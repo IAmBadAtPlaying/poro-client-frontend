@@ -1,0 +1,25 @@
+.task_container {
+    border: green solid;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    position: relative;
+    left: 2%;
+    height: 10%;
+    border: transparent solid;
+    width: 97%;
+}
+
+.tasks_container {
+    position: relative;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+    left: 2%;
+    display: flex;
+    height: 80%;
+    width: 97%;
+}

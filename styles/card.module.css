@@ -1,0 +1,53 @@
+
+
+.image-container {
+    background-color: transparent;
+}
+
+.champSelectButton {
+    margin: 0.5rem;
+    flex-basis: 45%;
+    padding: 1rem 1.0rem 1.5rem;
+    text-align: left;
+    background-color: transparent;
+    text-decoration: none;
+    border: 2px solid #eaeaea;
+    border-radius: 15px;
+    transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.champSelectButton h3 {
+    padding-top: 1rem;
+    margin: 0 0 0rem 0;
+    font-size: 0.8rem;
+}
+
+.champSelectButton p {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.champSelectButton:hover ,
+.champSelectButton:active ,
+.bgimage:focus{
+    border-color: #0070f3;
+    color: #0070f3;
+}
+
+.bgimage {
+    background-size: cover;
+    background-position: center;
+}
+
+.bgimage:hover,
+.bgimage:focus,
+.bgimage:active {
+    border-color: #0070f3;
+}
+
+.bgContainer {
+    margin: 0;
+    padding: 0;
+}
+

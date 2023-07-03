@@ -1,0 +1,25 @@
+.friendComponent {
+    user-select: initial;
+    border-top: solid 1px saddlebrown;
+    border-bottom: solid 1px saddlebrown;
+    width: 100%;
+    margin: 0;
+    padding-left: 0px;
+    display: flex;
+    height: 7vh;
+}
+
+.displayName {
+}
+
+.status {
+
+}
+
+.icon {
+    position: relative;
+    height: 100%;
+}
+
+.friendTextComponents {
+}

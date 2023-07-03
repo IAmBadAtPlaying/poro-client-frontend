@@ -1,0 +1,90 @@
+.lobby_type_display {
+    position: absolute;
+    text-align: left;
+    width: 96.6%;
+    top: 2%;
+    left: 2%;
+    font-size: 120%;
+}
+
+
+.positionSelectContainer {
+    position: absolute;
+    display: flex;
+    height: 5%;
+    width: 8%;
+    left: 65%;
+    top: 88%;
+}
+
+
+.lobby_container {
+    padding: 0;
+    margin: 0;
+    position: relative;
+    align-content: center;
+    top: 0;
+    left: 0.5%;
+    height: 100%;
+    width: 99%;
+}
+
+.member_container {
+    position: relative;
+    display: flex;
+    left: 1%;
+    top: 5%;
+    height: 80%;
+    width: 98%;
+}
+
+.button_container {
+    position: absolute;
+    height: 6%;
+    width: 14%;
+    left: 50%;
+    top: 88%;
+    transform: translateX(-50%);
+    align-content: center;
+}
+
+.start_matchmaking_button {
+    height: 100%;
+    width: 100%;
+    border: black solid 3px;
+    color: black;
+    border-radius: 30px;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    background: transparent;
+}
+
+.start_matchmaking_button:hover {
+    border-color: #4CAF50;
+}
+
+.start_matchmaking_button:active {
+    background-color: #4CAF50;
+    border-color: #4CAF50;
+}
+
+.stop_matchmaking_button {
+    height: 100%;
+    width: 100%;
+    border: none;
+    color: black;
+    border-radius: 30px;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    background: #4CAF50;
+}

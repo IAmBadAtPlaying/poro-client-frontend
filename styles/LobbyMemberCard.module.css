@@ -1,0 +1,180 @@
+.lobbyMemberCard {
+    position: relative;
+    flex: 1; /* Distribute equal width among the cards */
+    margin: 10px;
+    padding: 0px;
+    align-content: center;
+    text-align: center;
+    border: black solid;
+}
+
+.lobbyMemberCard:hover {
+    border: #888888 solid;
+}
+
+.bannerDisplay {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
+    z-index: -1;
+}
+
+.bannerDisplayImage {
+
+}
+
+.noDrag {
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
+}
+
+.displayName {
+    font-size: 1.2em;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    top: 50%;
+}
+
+.leaderCrownContainer {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    object-fit: fill;
+    width: 10%;
+    top: 49.5%;
+    left: 12%;
+}
+
+.leaderCrownImage {
+    height: 100%;
+    width: 100%;
+}
+
+.title {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    top: 50%;
+
+}
+
+.dualPositionsContainer {
+    display: flex;
+    position: absolute;
+    left: 20%;
+    width: 60%;
+    height: auto;
+    top: 65%;
+}
+
+.singlePositionContainer {
+    position: absolute;
+    display: flex;
+    left: 35%;
+    width: 30%;
+    top: 65%;
+}
+
+.position {
+    position: relative;
+    align-content: center;
+    flex: 1;
+}
+
+.positionImage {
+    width: 60%;
+    margin: 10%;
+}
+
+
+.tokenContainer {
+    width: 100%;
+    position: absolute;
+}
+
+.profileContainer {
+    margin: 0;
+    position: absolute;
+    width: 80%;
+    left: 10%;
+    max-width: 100%;
+    height: 0;
+    top: 14%;
+    padding: 0 0 80%;
+}
+
+.profileContainer::before {
+    content: "";
+    padding-top: 100%; /* Creates a space for content inside the container */
+}
+
+.profileImage {
+    padding: 0;
+    margin: 0;
+    left: 0;
+    position: absolute;
+    scale: 0.5;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    object-fit: cover;
+    border-radius: 50%;
+    border: none;
+    z-index: 1;
+}
+
+.prestigeImage {
+    max-width: none;
+    left: 0;
+    top: 0;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    height: 125%;
+    width: 125%;
+    transform: translate(-10%,-12%);
+    z-index: 1;
+}
+
+.rankedAnimatedContainer {
+    position: absolute;
+    padding: 0px;
+    margin: 0px;
+    height: 150%;
+    width: 150%;
+    left: 0;
+    transform: translate(-17%,-30%);
+    border: transparent;
+}
+
+.rankedImage {
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    z-index: 1;
+}
+
+.rankedVideo {
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+

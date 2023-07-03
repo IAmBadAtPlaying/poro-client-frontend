@@ -1,0 +1,99 @@
+@font-face {
+    font-family: "Beaufort for LOL";
+    src: url("http://127.0.0.1:35199/assets/fonts/BeaufortforLOL-Regular.woff") format("woff");
+    font-weight: 700;
+    font-style: normal;
+}
+
+.mainContainer {
+    user-select: none;
+    font-family: "Beaufort for LOL";
+    color: white;
+    height: 100vh;
+    width: 100vw;
+    background-size: 100% 100%;
+    background-position: center;
+    z-index: -1;
+}
+
+.videoContainer {
+    position: absolute;
+    height: 100vh;
+    width: 82.50vw;
+    z-index: 0;
+}
+
+.video {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.mainContent {
+    position: absolute;
+    height: 100vh;
+    width: 82.50vw;
+    background-color: transparent;
+    z-index: 1;
+}
+
+.friendsTab {
+    position: absolute;
+    top: 10vh;
+    height: 90vh;
+    width: 17.50vw;
+    left: 82.50vw;
+    z-index: 1;
+    background-color: transparent;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.friendsGrid {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+}
+
+.containerSelector {
+    display: flex;
+    top: 0;
+    height: 10%;
+    width: 50%;
+}
+
+
+.containerButton {
+    flex: 1 0 0;
+    border-radius: 0;
+    border: none;
+}
+
+.containerButton:hover {
+    background: #4CAF50;
+}
+
+.contentContainer {
+    position: relative;
+    height: 90%;
+    width: 100%;
+    background-color: transparent;
+    z-index: 1;
+}
+
+.friendsGrid::-webkit-scrollbar-track {
+    background:transparent;
+    color: transparent;
+    visibility: hidden;
+}
+
+.friendsGrid::-webkit-scrollbar {
+    width: 10px;
+}
+
+.friendsGrid::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 100px;
+}

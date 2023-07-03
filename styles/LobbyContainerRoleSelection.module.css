@@ -1,0 +1,41 @@
+.background_darken {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.separator {
+}
+
+.overlay_content {
+    position: fixed;
+    display: flex;
+    height: 10%;
+    z-index: 10;
+    border: solid #C89B3C 2px;
+}
+
+.position_image {
+    flex: 1;
+    height: 100%;
+}
+
+.position_image:hover {
+    background-color: rgba(128, 128, 128, 0.3);
+}
+
+.current_position_image {
+    flex: 1;
+}
+
+.overlay_button {
+    flex: 1;
+    object-fit: cover;
+    background: transparent;
+    border: solid #888888 2px;
+    border-radius: 10%;
+}
