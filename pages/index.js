@@ -2,13 +2,13 @@ import Head from 'next/head';
 import styles from '../styles/Home.module.css';
 import {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
-import LoadingComponent from "./LoadingComponent";
-import FriendComponent from "./FriendComponent";
-import LobbyContainer from "./LobbyContainer";
-import TaskContainer from "./TaskContainer";
+import LoadingComponent from "../components/LoadingComponent";
+import FriendComponent from "../components/FriendComponent";
+import LobbyContainer from "../components/LobbyContainer";
+import TaskContainer from "../components/TaskContainer";
 import * as Globals from '../globals'
 import {console} from "next/dist/compiled/@edge-runtime/primitives/console";
-import OverlayComponentTest from "./OverlayComponentTest";
+import OverlayComponentTest from "../components/OverlayComponentTest";
 export var socket
 
 let pktNr = 0;

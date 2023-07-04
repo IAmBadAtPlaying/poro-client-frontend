@@ -1,6 +1,7 @@
 import styles from '../styles/FriendComponent.module.css';
 import {useEffect, useRef} from "react";
 import * as Globals from "../globals"
+import Image from "next/image";
 
 export default function FriendComponent({friend}) {
     const friendDiv = useRef();
@@ -34,7 +35,15 @@ export default function FriendComponent({friend}) {
     }, []);
     return (
         <div className={styles.friendComponent} id={"friendComponent"} ref={friendDiv}>
-            <img src={`${Globals.PROXY_STATIC_PREFIX}/lol-game-data/assets/v1/profile-icons/${friend.iconId}.jpg`} alt={"Icon"} className={styles.icon}/>
+            <div className={styles.imageContainer}><Image
+                src={`${Globals.PROXY_STATIC_PREFIX}/lol-game-data/assets/v1/profile-icons/${friend.iconId}.jpg`}
+                alt="Icon"
+                className={styles.icon}
+                layout="fill"
+                objectFit="cover"
+                loading="lazy"
+            />
+            </div>
             <div className={styles.friendTextComponents}>
                 <div className={styles.displayName}>{friend.name}</div>
                 <div className={styles.status}>{friend.availability}</div>

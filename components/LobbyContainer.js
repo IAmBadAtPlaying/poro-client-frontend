@@ -1,7 +1,7 @@
 import LobbyMemberCard from "./LobbyMemberCard";
 import styles from "../styles/LobbyContainer.module.css"
 import * as Globals from '../globals'
-import * as Index from './index'
+import * as Index from '../pages/index'
 import {useEffect, useState} from "react";
 import LobbyContainerRoleSelection from "./LobbyContainerRoleSelection";
 

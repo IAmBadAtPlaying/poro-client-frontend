@@ -2,8 +2,8 @@ import Head from 'next/head';
 import styles from '../styles/Home2.module.css';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import ChampionCard from "./ChampionCard";
-import LoadingComponent from "./LoadingComponent";
+import ChampionCard from "../components/ChampionCard";
+import LoadingComponent from "../components/LoadingComponent";
 let socket
 
 function connect(host) {

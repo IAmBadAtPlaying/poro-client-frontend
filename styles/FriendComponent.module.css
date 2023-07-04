@@ -21,5 +21,13 @@
     height: 100%;
 }
 
+.imageContainer {
+    position: relative;
+    height: 100%;
+    width: 20%;
+}
+
 .friendTextComponents {
+    margin-left: 2%;
+    margin-top: 1%;
 }
