@@ -1,4 +1,4 @@
-export const PROXY_PORT = 2023;
+export const PROXY_PORT = 35199;
 export const STATIC_PORT = 35199;
 export const SOCKET_PORT = 8887;
 
@@ -6,7 +6,7 @@ const VERSION = "0.1.3"
 
 export const PROXY_STATIC_PREFIX = "http://127.0.0.1:"+PROXY_PORT+"/proxy/static";
 export const PROXY_PREFIX = "http://127.0.0.1:"+PROXY_PORT+"/proxy";
-export const STATIC_PREFIX = "http://127.0.0.1:"+STATIC_PORT;
+export const STATIC_PREFIX = "http://127.0.0.1:"+STATIC_PORT+"/static";
 
 export const SOCKET_URL = "ws://127.0.0.1:"+SOCKET_PORT;
 
@@ -14,6 +14,10 @@ export const VERSION_SHORT = "v"+VERSION
 export const VERSION_LONG = "Version "+VERSION
 
 export const BROWSER_TITLE = "Poro-Client " + VERSION_SHORT
+
+export const CHAMP_SELECT_MAX_BANS_PER_TEAM = 5
+
+export const GITHUB_ISSUES_LINK = "https://github.com/IAmBadAtPlaying/poro-client-frontend/issues"
 
 export function isJsonObjectEmpty(jsonObj) {
     if (typeof jsonObj === 'object') {

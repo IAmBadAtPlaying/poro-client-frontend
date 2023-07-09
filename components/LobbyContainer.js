@@ -6,6 +6,7 @@ import {useEffect, useState} from "react";
 import LobbyContainerRoleSelection from "./LobbyContainerRoleSelection";
 
 function startMatchmaking () {
+    console.log("Starting Matchmaking")
     Index.send([0,"POST","/lol-lobby/v2/lobby/matchmaking/search", ""])
 }
 
@@ -99,7 +100,7 @@ export default function LobbyContainer({lobbyConfig}) {
                     </div>
                     {renderPositionSelector(lobbyConfig.gameConfig.showPositionSelector)}
                     <div className={styles.button_container}>
-                        <button className={styles.start_matchmaking_button} onClick={startMatchmaking} type={"submit"}>Start Matchmaking</button>
+                        <button className={styles.start_matchmaking_button} onClick={startMatchmaking} type={"submit"} disabled={true}>Start Matchmaking</button>
                     </div>
                 </>
             )}

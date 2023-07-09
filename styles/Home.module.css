@@ -1,6 +1,6 @@
 @font-face {
     font-family: "Beaufort for LOL";
-    src: url("http://127.0.0.1:35199/assets/fonts/BeaufortforLOL-Regular.woff") format("woff");
+    src: url("http://127.0.0.1:35199/static/assets/fonts/BeaufortforLOL-Regular.woff") format("woff");
     font-weight: 700;
     font-style: normal;
 }

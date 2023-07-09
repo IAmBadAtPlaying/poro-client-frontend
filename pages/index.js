@@ -6,9 +6,11 @@ import LoadingComponent from "../components/LoadingComponent";
 import FriendComponent from "../components/FriendComponent";
 import LobbyContainer from "../components/LobbyContainer";
 import TaskContainer from "../components/TaskContainer";
+import MatchmakingContainer from "../components/MatchmakingContainer";
 import * as Globals from '../globals'
 import {console} from "next/dist/compiled/@edge-runtime/primitives/console";
 import OverlayComponentTest from "../components/OverlayComponentTest";
+import ChampionSelectContainer from "../components/ChampionSelectContainer";
 export var socket
 
 let pktNr = 0;
@@ -33,6 +35,7 @@ export default function Home() {
     let [lobby, setLobby] = useState({});
     let [container, setContainer] = useState("lobby");
     let [gameflowState, setGameflowState] = useState("None");
+    let [championSelectState, setChampionSelectState] = useState({});
     const [isConnected, setIsConnected] = useState(false);
     function connect(host) {
             socket = new WebSocket(host);
@@ -97,7 +100,12 @@ export default function Home() {
                         case 'GameflowPhaseUpdate':
                             const currentGameflowState = message.data;
                             setGameflowState(currentGameflowState.GameflowPhase);
-                            console.log(currentGameflowState.GameflowPhase);
+                        break;
+                        case 'ChampSelectUpdate':
+                            const currentChampSelectState = message.data;
+                            setChampionSelectState(currentChampSelectState);
+                            console.log(currentChampSelectState);
+                        break;
                     }
                 }
             } catch (e) {
@@ -140,7 +148,7 @@ export default function Home() {
     const renderContent = (activeTab) => {
         switch (activeTab) {
             case 'lobby':
-                return <LobbyContainer lobbyConfig={lobby} />;
+                return renderLobby(gameflowState);
             case 'tasks':
                 return <TaskContainer />;
             case 'loot':
@@ -148,6 +156,54 @@ export default function Home() {
                 return (<></>);
         }
     };
+
+
+    const renderFullScreenGameInfo = (state) => {
+
+    }
+
+    const renderLobby = (state) => {
+        switch (state) {
+            case 'Lobby':
+                return <LobbyContainer lobbyConfig={lobby} />;
+            break;
+            case 'Matchmaking':
+                return <MatchmakingContainer lobbyConfig={lobby}/>
+            break;
+            case 'ReadyCheck':
+                return <div>READY - CHECK</div>
+            break;
+            case 'ChampSelect':
+                return <ChampionSelectContainer session={championSelectState}/>;
+            break;
+            case 'GameStart':
+                return <div>GAME - START</div>;
+            break;
+            case 'InProgress':
+                return <div>GAME - INPROGRESS</div>;
+            break;
+            case 'Reconnect':
+                return <div>RECONNECT - COMPONENT</div>;
+            break;
+            case 'WaitingForStats':
+                return <div>WAITING FOR STATS</div>
+            break;
+            case 'PreEndOfGame':
+                return <div>PRE END OF GAME</div>
+            break;
+            case 'EndOfGame':
+                return <div>END OF GAME</div>
+            break;
+            case 'None':
+            case 'TerminatedInError': //Really Rare Edge Case
+                return <div>NONE</div>
+            break;
+            default:
+                return <div>Unknown State : {state}</div>
+            break;
+        }
+    }
+
   return (
     <div className={styles.container}>
       <Head>

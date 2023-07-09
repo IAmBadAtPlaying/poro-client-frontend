@@ -39,8 +39,8 @@ export default function FriendComponent({friend}) {
                 src={`${Globals.PROXY_STATIC_PREFIX}/lol-game-data/assets/v1/profile-icons/${friend.iconId}.jpg`}
                 alt="Icon"
                 className={styles.icon}
-                layout="fill"
-                objectFit="cover"
+                fill
+                style={{objectFit:"cover"}}
                 loading="lazy"
             />
             </div>
