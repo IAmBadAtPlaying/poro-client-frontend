@@ -104,7 +104,6 @@ export default function Home() {
                         case 'ChampSelectUpdate':
                             const currentChampSelectState = message.data;
                             setChampionSelectState(currentChampSelectState);
-                            console.log(currentChampSelectState);
                         break;
                     }
                 }
@@ -174,7 +173,7 @@ export default function Home() {
                 return <div>READY - CHECK</div>
             break;
             case 'ChampSelect':
-                return <ChampionSelectContainer session={championSelectState}/>;
+                return <></>;
             break;
             case 'GameStart':
                 return <div>GAME - START</div>;
@@ -204,6 +203,68 @@ export default function Home() {
         }
     }
 
+  const renderFullScreen = (gameflowState) => {
+    switch (gameflowState) {
+        case 'ChampSelect':
+            return (<ChampionSelectContainer session={championSelectState}/>)
+        default:
+            return renderNormalLobby()
+        break;
+    }
+  }
+
+
+  const renderNormalLobby = () => {
+        return (
+            <>
+                <div className={styles.mainContent}>
+                    <div className={styles.containerSelector}>
+                        <button className={styles.containerButton} onClick={() => setContainer("lobby")}>Lobby</button>
+                        <button className={styles.containerButton}>Profile</button>
+                        <button className={styles.containerButton}>Loot</button>
+                        <button className={styles.containerButton} onClick={() => setContainer("tasks")}>Tasks</button>
+                    </div>
+                    <div className={styles.contentContainer}>
+                        {(renderContent(container))}
+                    </div>
+                </div>
+                <div className={styles.friendsTab}>
+                    <div className={styles.friendsGrid}>
+                        {/* Render the FriendComponents */}
+                        {
+                            Object.values(friends)
+                                .sort((a, b) => {
+                                    if (!a.availability) a.availability = "offline";
+                                    if (!b.availability) b.availability = "offline";
+
+                                    const availabilityIndexA = availabilityOrder.indexOf(a.availability);
+                                    const availabilityIndexB = availabilityOrder.indexOf(b.availability);
+
+                                    if (availabilityIndexA !== availabilityIndexB) {
+                                        return availabilityIndexA - availabilityIndexB;
+                                    } else {
+                                        const displayNameA = a.name.toLowerCase();
+                                        const displayNameB = b.name.toLowerCase();
+
+                                        if (displayNameA < displayNameB) {
+                                            return -1;
+                                        } else if (displayNameA > displayNameB) {
+                                            return 1;
+                                        } else {
+                                            return 0;
+                                        }
+                                    }
+                                })
+                                .map((friend) => (
+                                    <FriendComponent key={friend.puuid} friend={friend} />
+                                ))
+                        }
+                    </div>
+                </div>
+            </>
+        )
+  }
+
   return (
     <div className={styles.container}>
       <Head>
@@ -212,33 +273,9 @@ export default function Home() {
       </Head>
       <main>
           <div className={styles.mainContainer} ref={mainDiv}>
-             <div className={styles.mainContent}>
-                 <div className={styles.containerSelector}>
-                     <button className={styles.containerButton} onClick={() => setContainer("lobby")}>Lobby</button>
-                     <button className={styles.containerButton}>Profile</button>
-                     <button className={styles.containerButton}>Loot</button>
-                     <button className={styles.containerButton} onClick={() => setContainer("tasks")}>Tasks</button>
-                 </div>
-                 <div className={styles.contentContainer}>
-                     {(renderContent(container))}
-                 </div>
-             </div>
-             <div className={styles.friendsTab}>
-                 <div className={styles.friendsGrid}>
-                     {/* Render the FriendComponents */}
-                     {Object.values(friends)
-                         .sort((a, b) => {
-                             if (!a.availability) a.availability= "offline";
-                             if (!b.availability) b.availability= "offline";
-                             const availabilityIndexA = availabilityOrder.indexOf(a.availability);
-                             const availabilityIndexB = availabilityOrder.indexOf(b.availability);
-                             return availabilityIndexA - availabilityIndexB;
-                         })
-                         .map((friend) => (
-                             <FriendComponent key={friend.puuid} friend={friend} />
-                         ))}
-                 </div>
-             </div>
+              {
+                  renderFullScreen(gameflowState)
+              }
           </div>
       </main>
         {isConnected ? (null): (<LoadingComponent reason={`Waiting for the League Client to start`}/>)}

@@ -33,6 +33,20 @@ export default function FriendComponent({friend}) {
 
         };
     }, []);
+
+    const renderActivity = (availability, lol) => {
+        if (!lol) return renderDefaultActivity(availability);
+        if (Globals.isJsonObjectEmpty(lol) || Globals.isJsonObjectEmpty(lol.gameMode) || Globals.isJsonObjectEmpty(lol.gameStatus)) return renderDefaultActivity(availability);
+        if (lol.gameStatus === "outOfGame") return (<div className={styles.status}>Lobby</div>)
+        let displayGameStatus = Globals.GAME_STATUS_TO_STRING[lol.gameStatus]
+        if (!displayGameStatus) displayGameStatus = lol.gameStatus;
+        return (<div className={styles.status}>{lol.gameMode} - {displayGameStatus}</div>)
+    }
+
+    const renderDefaultActivity = (availability) => {
+        return (<div className={styles.status}>{friend.availability}</div>);
+    }
+
     return (
         <div className={styles.friendComponent} id={"friendComponent"} ref={friendDiv}>
             <div className={styles.imageContainer}><Image
@@ -40,13 +54,16 @@ export default function FriendComponent({friend}) {
                 alt="Icon"
                 className={styles.icon}
                 fill
+                draggable={false}
                 style={{objectFit:"cover"}}
                 loading="lazy"
             />
             </div>
             <div className={styles.friendTextComponents}>
                 <div className={styles.displayName}>{friend.name}</div>
-                <div className={styles.status}>{friend.availability}</div>
+                {
+                    renderActivity(friend.availability, friend.lol)
+                }
             </div>
         </div>
     );

@@ -16,13 +16,14 @@ export const VERSION_LONG = "Version "+VERSION
 export const BROWSER_TITLE = "Poro-Client " + VERSION_SHORT
 
 export const CHAMP_SELECT_MAX_BANS_PER_TEAM = 5
+export const CHAMP_SELECT_MAX_MEMBERS_PER_TEAM = 5
 
 export const GITHUB_ISSUES_LINK = "https://github.com/IAmBadAtPlaying/poro-client-frontend/issues"
 
 export function isJsonObjectEmpty(jsonObj) {
     if (typeof jsonObj === 'object') {
-        for (var key in jsonObj) {
-            if(jsonObj.hasOwnProperty(key)) {
+        for (let objKey in jsonObj) {
+            if(jsonObj.hasOwnProperty(objKey)) {
                 return false;
             }
         }
@@ -35,6 +36,8 @@ export const TASKS = {};
 
 export const TASK_AUTO_ACCEPT_QUEUE = {name: "Auto Accept Queue", parameters: [{name: "Delay", description: "Time till Ready-Check gets accepted", backendKey: "delay"}]};
 export const TASK_AUTO_PICK_CHAMP = {name: "Auto Pick Champion", parameters: [{name: "Delay", description: "Time until the champion gets picked", backendKey: "delay"},{name:"Champion ID", description:"Champion ID of the champion you want to get picked", backendKey: "championId"}]};
+export const GAME_STATUS_TO_STRING = {inGame: "In Game", championSelect: "Champ Select", outOfGame: "Game ended", hosting_ARAM_UNRANKED_5x5: "Creating ARAM", hosting_NORMAL: "Creating Normal", hosting_RANKED_SOLO_5x5: "Creating Ranked"}
+export const GAME_MODE_TO_STRING = {CLASSIC: "Summoner´s Rift", ARAM: "ARAM"}
 
 /*
 *

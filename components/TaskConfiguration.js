@@ -9,7 +9,7 @@ export default function TaskConfiguration({task, setParametersFunction}) {
     const handleInputChange = (e, backendKey) => {
         console.log(backendKey + " was set to " + e.target.value)
         const num = parseInt(e.target.value);
-        if (num === NaN) {
+        if (isNaN(num)) {
             const newValues = { ...inputValues, [backendKey]:num };
             setInputValues(newValues);
             setParametersFunction(newValues);

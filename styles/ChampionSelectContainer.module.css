@@ -49,6 +49,67 @@
 }
 
 .myTeamPickContainer {
+    border: green solid 2px;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 12%;
+    left: 5%;
+    height: 80%;
+    width: 20%;
+}
 
+.myTeamPickComponent {
+    border: red solid 2px;
+    display: flex; /* Add flex display */
+    align-items: center; /* Vertically center align items */
+    position: relative;
+    height: 16%;
+    margin: 3% 0;
+}
+
+.myTeamPickImageContainer {
+    height: 100%;
+    width: 40%;
+    border: yellow solid 2px;
+    margin-right: 2%; /* Add margin-right to create space between image and text */
+}
+
+.myTeamPickImage {
+    height: 100%;
+    border: #888888 1px solid;
+}
+
+.theirTeamPickContainer {
+    border: green solid 2px;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 12%;
+    left: 75%;
+    height: 80%;
+    width: 20%;
+}
+
+.theirTeamPickComponent {
+    border: red solid 2px;
+    display: flex; /* Add flex display */
+    flex-direction: row-reverse;
+    align-items: center; /* Vertically center align items */
+    position: relative;
+    height: 16%;
+    margin: 3% 0;
+}
+
+.theirTeamPickImageContainer {
+    height: 100%;
+    width: 40%;
+    border: yellow solid 2px;
+    margin-right: 2%; /* Add margin-right to create space between image and text */
+}
+
+.theirTeamPickImage {
+    height: 100%;
+    border: #888888 1px solid;
 }
 
