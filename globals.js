@@ -39,6 +39,12 @@ export const TASK_AUTO_PICK_CHAMP = {name: "Auto Pick Champion", parameters: [{n
 export const GAME_STATUS_TO_STRING = {inGame: "In Game", championSelect: "Champ Select", outOfGame: "Game ended", hosting_ARAM_UNRANKED_5x5: "Creating ARAM", hosting_NORMAL: "Creating Normal", hosting_RANKED_SOLO_5x5: "Creating Ranked"}
 export const GAME_MODE_TO_STRING = {CLASSIC: "Summoner´s Rift", ARAM: "ARAM"}
 
+
+export const GAMEMODE_SUMMONERS_RIFT = ["classic_sru", "Summoners Rift", [[430, "Blind Pick"],[400, "Draft Pick"],[420, "Ranked Solo/Duo"],[440, "Ranked Flex"]]];
+export const GAMEMODE_ARAM = ["aram", "Aram", [[450, "ARAM"]]];
+export const GAMEMODE_ONE_FOR_ALL = ["oneforall", "One for All", []];
+export const GAMEMODE_URF = ["urf", "Ultra Rapid Fire", []];
+export const GAMEMODE_TFT = ["tft", "Teamfight Tactics", []];
 /*
 *
 * COLORS

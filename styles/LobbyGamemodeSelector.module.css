@@ -1,0 +1,85 @@
+.gamemodeSelectorContainer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.gamemodeSelectorElement {
+    align-content: center;
+    text-align: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.gamemodeSelectorIcon {
+    object-fit: fill;
+    height: 100%;
+}
+
+.gamemodeSelectorIconVideo {
+    position: relative;
+    object-fit: fill;
+    height: 100%;
+}
+
+
+.gamemodeSelectorIconContainer {
+    position: relative;
+    top: 10%;
+    height: 12%;
+    left: 37.5%;
+    width: 25%;
+}
+
+.gamemodeSelectorHeader {
+    top: 10%;
+    margin-top: 2%;
+    position: relative;
+    height: 10%;
+    width: 20%;
+    left: 40%;
+}
+
+.gamemodeDescription {
+
+}
+
+.additionalOptions {
+    margin: 2%;
+    border: #785A28 solid 2px;
+}
+
+.activeAdditionalOptions {
+    border: #C89B3C solid 3px;
+    margin: 2%;
+}
+
+.activeAdditionalOptions::before {
+    content: "▶ ";
+}
+
+.additionalOptionsContainer {
+    position: relative;
+    top: 20%;
+}
+
+.confirmButton {
+    position: absolute;
+    top: 85%;
+    width: 20%;
+    left: 40%;
+    height: 10%;
+    align-content: center;
+    text-align: center;
+    border: #C89B3C solid 4px;
+}
+
+.confirmButton:hover {
+    background-color: rgba(50,50,50, 0.5);
+}
+
+.confirmButtonContent {
+    margin-top: 10%;
+}

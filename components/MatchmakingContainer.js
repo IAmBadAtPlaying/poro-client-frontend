@@ -4,12 +4,15 @@ import * as Globals from '../globals'
 import * as Index from '../pages/index'
 import {useEffect, useState} from "react";
 import LobbyContainerRoleSelection from "./LobbyContainerRoleSelection";
+import {PROXY_STATIC_PREFIX} from "../globals";
 
 function stopMatchmaking () {
     Index.send([0,"DELETE","/lol-lobby/v2/lobby/matchmaking/search", ""])
 }
 
 export default function MatchmakingContainer({lobbyConfig}) {
+
+
     return (
         <div className={styles.lobby_container}>
             {Globals.isJsonObjectEmpty(lobbyConfig) || (lobbyConfig === undefined)? (

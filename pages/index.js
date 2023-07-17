@@ -11,12 +11,16 @@ import * as Globals from '../globals'
 import {console} from "next/dist/compiled/@edge-runtime/primitives/console";
 import OverlayComponentTest from "../components/OverlayComponentTest";
 import ChampionSelectContainer from "../components/ChampionSelectContainer";
+import LobbyGamemodeSelector from "../components/LobbyGamemodeSelector";
+import {log} from "next/dist/server/typescript/utils";
+import {PROXY_STATIC_PREFIX} from "../globals";
+import ReadyCheckContainer from "../components/ReadyCheckContainer";
 export var socket
 
 let pktNr = 0;
 const availabilityOrder = ['','chat','dnd', 'online', 'away', 'mobile', 'offline'];
 
-let initialLoadDone = false;
+let audio;
 
 export function send(jsonArray) {
     if (jsonArray instanceof Array) {
@@ -26,6 +30,13 @@ export function send(jsonArray) {
         console.log("Sending: " + toSend);
         socket.send(toSend);
     }
+}
+
+export function AUDIO_PLAY_GENERIC_BUTTON() {
+    if (audio === undefined) return;
+    const playAudio = audio.cloneNode();
+    playAudio.volume = 0.5;
+    playAudio.play();
 }
 
 export default function Home() {
@@ -81,9 +92,10 @@ export default function Home() {
                     console.log(message.event)
                     switch (message.event) {
                         case 'FriendListUpdate':
-                            const { puuid, availability, statusMessage, summonerId, iconId, name } = message.data;
+                            const { puuid, availability, statusMessage, summonerId, iconId, name, lol} = message.data;
                             setFriends(prevFriends => {
-                                prevFriends[puuid] = { iconId, name, puuid, summonerId,  availability, statusMessage};
+                                console.log("Updating "+name+": " + availability +" - " + lol);
+                                prevFriends[puuid] = { iconId, name, puuid, summonerId,  availability, statusMessage, lol};
                                 return prevFriends;
                             });
                             break;
@@ -120,6 +132,11 @@ export default function Home() {
             document.body.style.padding = "0";
             document.body.style.width = "100.00vw";
             document.body.style.height = "100.00vh";
+
+            audio = new Audio();
+            audio.src = Globals.PROXY_STATIC_PREFIX+ "/lol-game-data/assets/assets/events/ps2021/audio/sfx-ps-ui-champ-button-click.ogg";
+            audio.load();
+
 
             if (typeof mainDiv !== 'undefined') {
                 mainDiv.current.style.backgroundImage = `url(${Globals.STATIC_PREFIX}/assets/png/background.png)`
@@ -170,7 +187,7 @@ export default function Home() {
                 return <MatchmakingContainer lobbyConfig={lobby}/>
             break;
             case 'ReadyCheck':
-                return <div>READY - CHECK</div>
+                return <ReadyCheckContainer />
             break;
             case 'ChampSelect':
                 return <></>;
@@ -195,7 +212,7 @@ export default function Home() {
             break;
             case 'None':
             case 'TerminatedInError': //Really Rare Edge Case
-                return <div>NONE</div>
+                return <LobbyGamemodeSelector/>
             break;
             default:
                 return <div>Unknown State : {state}</div>
