@@ -5,11 +5,11 @@
     padding: 0px;
     align-content: center;
     text-align: center;
-    border: black solid;
+    border: #5B5A56 solid;
 }
 
 .lobbyMemberCard:hover {
-    border: #888888 solid;
+    border: #3C3C41 solid;
 }
 
 .bannerDisplay {

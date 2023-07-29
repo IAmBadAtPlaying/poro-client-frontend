@@ -1,0 +1,81 @@
+.content {
+    height: 100%;
+    border: green solid;
+}
+
+
+
+.currentLootContainer {
+    position: absolute;
+    overflow-y: scroll;
+    height: 90%;
+    width: 40%;
+    display: flex;
+    flex-wrap: wrap;
+    border: green solid;
+
+    align-content: flex-start;
+
+    scroll-behavior: smooth;
+}
+
+.disenchantLootContainer {
+    position: absolute;
+    overflow-y: scroll;
+    height: 90%;
+    left: 60%;
+    width: 40%;
+    display: flex;
+    flex-wrap: wrap;
+    border: green solid;
+
+    align-content: flex-start;
+
+    scroll-behavior: smooth;
+}
+
+
+.lootElement {
+    flex: 1;
+    min-width: 99%;
+    max-width: 99%;
+    max-height: 19%;
+    height: 19%;
+    display: flex;
+    border: gray solid 2px;
+}
+
+.imageContainer {
+    position: relative;
+    height: 100%;
+    min-width: 25%;
+    max-width: 25%;
+    flex: 1;
+    margin-right: 2%;
+    overflow: hidden;
+}
+
+.lootImage {
+    position: relative;
+    object-fit: scale-down;
+}
+
+.lootDescription {
+    margin-top: 2%;
+    height: 100%;
+    width: 100%;
+    flex: 3;
+}
+
+.overlayBackground {
+    position: fixed;
+    top: 10%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    z-index: 100;
+}

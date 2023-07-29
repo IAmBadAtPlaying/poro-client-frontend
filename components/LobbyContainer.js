@@ -4,14 +4,18 @@ import * as Globals from '../globals'
 import * as Index from '../pages/index'
 import {useEffect, useState} from "react";
 import LobbyContainerRoleSelection from "./LobbyContainerRoleSelection";
+import LobbyGamemodeSelector from "./LobbyGamemodeSelector";
+import {PROXY_STATIC_PREFIX} from "../globals";
 
 function startMatchmaking () {
+    console.log("Starting Matchmaking")
     Index.send([0,"POST","/lol-lobby/v2/lobby/matchmaking/search", ""])
 }
 
 
 
-export default function LobbyContainer({lobbyConfig}) {
+export default function LobbyContainer({lobbyConfig, availableQueues}) {
+    let [showSelector, setShowSelector] = useState(false);
     let [firstPositionPreference, setFirstPositionPreference] = useState("UNSELECTED");
     let [secondPositionPreference, setSecondPositionPreference] = useState("UNSELECTED");
 
@@ -66,6 +70,31 @@ export default function LobbyContainer({lobbyConfig}) {
         )
     }
 
+    const renderFunction = () => {
+      return (
+          Globals.isJsonObjectEmpty(lobbyConfig) || (lobbyConfig === undefined)? (
+                  <>
+                  </>
+              ) : (
+                  <>
+                      <div className={styles.lobby_type_display} onClick={() => setShowSelector(true)}>
+                          {"Current Gamemode: " + lobbyConfig.gameConfig.gameMode}
+                      </div>
+                      <div className={styles.member_container}>
+                          {lobbyConfig.members.map((member, index) => {
+                              if (!member.puuid) {
+                              }
+                              return <LobbyMemberCard key={`Member-${index}`} member={member} />
+                          })}
+                      </div>
+                      {renderPositionSelector(lobbyConfig.gameConfig.showPositionSelector)}
+                      <div className={styles.button_container}>
+                          <button className={styles.start_matchmaking_button} onClick={startMatchmaking} type={"submit"}>Start Matchmaking</button>
+                      </div>
+                  </>
+              )
+      )
+    }
 
     const renderSecondPositionPref = (firstPref) => {
       if (firstPref !== "FILL") {
@@ -77,33 +106,11 @@ export default function LobbyContainer({lobbyConfig}) {
 
     return (
         <div className={styles.lobby_container}>
-            {Globals.isJsonObjectEmpty(lobbyConfig) || (lobbyConfig === undefined)? (
-                <>
-                </>
+            {showSelector ? (
+                <LobbyGamemodeSelector showFunction={setShowSelector} availableQueues={availableQueues}/>
             ) : (
-                <>
-                    <div className={styles.lobby_type_display}>
-                        {"Current Gamemode: " + lobbyConfig.gameConfig.gameMode}
-                    </div>
-                    <div className={styles.member_container}>
-                        {lobbyConfig.members.map((member, index) => {
-                            if (!member.puuid) {
-                            }
-                            return <LobbyMemberCard key={`Member-${index}`} member={member} />
-                        })}
-                        {/*<LobbyMemberCard member={{name:"Test", profileIconId: 4022}}></LobbyMemberCard>*/}
-                        {/*<LobbyMemberCard member={{name:"IAmBadAtPlaying",title:"Poroyalty", profileIconId: 4025, regalia: {type: "ranked", value: "diamond"}, secondPositionPreference: "top", firstPositionPreference: "jungle"}}></LobbyMemberCard>*/}
-                        {/*<LobbyMemberCard member={{name:"Test",title:"Test2", profileIconId: 4025, regalia: {type: "prestige", value: "12"}}}></LobbyMemberCard>*/}
-                        {/*<LobbyMemberCard member={{name:"IAmBadAtPlaying",title:"Poroyalty", profileIconId: 4023, regalia: {type: "ranked", value: "grandmaster"}}}></LobbyMemberCard>*/}
-                        {/*<LobbyMemberCard member={{name:"Test 2", profileIconId: 4023}}></LobbyMemberCard>*/}
-                    </div>
-                    {renderPositionSelector(lobbyConfig.gameConfig.showPositionSelector)}
-                    <div className={styles.button_container}>
-                        <button className={styles.start_matchmaking_button} onClick={startMatchmaking} type={"submit"}>Start Matchmaking</button>
-                    </div>
-                </>
+                renderFunction()
             )}
-
         </div>
     )
 }

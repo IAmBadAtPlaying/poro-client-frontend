@@ -2,8 +2,6 @@ import styles from "../styles/LobbyMemberCard.module.css"
 import * as Globals from '../globals'
 
 export default function LobbyMemberCard({member}) {
-
-
     const renderPositionIcons = (firstPositionPreference, secondPositionPreference) => {
         if (firstPositionPreference !== undefined && firstPositionPreference!== '') {
             if (firstPositionPreference === 'FILL') {
@@ -59,8 +57,15 @@ export default function LobbyMemberCard({member}) {
                             </>
                         ) : (
                             <>
-                                <img draggable={false}className={`${styles.prestigeImage} ${styles.noDrag}`} src={Globals.STATIC_PREFIX + "/assets/png/regalia/prestige/regalia-prestige-" +  member.regalia.selectedPrestigeCrest + ".png"} alt={""}/>
-                            </>
+                            {
+                                (member.regalia.selectedPrestigeCrest > 21 ? (
+                                    <></>
+                                ) : (
+                                    <img draggable={false}className={`${styles.prestigeImage} ${styles.noDrag}`} src={Globals.STATIC_PREFIX + "/assets/png/regalia/prestige/regalia-prestige-" +  member.regalia.selectedPrestigeCrest + ".png"} alt={""}/>
+
+                                ))
+                            }
+                                </>
                         )}
                         </div>
                     {renderLeaderIcon(member.isLeader)}
