@@ -18,7 +18,9 @@ export default function LoadingComponent({ reason }) {
 
     const showAdditionalInfo = (doRender) => {
         if (doRender) {
-            return(<h3>The League Client is already running ? Click <a href={Globals.GITHUB_ISSUES_LINK} target={"_blank"}>here</a> for troubleshooting</h3>)
+            return(<h3>
+                    The League Client is already running ? Click <a href={Globals.GITHUB_ISSUES_LINK} target={"_blank"}  rel={"noreferrer"}>here</a> for troubleshooting
+                </h3>)
         } else return (<></>)
     }
 
@@ -29,7 +31,7 @@ export default function LoadingComponent({ reason }) {
             <div className={style.loadingContent}>
                 <img
                     src={Globals.STATIC_PREFIX + '/assets/gifs/Poro.gif'}
-                    alt="This text should NEVER appear"
+                    alt="The Poro-Gif isnt loading, maybe the Application stopped."
                     className={style.loadingGif}
                 />
                 <h1>{reason}</h1>

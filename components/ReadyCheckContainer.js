@@ -20,15 +20,20 @@ export default function ReadyCheckContainer() {
 
 
     const declineReadyCheck = () => {
-        send()
+        send([0,"POST","/lol-matchmaking/v1/ready-check/decline",""])
     }
 
     const acceptReadyCheck = () => {
-        send()
+        send([0,"POST","/lol-matchmaking/v1/ready-check/accept",""])
     }
 
 
     return (
-        <div>READY - CHECK</div>
+        <div>READY - CHECK
+        <div>
+            <button onClick={() => {acceptReadyCheck()}}> Accept</button>
+            <button onClick={() => {declineReadyCheck()}}>Decline</button>
+        </div>
+        </div>
     )
 }

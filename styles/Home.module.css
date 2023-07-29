@@ -60,8 +60,9 @@
 .containerSelector {
     display: flex;
     top: 0;
+    color: white;
     height: 10%;
-    width: 50%;
+    width: 65%;
 }
 
 
@@ -69,10 +70,12 @@
     flex: 1 0 0;
     border-radius: 0;
     border: none;
+    color: white;
+    background: #5B5A56;
 }
 
 .containerButton:hover {
-    background: #4CAF50;
+    background: #3C3C41;
 }
 
 .contentContainer {

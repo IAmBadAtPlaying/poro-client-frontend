@@ -1,6 +1,8 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import styles from '../styles/ChampionSelectContainer.module.css';
+import {getChampions} from "../pages";
 import * as Globals from "../globals";
+import ChampionCard from "./ChampionCard";
 
 export default function ChampionSelectContainer({session}) {
     if (!session.bans) {
@@ -12,6 +14,9 @@ export default function ChampionSelectContainer({session}) {
     if (!session.myTeam) session.myTeam = [];
     if (!session.theirTeam) session.theirTeam = [];
 
+    let champions = getChampions();
+
+    const [currentlySelected, setCurrentlySelected] = useState(-1);
 
     const renderMyTeamBans = (passedBans, maxBans) => {
         const bans = [];
@@ -119,16 +124,12 @@ export default function ChampionSelectContainer({session}) {
         switch (timerPhase) {
             case 'PLANNING':
                 return renderMyTeam_PLANNING(myTeam);
-            break;
             case 'BAN_PICK':
                 return renderMyTeam_BAN_PICK(myTeam);
-            break;
             case 'FINALIZATION':
                 return renderMyTeam_FINALIZATION(myTeam);
-            break;
             default:
                 return <>Unknown Timer Phase: {timerPhase}</>
-            break;
         }
     }
 
@@ -212,7 +213,7 @@ export default function ChampionSelectContainer({session}) {
 
     const createMyTeamPickComponent = (currentSummoner, useIntentAsValue, index) => {
 
-        let errorDefault = (<div className={styles.theirTeamPickComponent} key={"MyTeamPick-" + index}>
+        let errorDefault = (<div className={styles.myTeamPickComponent} key={"MyTeamPick-" + index}>
             <div className={styles.theirTeamPickImageContainer}>
                 <img
                     draggable={false}
@@ -256,7 +257,7 @@ export default function ChampionSelectContainer({session}) {
                     currentSummoner.pickAction.championId = -1;
                 }
                 return (<div className={styles.myTeamPickComponent} key={"MyTeamPick-" + index}>
-                    <div className={styles.myTeamPickImageContainer}>
+                    <div className={styles.myTeamPickBanImageContainer}>
                         <img
                             draggable={false}
                             src={`${Globals.PROXY_STATIC_PREFIX}/lol-game-data/assets/v1/champion-icons/${currentSummoner.pickAction.championId}.png`}
@@ -276,7 +277,7 @@ export default function ChampionSelectContainer({session}) {
         } else {
             if (!currentSummoner.pickAction.completed) {
                 return (<div className={styles.myTeamPickComponent} key={"MyTeamPick-" + index}>
-                    <div className={styles.myTeamPickImageContainer}>
+                    <div className={styles.myTeamPickBanImageContainer}>
                         <img
                             draggable={false}
                             src={`${Globals.PROXY_STATIC_PREFIX}/lol-game-data/assets/v1/champion-icons/-1.png`}
@@ -292,7 +293,7 @@ export default function ChampionSelectContainer({session}) {
                 </div>)
             } else {
                 return (<div className={styles.myTeamPickComponent} key={"MyTeamPick-" + index}>
-                    <div className={styles.myTeamPickImageContainer}>
+                    <div className={styles.myTeamPickBanImageContainer}>
                         <img
                             draggable={false}
                             src={`${Globals.PROXY_STATIC_PREFIX}/lol-game-data/assets/v1/champion-icons/${currentSummoner.pickAction.championId}.png`}
@@ -318,13 +319,15 @@ export default function ChampionSelectContainer({session}) {
                     currentSummoner.banAction.championId = -1;
                 }
                 return (<div className={styles.myTeamPickComponent} key={"MyTeamPick-" + index}>
-                    <div className={styles.myTeamPickImageContainer}>
-                        <img
-                            draggable={false}
-                            src={`${Globals.PROXY_STATIC_PREFIX}/lol-game-data/assets/v1/champion-icons/${currentSummoner.banAction.championId}.png`}
-                            alt="Icon"
-                            className={styles.myTeamPickImage}
-                        />
+                    <div className={styles.myTeamPickBanImageContainer}>
+                        <div className={styles.imageMask}>
+                            <img
+                                draggable={false}
+                                src={`${Globals.PROXY_STATIC_PREFIX}/lol-game-data/assets/v1/champion-icons/${currentSummoner.banAction.championId}.png`}
+                                alt="Icon"
+                                className={styles.myTeamPickImage}
+                            />
+                        </div>
                     </div>
                     <div>
                         <span>HOVERING BAN</span><br></br>
@@ -338,13 +341,15 @@ export default function ChampionSelectContainer({session}) {
         } else {
             if (!currentSummoner.banAction.completed) {
                 return (<div className={styles.myTeamPickComponent} key={"MyTeamPick-" + index}>
-                    <div className={styles.myTeamPickImageContainer}>
+                    <div className={styles.myTeamPickBanImageContainer}>
+                        <div className={styles.imageMask}>
                         <img
                             draggable={false}
                             src={`${Globals.PROXY_STATIC_PREFIX}/lol-game-data/assets/v1/champion-icons/-1.png`}
                             alt="Icon"
                             className={styles.myTeamPickImage}
                         />
+                        </div>
                     </div>
                     <div>
                         <span>YET TO BAN</span><br></br>
@@ -354,13 +359,15 @@ export default function ChampionSelectContainer({session}) {
                 </div>)
             } else {
                 return (<div className={styles.myTeamPickComponent} key={"MyTeamPick-" + index}>
-                    <div className={styles.myTeamPickImageContainer}>
+                    <div className={styles.myTeamPickBanImageContainer}>
+                        <div className={styles.imageMask}>
                         <img
                             draggable={false}
                             src={`${Globals.PROXY_STATIC_PREFIX}/lol-game-data/assets/v1/champion-icons/-1.png`}
                             alt="Icon"
                             className={styles.myTeamPickImage}
                         />
+                        </div>
                     </div>
                     <div>
                         <span>YET TO PICK</span><br></br>
@@ -381,13 +388,15 @@ export default function ChampionSelectContainer({session}) {
             currentSummoner.championPickIntent = -1;
         }
         return (<div className={styles.myTeamPickComponent} key={"MyTeamPick-" + index}>
-            <div className={styles.myTeamPickImageContainer}>
+            <div className={styles.myTeamPickBanImageContainer}>
+                <div className={styles.imageCircleMask}>
                 <img
                     draggable={false}
                     src={`${Globals.PROXY_STATIC_PREFIX}/lol-game-data/assets/v1/champion-icons/${currentSummoner.championPickIntent}.png`}
                     alt="Icon"
                     className={styles.myTeamPickImage}
                 />
+                    </div>
             </div>
             <div>
                 <span>PICK INTENT</span><br></br>
@@ -398,19 +407,34 @@ export default function ChampionSelectContainer({session}) {
     }
 
     const renderPickAndBan = (currentSummoner, index) => {
+        if (currentSummoner.banAction.championId === 0) currentSummoner.banAction.championId = -1;
+        if (currentSummoner.pickAction.championId === 0) currentSummoner.pickAction.championId = -1;
         return (
             <div className={styles.myTeamPickComponent} key={"MyTeamPick-" + index}>
-            <div className={styles.myTeamPickImageContainer}>
-                <img
-                    draggable={false}
-                    src={`${Globals.PROXY_STATIC_PREFIX}/lol-game-data/assets/v1/champion-icons/${currentSummoner.pickAction.championId}.png`}
-                    alt="Icon"
-                    className={styles.myTeamPickImage}
-                />
+            <div className={styles.myTeamPickBanImageContainer}>
+                <div className={styles.myTeamBanImageContainer}>
+                    <img
+                        draggable={false}
+                        src={`${Globals.PROXY_STATIC_PREFIX}/lol-game-data/assets/v1/champion-icons/${currentSummoner.banAction.championId}.png`}
+                        alt="Icon"
+                        className={styles.myTeamPickBanImage}
+                    />
+                </div>
+                <div className={styles.myTeamPickImageContainer}>
+                    <div className={styles.imageCircleMask}>
+                        <img
+                            draggable={false}
+                            src={`${Globals.PROXY_STATIC_PREFIX}/lol-game-data/assets/v1/champion-icons/${currentSummoner.pickAction.championId}.png`}
+                            alt="Icon"
+                            className={styles.myTeamPickImage}
+                        />
+                    </div>
+
+                </div>
             </div>
-            <div>
-                <span>BAN: {currentSummoner.banAction.championId} {currentSummoner.banAction.completed ? ("Completed") : ("Not Completed")} {currentSummoner.banAction.isInProgress ? ("In Progress") : ("--")}</span><br></br>
-                <span>Pick: {currentSummoner.pickAction.championId} {currentSummoner.pickAction.completed ? ("Completed") : ("Not Completed")} {currentSummoner.pickAction.isInProgress ? ("In Progress") : ("--")}</span>
+            <div className={styles.myTeamPickDescription}>
+                <span>BAN: {currentSummoner.banAction.championId} {currentSummoner.banAction.completed ? ("Completed") : ("!Completed")} {currentSummoner.banAction.isInProgress ? ("Progress") : ("--")}</span><br></br>
+                <span>Pick: {currentSummoner.pickAction.championId} {currentSummoner.pickAction.completed ? ("Completed") : ("!Completed")} {currentSummoner.pickAction.isInProgress ? ("Progress") : ("--")}</span><br></br>
                 {currentSummoner.spell1Id}<br></br>
                 {currentSummoner.spell2Id}
             </div>
@@ -437,6 +461,22 @@ export default function ChampionSelectContainer({session}) {
             <div className={styles.theirTeamPickContainer}>
                 {
                     renderTheirTeam(session.theirTeam)
+                }
+            </div>
+            <div className={styles.championSelectorContainer}>
+                {
+                        champions.filter(champion => champion.id !== -1) // Exclude champion with id -1
+                            .sort((a,b) => {
+                                if(a.name < b.name) {
+                                    return -1;
+                                }
+                                if(a.name > b.name) {
+                                    return 1;
+                                }
+                                return 0;
+                            })
+                            .map(champion =>
+                                (<ChampionCard setActive={setCurrentlySelected} isActive={champion.id === currentlySelected} key={champion.id} id={champion.id} championName={champion.name} />))
                 }
             </div>
         </div>

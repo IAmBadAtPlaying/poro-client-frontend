@@ -2,6 +2,7 @@ import styles from '../styles/FriendComponent.module.css';
 import {useEffect, useRef} from "react";
 import * as Globals from "../globals"
 import Image from "next/image";
+import {send} from "../pages";
 
 export default function FriendComponent({friend}) {
     const friendDiv = useRef();
@@ -9,13 +10,19 @@ export default function FriendComponent({friend}) {
         const handleRightClick = (event) => {
             if (event.button === 2) {
                 event.preventDefault();
-                console.log(`${friend.summonerId}`)
+                console.log(`${friend.summonerId}`);
                 // Handle right-click event here
             }
         };
         const handleMiddleClick = (event) => {
             if (event.button === 1) {
                 event.preventDefault();
+                let bodyWrapper = new Array();
+                let body = new Object();
+                body["toSummonerId"] = friend.summonerId;
+                body["toSummonerName"] = friend.displayName;
+                bodyWrapper.push(body);
+                send([0, "POST", "/lol-lobby/v2/lobby/invitations", JSON.stringify(bodyWrapper)]);
                 console.log(`Invite ${friend.summonerId}`);
             }
         };
@@ -35,15 +42,15 @@ export default function FriendComponent({friend}) {
     }, []);
 
     const renderActivity = (availability, lol) => {
-        if (!lol) return renderDefaultActivity(availability);
-        if (Globals.isJsonObjectEmpty(lol) || Globals.isJsonObjectEmpty(lol.gameMode) || Globals.isJsonObjectEmpty(lol.gameStatus)) return renderDefaultActivity(availability);
+        if (!lol) return renderDefaultActivity();
+        if (Globals.isJsonObjectEmpty(lol) || Globals.isJsonObjectEmpty(lol.gameMode) || Globals.isJsonObjectEmpty(lol.gameStatus)) return renderDefaultActivity();
         if (lol.gameStatus === "outOfGame") return (<div className={styles.status}>Lobby</div>)
         let displayGameStatus = Globals.GAME_STATUS_TO_STRING[lol.gameStatus]
         if (!displayGameStatus) displayGameStatus = lol.gameStatus;
         return (<div className={styles.status}>{lol.gameMode} - {displayGameStatus}</div>)
     }
 
-    const renderDefaultActivity = (availability) => {
+    const renderDefaultActivity = () => {
         return (<div className={styles.status}>{friend.availability}</div>);
     }
 

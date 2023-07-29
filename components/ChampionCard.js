@@ -1,19 +1,28 @@
-import styles from '../styles/card.module.css';
+import styles from '../styles/ChampionCard.module.css';
 import BackgroundImage from './BackgroundImage';
+import Image from "next/image";
+import * as Globals from "../globals";
 
-export default function ChampionCard({ id,  championName, alias}) {
+export default function ChampionCard({ id,  championName, isActive, setActive}) {
+
+
+    const pick = () => {
+        setActive(id);
+        console.log(championName);
+    }
+
     return (
-        <div className={styles.default}>
-            <button className={styles.champSelectButton} onClick={() => logName(championName)}>
+        <div className={styles.cardContainer}>
+            <button className={isActive ? styles.champSelectButtonActive : styles.champSelectButton} onClick={() => pick()}>
             <div className={styles.card}>
-                    <BackgroundImage url={`http://127.0.0.1:2023/proxy/static/lol-game-data/assets/v1/champion-tiles/${id}/${id}000.jpg`} width={100} height={100} />
-                    <h3>{championName}</h3>
+                <img
+                    src={Globals.PROXY_STATIC_PREFIX+ "/lol-game-data/assets/v1/champion-icons/"+id+".png"}
+                    alt={"Icon " + id}
+                    className={styles.image}
+                />
+                <div className={styles.championName}>{isActive}{championName}</div>
               </div>
             </button>
         </div>
     )
-}
-
-function logName(name) {
-    console.log(name);
 }

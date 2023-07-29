@@ -61,23 +61,74 @@
 
 .myTeamPickComponent {
     border: red solid 2px;
-    display: flex; /* Add flex display */
-    align-items: center; /* Vertically center align items */
+    display: flex;
+    align-items: center;
     position: relative;
     height: 16%;
     margin: 3% 0;
 }
 
-.myTeamPickImageContainer {
+.myTeamPickBanImage{
+    top: 0;
+    max-width: 100%;
+    max-height: 100%;
+    position: relative;
+}
+
+.myTeamPickBanImageContainer {
+    flex: 2;
+    position: relative;
+    display: flex;
     height: 100%;
-    width: 40%;
+    width: 100%;
     border: yellow solid 2px;
-    margin-right: 2%; /* Add margin-right to create space between image and text */
+    margin-right: 2%;
+}
+
+.myTeamPickImageContainer {
+    flex: 10;
+}
+
+.myTeamBanImageContainer {
+    flex: 3;
+    position: relative;
+    top: 30%;
+    max-height: 40%;
+    max-width: 40%;
+    border: green solid 2px;
+}
+
+.imageCircleMask {
+    zoom: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    height: 100%;
+    width: 100%;
+    border-radius: 100%;
+    overflow: hidden;
+}
+
+.imageMask {
+    max-width: 50%;
+    max-height: 100%;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    border: red solid 2px;
 }
 
 .myTeamPickImage {
-    height: 100%;
-    border: #888888 1px solid;
+    transform: scale(1.2,1.2);
+    position: relative;
+    flex: 10;
+    max-height: 100%;
+    max-width: 100%;
+    width: 100%;
+    border: #888888 1px inset;
+}
+
+.myTeamPickDescription {
+    flex: 2;
 }
 
 .theirTeamPickContainer {
@@ -93,9 +144,9 @@
 
 .theirTeamPickComponent {
     border: red solid 2px;
-    display: flex; /* Add flex display */
+    display: flex;
     flex-direction: row-reverse;
-    align-items: center; /* Vertically center align items */
+    align-items: center;
     position: relative;
     height: 16%;
     margin: 3% 0;
@@ -105,7 +156,7 @@
     height: 100%;
     width: 40%;
     border: yellow solid 2px;
-    margin-right: 2%; /* Add margin-right to create space between image and text */
+    margin-right: 2%;
 }
 
 .theirTeamPickImage {
@@ -113,3 +164,27 @@
     border: #888888 1px solid;
 }
 
+.championSelectorContainer {
+    top: 12%;
+    height: 80%;
+    left: 31%;
+    width: 42%;
+    position: absolute;
+
+    align-items: flex-start;
+    justify-content: flex-start;
+
+    scroll-behavior: smooth;
+
+    border: GOLD solid 2px;
+    overflow-x: hidden;
+
+    display: flex;
+    flex-wrap: wrap;
+    overflow-y : scroll;
+}
+
+.championSelectorContainer::-webkit-scrollbar {
+    width: 5px;
+    background-color: transparent;
+}

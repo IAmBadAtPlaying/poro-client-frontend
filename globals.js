@@ -2,7 +2,7 @@ export const PROXY_PORT = 35199;
 export const STATIC_PORT = 35199;
 export const SOCKET_PORT = 8887;
 
-const VERSION = "0.1.3"
+const VERSION = "0.1.3";
 
 export const PROXY_STATIC_PREFIX = "http://127.0.0.1:"+PROXY_PORT+"/proxy/static";
 export const PROXY_PREFIX = "http://127.0.0.1:"+PROXY_PORT+"/proxy";
@@ -10,15 +10,15 @@ export const STATIC_PREFIX = "http://127.0.0.1:"+STATIC_PORT+"/static";
 
 export const SOCKET_URL = "ws://127.0.0.1:"+SOCKET_PORT;
 
-export const VERSION_SHORT = "v"+VERSION
-export const VERSION_LONG = "Version "+VERSION
+export const VERSION_SHORT = "v"+VERSION;
+export const VERSION_LONG = "Version "+VERSION;
 
-export const BROWSER_TITLE = "Poro-Client " + VERSION_SHORT
+export const BROWSER_TITLE = "Poro-Client " + VERSION_SHORT;
 
-export const CHAMP_SELECT_MAX_BANS_PER_TEAM = 5
-export const CHAMP_SELECT_MAX_MEMBERS_PER_TEAM = 5
+export const CHAMP_SELECT_MAX_BANS_PER_TEAM = 5;
+export const CHAMP_SELECT_MAX_MEMBERS_PER_TEAM = 5;
 
-export const GITHUB_ISSUES_LINK = "https://github.com/IAmBadAtPlaying/poro-client-frontend/issues"
+export const GITHUB_ISSUES_LINK = "https://github.com/IAmBadAtPlaying/poro-client-frontend/issues";
 
 export function isJsonObjectEmpty(jsonObj) {
     if (typeof jsonObj === 'object') {
@@ -36,15 +36,10 @@ export const TASKS = {};
 
 export const TASK_AUTO_ACCEPT_QUEUE = {name: "Auto Accept Queue", parameters: [{name: "Delay", description: "Time till Ready-Check gets accepted", backendKey: "delay"}]};
 export const TASK_AUTO_PICK_CHAMP = {name: "Auto Pick Champion", parameters: [{name: "Delay", description: "Time until the champion gets picked", backendKey: "delay"},{name:"Champion ID", description:"Champion ID of the champion you want to get picked", backendKey: "championId"}]};
-export const GAME_STATUS_TO_STRING = {inGame: "In Game", championSelect: "Champ Select", outOfGame: "Game ended", hosting_ARAM_UNRANKED_5x5: "Creating ARAM", hosting_NORMAL: "Creating Normal", hosting_RANKED_SOLO_5x5: "Creating Ranked"}
-export const GAME_MODE_TO_STRING = {CLASSIC: "Summoner´s Rift", ARAM: "ARAM"}
+export const GAME_STATUS_TO_STRING = {inGame: "In Game", championSelect: "Champ Select", outOfGame: "Game ended", hosting_ARAM_UNRANKED_5x5: "Creating ARAM", hosting_NORMAL: "Creating Normal", hosting_RANKED_SOLO_5x5: "Creating Ranked"};
+export const GAME_MODE_TO_STRING = {CLASSIC: "Summoner´s Rift", ARAM: "ARAM"};
 
 
-export const GAMEMODE_SUMMONERS_RIFT = ["classic_sru", "Summoners Rift", [[430, "Blind Pick"],[400, "Draft Pick"],[420, "Ranked Solo/Duo"],[440, "Ranked Flex"]]];
-export const GAMEMODE_ARAM = ["aram", "Aram", [[450, "ARAM"]]];
-export const GAMEMODE_ONE_FOR_ALL = ["oneforall", "One for All", []];
-export const GAMEMODE_URF = ["urf", "Ultra Rapid Fire", []];
-export const GAMEMODE_TFT = ["tft", "Teamfight Tactics", []];
 /*
 *
 * COLORS
@@ -72,7 +67,7 @@ export const GOLD7 = "#32281E";
 
 // ---TEXT AND BACKGROUND---
 export const GREY1 = "#A09B8C";
-export const GREY1DOT5 = "#5B5A56"
+export const GREY1DOT5 = "#5B5A56";
 export const GREY2 = "#3C3C41";
 export const GREY3 = "#1E2328";
 export const GREY_COOL = "#1E282D";

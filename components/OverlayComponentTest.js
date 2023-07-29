@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import * as Globals from "../globals";
+import * as Globals from "../globals.js";
 import styles from "../styles/OverlayComponentTest.module.css";
 
 const OverlayComponent = () => {

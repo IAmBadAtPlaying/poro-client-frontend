@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
+import * as Globals from '../globals';
 import {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import LoadingComponent from "../components/LoadingComponent";
@@ -7,20 +8,19 @@ import FriendComponent from "../components/FriendComponent";
 import LobbyContainer from "../components/LobbyContainer";
 import TaskContainer from "../components/TaskContainer";
 import MatchmakingContainer from "../components/MatchmakingContainer";
-import * as Globals from '../globals'
-import {console} from "next/dist/compiled/@edge-runtime/primitives/console";
-import OverlayComponentTest from "../components/OverlayComponentTest";
 import ChampionSelectContainer from "../components/ChampionSelectContainer";
 import LobbyGamemodeSelector from "../components/LobbyGamemodeSelector";
-import {log} from "next/dist/server/typescript/utils";
-import {PROXY_STATIC_PREFIX} from "../globals";
 import ReadyCheckContainer from "../components/ReadyCheckContainer";
+import ConfigContainer from "../components/ConfigContainer";
+import LootContainer from "../components/LootContainer";
+import ProfileContainer from "../components/ProfileContainer";
 export var socket
 
 let pktNr = 0;
 const availabilityOrder = ['','chat','dnd', 'online', 'away', 'mobile', 'offline'];
 
 let audio;
+let globalChampions;
 
 export function send(jsonArray) {
     if (jsonArray instanceof Array) {
@@ -29,25 +29,38 @@ export function send(jsonArray) {
         let toSend = JSON.stringify(jsonArray)
         console.log("Sending: " + toSend);
         socket.send(toSend);
+        return pktNr;
     }
 }
 
-export function AUDIO_PLAY_GENERIC_BUTTON() {
+export function AUDIO_PLAY_BIG_BUTTON() {
     if (audio === undefined) return;
-    const playAudio = audio.cloneNode();
-    playAudio.volume = 0.5;
-    playAudio.play();
+    try {
+        const playAudio = audio.cloneNode();
+        playAudio.volume = 0.5;
+        playAudio.play();
+    } catch (e) {
+        console.log(e);
+    }
+
+}
+
+
+export function getChampions() {
+    return globalChampions;
 }
 
 export default function Home() {
     const mainDiv = useRef();
+    const [queues, setQueues] = useState({});
     const [champions, setChampions] = useState([]);
-    let [friends, setFriends] = useState({});
-    let [lobby, setLobby] = useState({});
-    let [container, setContainer] = useState("lobby");
-    let [gameflowState, setGameflowState] = useState("None");
-    let [championSelectState, setChampionSelectState] = useState({});
+    const [friends, setFriends] = useState({});
+    const [lobby, setLobby] = useState({});
+    const [container, setContainer] = useState("lobby");
+    const [gameflowState, setGameflowState] = useState("None");
+    const [championSelectState, setChampionSelectState] = useState({});
     const [isConnected, setIsConnected] = useState(false);
+    const [loot,setLoot] = useState({});
     function connect(host) {
             socket = new WebSocket(host);
             socket.onopen = function (msg) {
@@ -76,12 +89,12 @@ export default function Home() {
 
 
     function createKeepAlive() {
-        setTimeout(createKeepAlive, 290000)
+        setTimeout(createKeepAlive, 250000)
         socket.send("[]");
     }
 
     function resetAll() {
-        setFriends = {};
+        setFriends({});
     }
 
     function handleMessage(messageText) {
@@ -117,6 +130,17 @@ export default function Home() {
                             const currentChampSelectState = message.data;
                             setChampionSelectState(currentChampSelectState);
                         break;
+                        case 'InitialQueues':
+                            const currentQueues = message.data;
+                            setQueues(currentQueues);
+                        break;
+                        case 'InitialLoot':
+                        case 'LootUpdate':
+                            const currentLoot = message.data;
+                            setLoot(currentLoot);
+                        break;
+                        default:
+                        break;
                     }
                 }
             } catch (e) {
@@ -149,6 +173,7 @@ export default function Home() {
                 const response = await axios.get(Globals.PROXY_STATIC_PREFIX+'/lol-game-data/assets/v1/champion-summary.json');
                 const data = response.data;
                 setChampions(data);
+                globalChampions = response.data;
             } catch (error) {
                 console.error('Error fetching champion data:', error);
             }
@@ -168,8 +193,13 @@ export default function Home() {
             case 'tasks':
                 return <TaskContainer />;
             case 'loot':
+                return <LootContainer loot={loot}/>;
+            case 'profile':
+                return <ProfileContainer />;
+            case 'config':
+                return <ConfigContainer />
             default:
-                return (<></>);
+                return (<>{activeTab}</>);
         }
     };
 
@@ -181,7 +211,7 @@ export default function Home() {
     const renderLobby = (state) => {
         switch (state) {
             case 'Lobby':
-                return <LobbyContainer lobbyConfig={lobby} />;
+                return <LobbyContainer lobbyConfig={lobby} availableQueues={queues} />;
             break;
             case 'Matchmaking':
                 return <MatchmakingContainer lobbyConfig={lobby}/>
@@ -212,8 +242,11 @@ export default function Home() {
             break;
             case 'None':
             case 'TerminatedInError': //Really Rare Edge Case
-                return <LobbyGamemodeSelector/>
+                return <LobbyGamemodeSelector availableQueues={queues}/>
             break;
+            case 'CheckedIntoTournament':
+                return <div>This client doesnt support clash tournaments, please use the League Client</div>
+                break;
             default:
                 return <div>Unknown State : {state}</div>
             break;
@@ -237,9 +270,10 @@ export default function Home() {
                 <div className={styles.mainContent}>
                     <div className={styles.containerSelector}>
                         <button className={styles.containerButton} onClick={() => setContainer("lobby")}>Lobby</button>
-                        <button className={styles.containerButton}>Profile</button>
-                        <button className={styles.containerButton}>Loot</button>
+                        <button className={styles.containerButton} onClick={() => setContainer("profile")}>Profile</button>
+                        <button className={styles.containerButton} onClick={() => setContainer("loot")}>Loot</button>
                         <button className={styles.containerButton} onClick={() => setContainer("tasks")}>Tasks</button>
+                        <button className={styles.containerButton} onClick={() => setContainer("config")}>Config</button>
                     </div>
                     <div className={styles.contentContainer}>
                         {(renderContent(container))}

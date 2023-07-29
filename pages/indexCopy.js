@@ -100,7 +100,7 @@ export default function Home2() {
             </footer>
             <LoadingComponent />
 
-            <style jsx>{`
+            <style>{`
         main {
           padding: 5rem 0;
           flex: 1;
@@ -137,7 +137,7 @@ export default function Home2() {
         }
       `}</style>
 
-            <style jsx global>{`
+            <style>{`
         html,
         body {
           padding: 0;
