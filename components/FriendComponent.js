@@ -62,7 +62,7 @@ export default function FriendComponent({friend}) {
                 className={styles.icon}
                 fill
                 draggable={false}
-                style={{objectFit:"cover"}}
+                style={{objectFit:"scale-down"}}
                 loading="lazy"
             />
             </div>

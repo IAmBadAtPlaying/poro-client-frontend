@@ -54,18 +54,19 @@
     flex-direction: column;
     position: absolute;
     top: 12%;
-    left: 5%;
-    height: 80%;
-    width: 20%;
+    left: 2%;
+    height: 75%;
+    width: 25%;
 }
 
 .myTeamPickComponent {
     border: red solid 2px;
     display: flex;
+    flex-direction: row;
     align-items: center;
     position: relative;
-    height: 16%;
-    margin: 3% 0;
+    min-height: 15%;
+    margin: 0% 0;
 }
 
 .myTeamPickBanImage{
@@ -76,17 +77,25 @@
 }
 
 .myTeamPickBanImageContainer {
-    flex: 2;
+    flex: 3;
     position: relative;
     display: flex;
+    flex-direction: row;
     height: 100%;
     width: 100%;
-    border: yellow solid 2px;
     margin-right: 2%;
 }
 
 .myTeamPickImageContainer {
-    flex: 10;
+    flex: 8;
+    border: blueviolet solid 2px;
+}
+
+.spaceDiv {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    border: blue solid 2px;
 }
 
 .myTeamBanImageContainer {
@@ -95,40 +104,38 @@
     top: 30%;
     max-height: 40%;
     max-width: 40%;
-    border: green solid 2px;
 }
 
 .imageCircleMask {
+    position: absolute;
     zoom: 100%;
-    max-width: 100%;
-    max-height: 100%;
     height: 100%;
-    width: 100%;
-    border-radius: 100%;
+    max-width: 100%;
+    border-radius: 50%;
     overflow: hidden;
+    border: gray solid 6px;
+    border-top: gold solid;
+    animation: spinner 2s linear infinite;
 }
 
+
+
 .imageMask {
-    max-width: 50%;
-    max-height: 100%;
     height: 100%;
     width: 100%;
     overflow: hidden;
-    border: red solid 2px;
 }
 
 .myTeamPickImage {
     transform: scale(1.2,1.2);
-    position: relative;
     flex: 10;
-    max-height: 100%;
-    max-width: 100%;
+    height: 100%;
     width: 100%;
     border: #888888 1px inset;
 }
 
 .myTeamPickDescription {
-    flex: 2;
+    flex: 3;
 }
 
 .theirTeamPickContainer {
@@ -139,7 +146,7 @@
     top: 12%;
     left: 75%;
     height: 80%;
-    width: 20%;
+    width: 22%;
 }
 
 .theirTeamPickComponent {
@@ -162,6 +169,15 @@
 .theirTeamPickImage {
     height: 100%;
     border: #888888 1px solid;
+}
+
+.championSelectorLockInButton {
+    position: absolute;
+    bottom: 2.5%;
+    right: 45%;
+    height: 5%;
+    width: 10%;
+    border: red solid 2px;
 }
 
 .championSelectorContainer {
@@ -188,3 +204,162 @@
     width: 5px;
     background-color: transparent;
 }
+
+
+.myTeamContentsContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.myTeamBackgroundImageContainer {
+    position: absolute;
+    width: 100%;
+    min-height: 100%;
+    z-index: -1;
+    background-size: cover;
+}
+
+.myTeamPickSummonerSpellsContainer {
+    flex: 4;
+    margin-bottom: 10%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 100%;
+    max-height: 50%;
+    margin-top: 15%;
+}
+
+.myTeamPickSummonerSpellImageContainerTop {
+    margin: 0;
+    flex: 1;
+    overflow: hidden;
+}
+
+.myTeamPickSummonerSpellImageContainerBottom {
+    margin: 0;
+    flex: 1;
+    overflow: hidden;
+}
+
+.myTeamPickSummonerSpellImage {
+    height: 100%;
+    width: 100%;
+    object-fit: scale-down;
+}
+
+.testPickChampionStateIndicatorPICKING {
+    flex: 0.1;
+    height: 100%;
+    background-color: GOLD;
+}
+
+.testPickChampionStateIndicatorBANNING {
+    flex: 0.1;
+    height: 100%;
+    background-color: RED;
+}
+
+.testPickSummonerSpellSection {
+    flex: 1;
+    display: grid;
+    width: 100%;
+    height: 100%;
+}
+
+.testPickSummonerSpellImageContainer {
+    vertical-align: middle;
+    margin: 0;
+    padding: 0;
+    transform: translate(0, 40%);
+    height: 60%;
+    width: 100%;
+    text-align: center;
+    overflow: hidden;
+}
+
+.testPickSummonerSpellImage {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+
+.testPickChampionIconSection {
+    flex: 2;
+    height: 100%;
+}
+
+.testPickChampionIconImageContainer {
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+
+.testPickChampionIconImageMask {
+    position: relative;
+    height: 80%;
+    width: 80%;
+    top: 50%;
+    left: 50%;
+    border: yellow solid 5px;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    overflow: hidden;
+}
+
+.testPickChampionIconImageMaskBAN {
+    position: relative;
+    height: 80%;
+    width: 80%;
+    top: 50%;
+    left: 50%;
+    border: red solid 5px;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    overflow: hidden;
+}
+
+.testPickInfoSection {
+    flex: 4;
+    height: 100%;
+    flex-direction: column;
+    display: flex;
+}
+
+
+.testPickInfoPosition {
+    flex: 1;
+    margin-left: 4%;
+    height: 100%;
+    align-content: center;
+    align-items: center;
+    transform: translate(0, 20%);
+}
+
+.testPickInfoChampionName {
+    flex: 1;
+    margin-left: 4%;
+    align-content: center;
+    align-items: center;
+    font-size: 150%;
+    color: GOLD;
+}
+
+.testPickInfoSummonerName {
+    flex: 1;
+    margin-left: 4%;
+}
+
+.runeButtonContainer {
+    position: absolute;
+    top: 92%;
+    left: 2%;
+    height: 80%;
+    width: 25%;
+    border: red solid 2px;
+}
+
+
+
+

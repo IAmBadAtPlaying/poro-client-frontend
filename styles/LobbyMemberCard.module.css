@@ -39,7 +39,7 @@
     margin: 0;
     padding: 0;
     width: 100%;
-    top: 50%;
+    top: 55%;
 }
 
 .leaderCrownContainer {
@@ -48,7 +48,7 @@
     padding: 0;
     object-fit: fill;
     width: 10%;
-    top: 49.5%;
+    top: 54.5%;
     left: 12%;
 }
 
@@ -113,7 +113,7 @@
 
 .profileContainer::before {
     content: "";
-    padding-top: 100%; /* Creates a space for content inside the container */
+    padding-top: 100%; /* TODO: I shouldnt need to do this, rethink approach*/
 }
 
 .profileImage {

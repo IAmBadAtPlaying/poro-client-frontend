@@ -1,12 +1,15 @@
-export const PROXY_PORT = 35199;
-export const STATIC_PORT = 35199;
+export const APPLICATION_PORT = 35199;
 export const SOCKET_PORT = 8887;
 
 const VERSION = "0.1.3";
 
-export const PROXY_STATIC_PREFIX = "http://127.0.0.1:"+PROXY_PORT+"/proxy/static";
-export const PROXY_PREFIX = "http://127.0.0.1:"+PROXY_PORT+"/proxy";
-export const STATIC_PREFIX = "http://127.0.0.1:"+STATIC_PORT+"/static";
+const BASE_URL = "http://127.0.0.1:"
+
+export const PROXY_STATIC_PREFIX = BASE_URL+APPLICATION_PORT+"/proxy/static";
+export const PROXY_PREFIX =  BASE_URL+ APPLICATION_PORT+"/proxy";
+export const STATIC_PREFIX = BASE_URL+APPLICATION_PORT+"/static";
+export const CONFIG_PREFIX = BASE_URL+APPLICATION_PORT+"/config";
+export const REST_PREFIX = BASE_URL+APPLICATION_PORT+"/rest";
 
 export const SOCKET_URL = "ws://127.0.0.1:"+SOCKET_PORT;
 

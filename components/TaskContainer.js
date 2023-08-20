@@ -1,26 +1,54 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import * as Globals from '../globals';
 import TaskConfiguration from "./TaskConfiguration";
 import styles from  '../styles/TaskContainer.module.css';
+import axios from "axios";
 
 export default function TaskContainer() {
+    //TODO: Communicate Task Updates, right now its a static request
 
-    const [params_TASK_AUTO_ACCEPT_QUEUE, setParams_TASK_AUTO_ACCEPT_QUEUE] = useState({});
-    const [params_TASK_AUTO_PICK_CHAMP, setParams_TASK_AUTO_PICK_CHAMP] = useState({});
+    const callbackArray = [];
 
+    const [taskList, setTaskList] = useState([]);
 
+    const invokeCallback = () => {
+        callbackArray.forEach((callback) => {
+            callback();
+        });
+    }
+
+    const fetch = () => {
+            axios.get(Globals.REST_PREFIX + "/tasks").then((response) => {
+                const data = response.data;
+                if (data.httpStatus == 200 && data.tasks != null) {
+                    setTaskList(data.tasks);
+                }
+            }).catch((error) => {
+                console.log(error);
+            });
+    }
+
+    useEffect(() => {
+        console.log("Fetching tasks");
+        fetch();
+    }, []);
 
     return(
         <div className={styles.task_container}>
             <div className={styles.header}>
                 <h1>TASKS</h1>
-                {console.log(params_TASK_AUTO_ACCEPT_QUEUE)}
-                {console.log(params_TASK_AUTO_PICK_CHAMP)}
             </div>
             <div className={styles.tasks_container}>
-                <TaskConfiguration task={Globals.TASK_AUTO_ACCEPT_QUEUE} setParametersFunction={setParams_TASK_AUTO_ACCEPT_QUEUE}></TaskConfiguration>
-                <TaskConfiguration task={Globals.TASK_AUTO_PICK_CHAMP} setParametersFunction={setParams_TASK_AUTO_PICK_CHAMP}></TaskConfiguration>
-
+                {
+                    taskList.map((task, index) => {
+                        return (
+                                <TaskConfiguration task={task} key={index} functionArray={callbackArray} index={index}></TaskConfiguration>
+                        )
+                    })
+                }
+            </div>
+            <div className={styles.submitContainer}>
+                <button className={styles.submitButton} onClick={() => {invokeCallback()}}>Submit</button>
             </div>
         </div>
     )

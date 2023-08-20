@@ -2,7 +2,6 @@ import Head from 'next/head';
 import styles from '../styles/Home.module.css';
 import * as Globals from '../globals';
 import {useEffect, useRef, useState} from 'react';
-import axios from 'axios';
 import LoadingComponent from "../components/LoadingComponent";
 import FriendComponent from "../components/FriendComponent";
 import LobbyContainer from "../components/LobbyContainer";
@@ -21,6 +20,8 @@ const availabilityOrder = ['','chat','dnd', 'online', 'away', 'mobile', 'offline
 
 let audio;
 let globalChampions;
+let globalSpells;
+let globalChromaSkins;
 
 export function send(jsonArray) {
     if (jsonArray instanceof Array) {
@@ -50,6 +51,14 @@ export function getChampions() {
     return globalChampions;
 }
 
+export function getSpells() {
+    return globalSpells;
+}
+
+export function getChromaSkins() {
+    return globalChromaSkins;
+}
+
 export default function Home() {
     const mainDiv = useRef();
     const [queues, setQueues] = useState({});
@@ -61,6 +70,7 @@ export default function Home() {
     const [championSelectState, setChampionSelectState] = useState({});
     const [isConnected, setIsConnected] = useState(false);
     const [loot,setLoot] = useState({});
+    const [taskList, setTaskList] = useState([]);
     function connect(host) {
             socket = new WebSocket(host);
             socket.onopen = function (msg) {
@@ -130,6 +140,11 @@ export default function Home() {
                             const currentChampSelectState = message.data;
                             setChampionSelectState(currentChampSelectState);
                         break;
+                        case 'TaskUpdate':
+                        case 'InitialTaskUpdate':
+                            const currentTasks = message.data;
+                            setTaskList(currentTasks);
+                        break;
                         case 'InitialQueues':
                             const currentQueues = message.data;
                             setQueues(currentQueues);
@@ -137,7 +152,29 @@ export default function Home() {
                         case 'InitialLoot':
                         case 'LootUpdate':
                             const currentLoot = message.data;
+                            console.log("Loot Update")
+                            console.log(currentLoot.CHAMPION_RENTAL_200.count)
                             setLoot(currentLoot);
+                        break;
+                        case 'DataTransfer':
+                            const currentData = message.data;
+                            const dataTransferType = currentData.dataType;
+                            const dataTransferData = currentData.data;
+                            if (dataTransferType === undefined) return;
+                            console.log(message.data);
+                            switch (dataTransferType) {
+                                case 'Champions':
+                                    globalChampions = dataTransferData;
+                                break;
+                                case 'SummonerSpells':
+                                    globalSpells = dataTransferData;
+                                break;
+                                case 'ChromaSkins':
+                                    globalChromaSkins = dataTransferData;
+                                break;
+                                default:
+                                break;
+                            }
                         break;
                         default:
                         break;
@@ -148,6 +185,7 @@ export default function Home() {
             }
         }
     }
+
 
     useEffect(() => {
         if (typeof document !== 'undefined') {
@@ -168,19 +206,6 @@ export default function Home() {
         }
     }, []);
     useEffect(() => {
-        async function fetchChampions() {
-            try {
-                const response = await axios.get(Globals.PROXY_STATIC_PREFIX+'/lol-game-data/assets/v1/champion-summary.json');
-                const data = response.data;
-                setChampions(data);
-                globalChampions = response.data;
-            } catch (error) {
-                console.error('Error fetching champion data:', error);
-            }
-        }
-
-        fetchChampions();
-
         connect("ws://127.0.0.1:8887");
     }, []);
 
@@ -191,7 +216,7 @@ export default function Home() {
             case 'lobby':
                 return renderLobby(gameflowState);
             case 'tasks':
-                return <TaskContainer />;
+                return <TaskContainer taskList={taskList} />;
             case 'loot':
                 return <LootContainer loot={loot}/>;
             case 'profile':
@@ -220,7 +245,7 @@ export default function Home() {
                 return <ReadyCheckContainer />
             break;
             case 'ChampSelect':
-                return <></>;
+                return <ChampionSelectContainer session={championSelectState}/>;
             break;
             case 'GameStart':
                 return <div>GAME - START</div>;
@@ -255,8 +280,8 @@ export default function Home() {
 
   const renderFullScreen = (gameflowState) => {
     switch (gameflowState) {
-        case 'ChampSelect':
-            return (<ChampionSelectContainer session={championSelectState}/>)
+        // case 'ChampSelect':
+        //     return (<ChampionSelectContainer session={championSelectState}/>)
         default:
             return renderNormalLobby()
         break;

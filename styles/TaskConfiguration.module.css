@@ -1,18 +1,26 @@
 .task_configuration_container {
     flex: 0;
     margin-top: 15px;
-    border: #C89B3C solid;
+    border: #785A28 solid;
     border-radius: 5px;
 }
 
 .task_configuration_name {
     display: flex;
-    color: red;
+    color: #C8AA6E;
     margin-left: 10px;
+    font-size: 125%;
+}
+
+.task_configuration_checkbox {
+    margin-left: 0;
+    border-radius: 100%;
 }
 
 .task_configuration_parameter_container {
     display: flex;
+    flex-wrap: wrap;
+    width: 100%;
 }
 
 .singleTaskConfig {
@@ -31,11 +39,9 @@
 
 .task_configuration_parameter:active {
     background: red;
-    border: #C8AA6E solid 2px;
 }
 
 .task_configuration_parameter:focus {
     background: green;
-    border: transparent solid;
-    outline: #C8AA6E solid;
+    outline: none;
 }

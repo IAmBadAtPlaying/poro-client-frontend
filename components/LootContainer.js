@@ -10,6 +10,7 @@ export default function LootContainer({loot}) {
     //TODO Cleanup loot, it still contains wards and champion tokens, which are not disenchantable
     //TODO Categories should have to be chosen before display, then set disenchantLoot to just the loot elements;
     //TODO: Make it look better
+    //TODO: The loot resets when selecting it into the disenchant container and then back, can be fixed via hard reload, but that's not a good solution.
 
     const DROP_ORIGIN_INVENTORY = "inventory";
     const DROP_ORIGIN_SELECTION = "selection";
@@ -18,20 +19,52 @@ export default function LootContainer({loot}) {
 
     const [awaitingDisenchant, setAwaitingDisenchant] = useState(false);
 
-    const [currentSelection, setCurrentSelection] = useState("all");
+    /*This shouldnt be implemented like this, but if I use a state, it will not update on the first button click, only the the second one.
+    Seems to be a react limitation. I am too tired to look into it. But it works for now (doesnt update the UI as it is not a state)
+    * */
+    let selection = "all";
 
     const [disenchantLoot, setDisenchantLoot] = useState([]);
     const [displayLoot, setDisplayLoot] = useState([]);
 
+    const resetSelection = () => {
+        setDisenchantLoot({});
+        setDisplayLoot(filterLoot(loot));
+    }
+
     useEffect(() => {
-        setDisplayLoot(loot);
-        setDisenchantLoot({})
+        return () => {
+            console.log("Resetting loot");
+            resetSelection();
+        }
+    }, []);
+
+
+    useEffect(() => {
+        console.log("Loot changed");
+        resetSelection();
         setAwaitingDisenchant(false);
     }, [loot]);
 
-    const resetSelection = () => {
-        setDisplayLoot(loot);
-        setDisenchantLoot({});
+    const filterLoot = (passedLoot) => {
+        let newLoot = {};
+        console.log(selection);
+        Object.values(passedLoot).filter(
+            (item) => {
+                if (item === undefined) return false;
+                if (item.itemDesc === undefined) return false;
+                if (item.itemDesc === "") return false;
+                if (item.lootName.startsWith("WARD_SKIN")) return false;
+                if (item.lootName.startsWith("CHAMPION_TOKEN")) return false;
+                if (selection === "all") return true;
+                else if (item.displayCategories.toLowerCase() !== selection) return false;
+                return true;
+            }
+        ).forEach((oldItem) => {
+            let item = {...oldItem};
+            newLoot[item.lootName] = item;
+        });
+        return newLoot;
     }
 
     const selectOwnedContent = () => {
@@ -50,7 +83,7 @@ export default function LootContainer({loot}) {
     const sendDisenchantLoot = () => {
         if (awaitingDisenchant || isJsonObjectEmpty(disenchantLoot)) return;
         let lootToDisenchant = [];
-        Object.values(disenchantLoot).map((item) => {
+        Object.values(disenchantLoot).forEach((item) => {
             lootToDisenchant.push(item);
         });
         setDisenchantLoot({});
@@ -117,8 +150,9 @@ export default function LootContainer({loot}) {
 
     }
 
-    const moveItem = (item, origin, destination, setOrigin, setDestination) => {
-        const preCopy = JSON.stringify(item)
+    const moveOneElement = (item, origin, destination, setOrigin, setDestination) => {
+        console.log(item.count);
+        const preCopy = JSON.stringify(item);
 
         const itemCopy = JSON.parse(preCopy);
 
@@ -128,8 +162,9 @@ export default function LootContainer({loot}) {
         if (originalCount >= 1) {
             if (originalCount === 1) {
                 delete updatedOrigin[name];
-            } else updatedOrigin[name].count -= 1;
+            } else updatedOrigin[name].count = originalCount - 1;
         } else return;
+
         const updatedDestination = {...destination};
         if (updatedDestination[name] === undefined) {
             itemCopy.count = 1;
@@ -149,21 +184,21 @@ export default function LootContainer({loot}) {
         event.dataTransfer.setData("text/plain", itemData);
     };
 
-    const changeSelection = (selection) => {
-        setCurrentSelection(selection);
-        const newDisplayLoot = {};
-        Object.values(loot).map((item) => {
-            if (item.displayCategories.toLowerCase() === selection) {
-                newDisplayLoot[item.lootName] = item;
-            }
-        });
-        setDisenchantLoot({});
-        setDisplayLoot(newDisplayLoot);
+    const changeSelection = (newSelection) => {
+        selection = newSelection;
+        resetSelection();
+        // const newDisplayLoot = {};
+        // Object.values(filterLoot(loot)).map((item) => {
+        //     if (item.displayCategories.toLowerCase() === selection) {
+        //         newDisplayLoot[item.lootName] = item;
+        //     }
+        // });
+        // setDisplayLoot(newDisplayLoot);
     }
 
     return (
         <div className={styles.content}>
-            {currentSelection}<br></br>
+            {selection}<br></br>
             Awaiting Disenchant: {awaitingDisenchant ? "true" : "false"}<br></br>
             <button onClick={() => {changeSelection("skin")}}>Skins</button>
             <button onClick={() => {changeSelection("champion")}}>Champions</button><br></br>
@@ -174,11 +209,9 @@ export default function LootContainer({loot}) {
                     Object.values(displayLoot).sort((a,b) => {
                         return a.itemDesc.localeCompare(b.itemDesc);
                     }).map((item, index) => {
-                        if (item.itemDesc === undefined || item.itemDesc === "") return <div key={"Loot-"+index}></div>
-                        if (item.lootName.startsWith("WARD_SKIN") || item.lootName.startsWith("CHAMPION_TOKEN")) return <div key={"Loot-"+index}></div>
-                            return (<div key={"Loot-"+index} className={styles.lootElement} draggable={true} onDragStart={(e) => {handleDragStart(e, item, DROP_ORIGIN_INVENTORY)}} onClick={() => moveItem(item, displayLoot, disenchantLoot, setDisplayLoot, setDisenchantLoot)}>
+                            return (<div key={"Loot-"+index} className={styles.lootElement} draggable={true} onDragStart={(e) => {handleDragStart(e, item, DROP_ORIGIN_INVENTORY)}} onClick={() => moveOneElement(item, displayLoot, disenchantLoot, setDisplayLoot, setDisenchantLoot)}>
                                 <div className={styles.imageContainer}>
-                                    <Image fill className={styles.lootImage} src={PROXY_STATIC_PREFIX + item.tilePath} draggable={false} loading={"lazy"}></Image>
+                                    <Image fill className={styles.lootImage} src={PROXY_STATIC_PREFIX + item.tilePath} alt={""+item.tilePath} draggable={false} loading={"lazy"}></Image>
                                 </div>
                                 <div className={styles.lootDescription} draggable={false}>
                                     <span>{item.itemDesc}<br></br></span>
@@ -197,11 +230,9 @@ export default function LootContainer({loot}) {
                     Object.values(disenchantLoot).sort((a,b) => {
                         return a.itemDesc.localeCompare(b.itemDesc);
                     }).map((item, index) => {
-                        if (item.itemDesc === undefined || item.itemDesc === "") return <div key={"Loot-"+index}></div>
-                        if (item.lootName.startsWith("WARD_SKIN") || item.lootName.startsWith("CHAMPION_TOKEN")) return <div key={"Loot-"+index}></div>
-                        return (<div key={"Loot-"+index} className={styles.lootElement} draggable={true} onDragStart={(e) => handleDragStart(e, item, DROP_ORIGIN_SELECTION)} onClick={() => moveItem(item, disenchantLoot, displayLoot, setDisenchantLoot, setDisplayLoot)}>
+                        return (<div key={"Loot-"+index} className={styles.lootElement} draggable={true} onDragStart={(e) => handleDragStart(e, item, DROP_ORIGIN_SELECTION)} onClick={() => moveOneElement(item, disenchantLoot, displayLoot, setDisenchantLoot, setDisplayLoot)}>
                             <div className={styles.imageContainer}>
-                                <Image fill className={styles.lootImage} src={PROXY_STATIC_PREFIX + item.tilePath} draggable={false} loading={"lazy"}></Image>
+                                <Image fill className={styles.lootImage} src={PROXY_STATIC_PREFIX + item.tilePath} alt={""+item.tilePath}  draggable={false} loading={"lazy"}></Image>
                             </div>
                                 <div className={styles.lootDescription} draggable={false}>
                                     <span>{item.itemDesc}<br></br></span>
