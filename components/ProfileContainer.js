@@ -162,15 +162,15 @@ export default function ProfileContainer() {
                 <button onClick={() => sendValues()}>Save!</button>
                 <button onClick={() => resetAll()}>Reset</button>
             </div>
-            <div>
-                <div className={styles.container}>
-                    <div className={styles.previewContainer}>
-                        <div className={styles.profileImageContainer}>
-                            <img className={styles.profileImage} src={Globals.PROXY_PREFIX + "/lol-game-data/assets/v1/profile-icons/4025.jpg"} alt={"Test"}/>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {/*<div>*/}
+            {/*    <div className={styles.container}>*/}
+            {/*        <div className={styles.previewContainer}>*/}
+            {/*            <div className={styles.profileImageContainer}>*/}
+            {/*                <img className={styles.profileImage} src={Globals.PROXY_PREFIX + "/lol-game-data/assets/v1/profile-icons/4025.jpg"} alt={"Test"}/>*/}
+            {/*            </div>*/}
+            {/*        </div>*/}
+            {/*    </div>*/}
+            {/*</div>*/}
         </div>
     )
 }
