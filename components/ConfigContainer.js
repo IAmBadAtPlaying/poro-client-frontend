@@ -1,18 +1,19 @@
 import styles from "../styles/Config.module.css";
-import {send} from "../pages";
+import {axiosSend, send} from "../pages";
 import * as Globals from "../globals";
 
 export default function ConfigContainer() {
+
     const restartClient = () => {
-        send([0,"POST","/riotclient/kill-and-restart-ux",""]);
+        axiosSend("POST", "/riotclient/kill-and-restart-ux", "")
     };
 
     const killUXProcess = () => {
-        send([0,"POST","/riotclient/kill-ux",""]);
+        axiosSend("POST", "/riotclient/kill-ux", "")
     };
 
     const restartUXProcess = () => {
-        send([0,"POST","/riotclient/launch-ux",""]);
+        axiosSend("POST", "/riotclient/launch-ux", "")
     };
 
     const uploadFile = ()  => {
@@ -43,6 +44,18 @@ export default function ConfigContainer() {
         xhr.send(formData);
     }
 
+    const shutdown = () => {
+        send([10, "shutdown"]);
+        window.onbeforeunload = function() {};
+        window.close();
+    }
+
+    const shutdownAll = () => {
+        send([10, "shutdown-all"]);
+        window.onbeforeunload = function() {};
+        window.close();
+    }
+
     return (
         <div>
             <div className={styles.clientClickOption}>
@@ -60,8 +73,8 @@ export default function ConfigContainer() {
                 </div>
                 <p>Exit Options</p>
                 <div className={styles.exitOptionsContainer}>
-                    <button className={styles.exitOption} onClick={() => send([10, "shutdown"])}>Exit the Poro-Client</button>
-                    <button className={styles.exitOption} onClick={() => send([10, "shutdown-all"])}>Exit the Poro-Client and League of Legends</button>
+                    <button className={styles.exitOption} onClick={() => shutdown()}>Exit the Poro-Client</button>
+                    <button className={styles.exitOption} onClick={() => shutdownAll()}>Exit the Poro-Client and League of Legends</button>
                 </div>
             </div>
             <div className={styles.taskUploadContainer}>

@@ -1,0 +1,75 @@
+.mainWindow {
+    height: 100%;
+    width: 100%;
+}
+
+.header {
+    border: yellow solid 2px;
+    height: 10%;
+    width: 100%;
+    margin-bottom: 1%;
+    display: flex;
+    flex-direction: row;
+}
+
+
+.close {}
+
+.messageDisplay {
+    height: 76%;
+    position: relative;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.messageContainer {
+    box-sizing: border-box;
+    margin: 1%;
+    width: 99%;
+    min-height: 3vh;
+    transform: translateX(-1%);
+    overflow: hidden;
+}
+
+.ownMessage {
+    box-sizing: border-box;
+    position: relative;
+    height: 100%;
+    left: 100%;
+    transform: translateX(-100%);
+    width: fit-content;
+    max-width: 80%;
+    overflow-wrap: break-word;
+    padding: 0.2% 1%;
+    text-align: left;
+    background-color: #C89B3C;
+    border: #C89B3C solid 2px;
+}
+
+.receivedMessage {
+    box-sizing: border-box;
+    position: relative;
+    height: 100%;
+    left: 0;
+    width: fit-content;
+    max-width: 80%;
+    padding: 0.2% 1%;
+    text-align: left;
+    background-color: #5B5A56;
+    border: #5B5A56 solid 2px;
+}
+
+.inputContainer {
+    height: 10%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.messageInput {
+    width: 100%;
+}
+
+.buttonClose {
+
+}

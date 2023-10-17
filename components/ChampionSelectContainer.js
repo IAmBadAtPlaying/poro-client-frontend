@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import styles from '../styles/ChampionSelectContainer.module.css';
+import styles from '../styles/champSelect/ChampionSelectContainer.module.css';
 import {getChampions, getChromaSkins, getSpells} from "../pages";
 import * as Globals from "../globals";
 import ChampionCard from "./ChampionCard";
@@ -8,23 +8,36 @@ import axios from "axios";
 import RuneSelector from "./RuneSelector";
 
 export default function ChampionSelectContainer({session}) {
+    let champions = getChampions();
 
     const [runesVisible, setRunesVisible] = useState(false);
+    const [searchInput, setSearchInput] = useState("");
+    const [filteredChampions, setFilteredChampions] = useState(champions);
 
-    const [currentlySelected, setCurrentlySelected] = useState(-1);
+    const [currentPickSelected, setCurrentPickSelected] = useState(-1);
+    const [currentBanSelected, setCurrentBanSelected] = useState(-1);
 
     useEffect(() => {
-        axios.post(Globals.REST_PREFIX + "/champSelect/pick", {
-            championId: currentlySelected,
+        axios.post(Globals.REST_PREFIX + "/champSelect/ban", {
+            championId: currentBanSelected,
             lockIn: false
         }).catch((error) => {
             console.log(error);
         })
-    }, [currentlySelected])
+    }, [currentBanSelected])
+
+    useEffect(() => {
+        axios.post(Globals.REST_PREFIX + "/champSelect/pick", {
+            championId: currentPickSelected,
+            lockIn: false
+        }).catch((error) => {
+            console.log(error);
+        })
+    }, [currentPickSelected])
 
     const lockIn = () => {
         axios.post(Globals.REST_PREFIX + "/champSelect/pick", {
-            championId: currentlySelected,
+            championId: currentPickSelected,
             lockIn: true
         }).catch((error) => {
             console.log(error);
@@ -40,8 +53,6 @@ export default function ChampionSelectContainer({session}) {
 
     if (!session.myTeam) session.myTeam = [];
     if (!session.theirTeam) session.theirTeam = [];
-
-    let champions = getChampions();
 
     const renderMyTeamBans = (passedBans, maxBans) => {
         const bans = [];
@@ -179,42 +190,20 @@ export default function ChampionSelectContainer({session}) {
         if (!session) return (<></>);
         let myTeam = session.myTeam;
         let timer = session.timer;
-        if (!timer) return renderMyTeam_PLANNING(myTeam);
+        if (!timer) return renderMyTeam(myTeam, true);
         let timerPhase = session.timer.phase;
         console.log("Current Phase " + timerPhase);
         switch (timerPhase) {
             case 'PLANNING':
             case 'BAN_PICK':
-                return renderMyTeam_BAN_PICK(myTeam);
             case 'FINALIZATION':
-                return renderMyTeam_FINALIZATION(myTeam);
+                return renderMyTeam(myTeam, false);
             default:
                 return <>Unknown Timer Phase: {timerPhase}</>
         }
     }
 
-    const renderMyTeam_FINALIZATION = (myTeam) => {
-        return (
-            <>Finalization
-                {renderMyTeam_BAN_PICK(myTeam)}
-            </>
-        );
-    }
-
-    const renderMyTeam_PLANNING = (myTeam) => {
-        const myTeamArray = [];
-
-        for (let index = 0; index < Globals.CHAMP_SELECT_MAX_MEMBERS_PER_TEAM; index++) {
-
-            const currentSummoner = myTeam[index];
-            myTeamArray.push(
-                createMyTeamPickComponent(currentSummoner, true, index)
-            )
-        }
-        return myTeamArray;
-    }
-
-    const renderMyTeam_BAN_PICK = (myTeam) => {
+    const renderMyTeam = (myTeam, useIntentAsValue) => {
         const myTeamArray = [];
 
         for (let index = 0; index < Globals.CHAMP_SELECT_MAX_MEMBERS_PER_TEAM; index++) {
@@ -222,7 +211,7 @@ export default function ChampionSelectContainer({session}) {
             const currentSummoner = myTeam[index];
             {
                 myTeamArray.push(
-                    createMyTeamPickComponent(currentSummoner, false, index)
+                    createMyTeamPickComponent(currentSummoner, useIntentAsValue, index)
                 )
             }
         }
@@ -330,8 +319,8 @@ export default function ChampionSelectContainer({session}) {
         let state = currentSummoner.stateDebug;
         console.log("" + index + " " + state)
         switch (state) {
-            case 'PREPERATION':
-                return renderSummonerPREPERATION(currentSummoner, index);
+            case 'PREPARATION':
+                return renderSummonerPREPARATION(currentSummoner, index);
             case 'BANNING':
                 return renderSummonerBANNING(currentSummoner, index);
             case 'AWAITING_PICK':
@@ -351,7 +340,7 @@ export default function ChampionSelectContainer({session}) {
         }
     }
 
-    const renderSummonerPREPERATION = (currentSummoner, index) => {
+    const renderSummonerPREPARATION = (currentSummoner, index) => {
         //TODO: Pick Intent, pickAction read just read the intent
 
         if (currentSummoner.championPickIntent === 0) {
@@ -536,7 +525,7 @@ export default function ChampionSelectContainer({session}) {
 
         return (
             <div className={styles.myTeamPickComponent} key={"MyTeamPick-" + index}>
-                <div className={styles.testPickChampionStateIndicatorPICKING}>
+                <div className={(currentSummoner.cellId === session.localPlayerCellId) ? styles.testPickChampionStateIndicatorPICKING_SELF : styles.testPickChampionStateIndicatorPICKING}>
 
                 </div>
                 <div className={styles.testPickSummonerSpellSection}>
@@ -644,9 +633,14 @@ export default function ChampionSelectContainer({session}) {
     const renderSummonerFINALIZATION = (currentSummoner, index) => {
         //TODO: Show pick action, pick action is in progress, summoner spells skins;
         return (
-            <div className={styles.myTeamPickComponent} key={"MyTeamPick-" + index} style={{
-                background: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${Globals.PROXY_STATIC_PREFIX}/lol-game-data/assets/v1/champion-splashes/${currentSummoner.championId}/${getSplashArtFromChromaId(currentSummoner.selectedSkinId)}.jpg) 20% 20% / 170% no-repeat`
-            }}>
+            <div className={styles.myTeamPickComponent} key={"MyTeamPick-" + index}>
+                <div className={styles.testBackgroundImageContainer}>
+                    <img className={styles.testBackgroundImage} src={`${Globals.PROXY_STATIC_PREFIX}/lol-game-data/assets/v1/champion-splashes/${currentSummoner.championId}/${getSplashArtFromChromaId(currentSummoner.selectedSkinId)}.jpg`}>
+                    </img>
+                    <div>
+
+                    </div>
+                </div>
                 <div className={styles.testPickSummonerSpellSection}>
                     <div className={styles.testPickSummonerSpellImageContainer}>
                         <img
@@ -677,8 +671,6 @@ export default function ChampionSelectContainer({session}) {
                         </div>
                     </div>
                 </div>
-                {console.log(currentSummoner.championId)}
-                {console.log(currentSummoner.selectedSkinId)}
                 <div className={styles.testPickInfoSection}>
                     <div className={styles.testPickInfoPosition}>
                         <span>{currentSummoner.assignedPosition}</span>
@@ -700,7 +692,7 @@ export default function ChampionSelectContainer({session}) {
         if (session === undefined) return errorResponse;
         if (session.localPlayerPhase === undefined) return errorResponse;
         switch (session.localPlayerPhase) {
-            case 'PREPERATION':
+            case 'PREPARATION':
                 return renderPickContainer(false)
             case 'BANNING':
                 return renderBanContainer(true)
@@ -720,30 +712,50 @@ export default function ChampionSelectContainer({session}) {
         }
     }
 
+    const handleSearch = (event) => {
+        let searchInput = event.target.value
+        if (searchInput === undefined) searchInput = ""
+        setSearchInput(searchInput);
+        const filterChampions = (champion) => {
+            if (champion.name === undefined) return false;
+            if (champion.id !== -1) {
+                return (searchInput === "" ||champion.alias.toString().toLowerCase().includes(searchInput.toLowerCase()) ||champion.name.toString().toLowerCase().includes(searchInput.toLowerCase()));
+            }
+        }
+        setFilteredChampions(Object.values(champions).filter(champion => filterChampions(champion)));
+    }
+
     const renderPickContainer = (allowLockIn) => {
 
 
         return (
-            <> <div className={styles.championSelectorContainer}>
-                {
-                    champions === undefined ? (<div>Loading...</div>) :
-                        Object.values(champions).filter(champion => champion.id !== -1) // Exclude champion with id -1
-                            .sort((a, b) => {
-                                if (a.name < b.name) {
-                                    return -1;
-                                }
-                                if (a.name > b.name) {
-                                    return 1;
-                                }
-                                return 0;
-                            })
-                            .map(champion =>
-                                (<ChampionCard setActive={setCurrentlySelected}
-                                               isActive={champion.id === currentlySelected} key={champion.id}
-                                               id={champion.id} championName={champion.name}/>))
-                }
-            </div>
-                {allowLockIn ? (<button  className={styles.championSelectorLockInButton} onClick={() => lockIn()}>Lock In</button>) : (<></>)}
+            <> <input
+                type="text"
+                placeholder="Search champions by name"
+                onChange={handleSearch}
+                className={styles.searchInput}
+            />
+                <div className={styles.championSelectorContainer}>
+                    {
+                        filteredChampions === undefined ? (<div>Loading...</div>) :
+                            Object.values(filteredChampions) // Exclude champion with id -1
+                                .sort((a, b) => {
+                                    if (a.name < b.name) {
+                                        return -1;
+                                    }
+                                    if (a.name > b.name) {
+                                        return 1;
+                                    }
+                                    return 0;
+                                })
+                                .map(champion =>
+                                    (<ChampionCard setActive={setCurrentPickSelected}
+                                                   isActive={champion.id === currentPickSelected} key={champion.id}
+                                                   id={champion.id} championName={champion.name}/>))
+                    }
+                </div>
+                {allowLockIn ? (<button className={styles.championSelectorLockInButton} onClick={() => lockIn()}>Lock
+                    In</button>) : (<></>)}
             </>
         )
 
@@ -751,20 +763,10 @@ export default function ChampionSelectContainer({session}) {
     }
 
     const renderBanContainer = (allowLockIn) => {
-        const [currentlySelected, setCurrentlySelected] = useState(-1);
-
-        useEffect(() => {
-            axios.post(Globals.REST_PREFIX + "/champSelect/ban", {
-                championId: currentlySelected,
-                lockIn: false
-            }).catch((error) => {
-                console.log(error);
-            })
-        }, [currentlySelected])
 
         const lockIn = () => {
             axios.post(Globals.REST_PREFIX + "/champSelect/ban", {
-                championId: currentlySelected,
+                championId: currentBanSelected,
                 lockIn: true
             }).catch((error) => {
                 console.log(error);
@@ -774,8 +776,8 @@ export default function ChampionSelectContainer({session}) {
         return (
             <> <div className={styles.championSelectorContainer}>
                 {
-                    champions === undefined ? (<div>Loading...</div>) :
-                        Object.values(champions).filter(champion => champion.id !== -1) // Exclude champion with id -1
+                    filteredChampions === undefined ? (<div>Loading...</div>) :
+                        Object.values(filteredChampions)
                             .sort((a, b) => {
                                 if (a.name < b.name) {
                                     return -1;
@@ -786,8 +788,8 @@ export default function ChampionSelectContainer({session}) {
                                 return 0;
                             })
                             .map(champion =>
-                                (<ChampionCard setActive={setCurrentlySelected}
-                                               isActive={champion.id === currentlySelected} key={champion.id}
+                                (<ChampionCard setActive={setCurrentBanSelected}
+                                               isActive={champion.id === currentBanSelected} key={champion.id}
                                                id={champion.id} championName={champion.name}/>))
                 }
             </div>

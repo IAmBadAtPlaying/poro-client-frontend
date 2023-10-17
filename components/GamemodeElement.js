@@ -9,6 +9,7 @@ export default function GamemodeElement({ queue, isActive, setActive, setQueueId
     const getImageLink = (key) => {
         if (!key) return "";
         switch (key.toLowerCase()) {
+            /*Solid naming scheme rito*/
             case "cherry":
                 return Globals.PROXY_STATIC_PREFIX + "/lol-game-data/assets/content/src/leagueclient/gamemodeassets/gamemodex/img/icon-empty.png";
             break;
@@ -62,7 +63,9 @@ export default function GamemodeElement({ queue, isActive, setActive, setQueueId
             <div className={styles.gamemodeSelectorIconContainer} onClick={handleClick}>
                 {
                     (queue[0].gameMode === undefined || queue[0].gameMode === "") ? <></> :
-                        <>
+                        <> {
+                            /*This method works better than just replacing it via react*/
+                        }
                             <video
                                 autoPlay={true}
                                 loop={true}

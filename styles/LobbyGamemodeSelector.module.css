@@ -34,6 +34,8 @@
 }
 
 .gamemodeSelectorHeader {
+    font-family: "Spiegel";
+    font-weight: 600;
     top: 10%;
     margin-top: 2%;
     position: relative;
@@ -58,6 +60,7 @@
 }
 
 .activeAdditionalOptions::before {
+    position: relative;
     content: "▶ ";
 }
 
@@ -67,6 +70,8 @@
 }
 
 .confirmButton {
+    font-family: "Beaufort for LOL";
+    font-weight: 700;
     position: absolute;
     top: 85%;
     width: 20%;

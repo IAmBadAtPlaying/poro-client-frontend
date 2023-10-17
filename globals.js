@@ -26,7 +26,7 @@ export const GITHUB_ISSUES_LINK = "https://github.com/IAmBadAtPlaying/poro-clien
 export function isJsonObjectEmpty(jsonObj) {
     if (typeof jsonObj === 'object') {
         for (let objKey in jsonObj) {
-            if(jsonObj.hasOwnProperty(objKey)) {
+            if(Object.hasOwn(jsonObj, objKey)) {
                 return false;
             }
         }
@@ -46,6 +46,8 @@ export const GAME_MODE_TO_STRING = {CLASSIC: "Summoner´s Rift", ARAM: "ARAM"};
 /*
 *
 * COLORS
+*
+* adapted from https://brand.riotgames.com/en-us/league-of-legends/color
 *
 * */
 

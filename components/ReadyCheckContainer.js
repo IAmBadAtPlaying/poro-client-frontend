@@ -1,6 +1,6 @@
 import {useEffect} from "react";
 import {PROXY_STATIC_PREFIX} from "../globals";
-import {send} from "../pages";
+import {axiosSend, send} from "../pages";
 
 
 export default function ReadyCheckContainer() {
@@ -20,11 +20,11 @@ export default function ReadyCheckContainer() {
 
 
     const declineReadyCheck = () => {
-        send([0,"POST","/lol-matchmaking/v1/ready-check/decline",""])
+        axiosSend("POST", "/lol-matchmaking/v1/ready-check/decline", "");
     }
 
     const acceptReadyCheck = () => {
-        send([0,"POST","/lol-matchmaking/v1/ready-check/accept",""])
+        axiosSend("POST", "/lol-matchmaking/v1/ready-check/accept", "");
     }
 
 

@@ -22,7 +22,7 @@ export default function LootContainer({loot}) {
     /*This shouldnt be implemented like this, but if I use a state, it will not update on the first button click, only the the second one.
     Seems to be a react limitation. I am too tired to look into it. But it works for now (doesnt update the UI as it is not a state)
     * */
-    let selection = "all";
+    let selection = "none";
 
     const [disenchantLoot, setDisenchantLoot] = useState([]);
     const [displayLoot, setDisplayLoot] = useState([]);
@@ -48,15 +48,12 @@ export default function LootContainer({loot}) {
 
     const filterLoot = (passedLoot) => {
         let newLoot = {};
-        console.log(selection);
         Object.values(passedLoot).filter(
             (item) => {
                 if (item === undefined) return false;
                 if (item.itemDesc === undefined) return false;
                 if (item.itemDesc === "") return false;
-                if (item.lootName.startsWith("WARD_SKIN")) return false;
                 if (item.lootName.startsWith("CHAMPION_TOKEN")) return false;
-                if (selection === "all") return true;
                 else if (item.displayCategories.toLowerCase() !== selection) return false;
                 return true;
             }
@@ -75,7 +72,6 @@ export default function LootContainer({loot}) {
                 newDisenchantLoot[item.lootName] = item;
             } else newDisplayLoot[item.lootName] = item;
         });
-        console.log(newDisenchantLoot);
         setDisplayLoot(newDisplayLoot);
         setDisenchantLoot(newDisenchantLoot);
     };
@@ -90,6 +86,17 @@ export default function LootContainer({loot}) {
         setAwaitingDisenchant(true);
         send([6, lootToDisenchant]);
     };
+
+    const sendRerollLoot = () => {
+        if (awaitingDisenchant || isJsonObjectEmpty(disenchantLoot)) return;
+        let lootToDisenchant = [];
+        Object.values(disenchantLoot).forEach((item) => {
+            lootToDisenchant.push(item);
+        });
+        setDisenchantLoot({});
+        setAwaitingDisenchant(true);
+        send([7, lootToDisenchant]);
+    }
 
     const handleDropToDisplay = (event) => {
         event.preventDefault();
@@ -151,7 +158,6 @@ export default function LootContainer({loot}) {
     }
 
     const moveOneElement = (item, origin, destination, setOrigin, setDestination) => {
-        console.log(item.count);
         const preCopy = JSON.stringify(item);
 
         const itemCopy = JSON.parse(preCopy);
@@ -187,13 +193,6 @@ export default function LootContainer({loot}) {
     const changeSelection = (newSelection) => {
         selection = newSelection;
         resetSelection();
-        // const newDisplayLoot = {};
-        // Object.values(filterLoot(loot)).map((item) => {
-        //     if (item.displayCategories.toLowerCase() === selection) {
-        //         newDisplayLoot[item.lootName] = item;
-        //     }
-        // });
-        // setDisplayLoot(newDisplayLoot);
     }
 
     return (
@@ -201,7 +200,8 @@ export default function LootContainer({loot}) {
             {selection}<br></br>
             Awaiting Disenchant: {awaitingDisenchant ? "true" : "false"}<br></br>
             <button onClick={() => {changeSelection("skin")}}>Skins</button>
-            <button onClick={() => {changeSelection("champion")}}>Champions</button><br></br>
+            <button onClick={() => {changeSelection("champion")}}>Champions</button>
+            <button onClick={() => {changeSelection("wardskin")}}>Wards</button><br></br>
             Owned Content:<br></br>
             <button onClick={() => {selectOwnedContent()}}>Select owned</button>
             <div className={styles.currentLootContainer} onDragOver={(e) => {e.preventDefault()}} onDrop={(e) => handleDropToDisplay(e)}>
@@ -214,10 +214,9 @@ export default function LootContainer({loot}) {
                                     <Image fill className={styles.lootImage} src={PROXY_STATIC_PREFIX + item.tilePath} alt={""+item.tilePath} draggable={false} loading={"lazy"}></Image>
                                 </div>
                                 <div className={styles.lootDescription} draggable={false}>
-                                    <span>{item.itemDesc}<br></br></span>
-                                    <span>x{item.count}<br></br></span>
-                                    <span>{item.lootName}<br></br></span>
-                                    <span>{item.redeemableStatus}<br></br></span>
+                                    <br></br>
+                                    <span>{item.displayCategories}<br></br></span>
+                                    <span>{item.itemDesc} x{item.count}<br></br></span>
                                 </div>
                             </div>)
 
@@ -235,10 +234,9 @@ export default function LootContainer({loot}) {
                                 <Image fill className={styles.lootImage} src={PROXY_STATIC_PREFIX + item.tilePath} alt={""+item.tilePath}  draggable={false} loading={"lazy"}></Image>
                             </div>
                                 <div className={styles.lootDescription} draggable={false}>
-                                    <span>{item.itemDesc}<br></br></span>
-                                    <span>x{item.count}<br></br></span>
-                                    <span>{item.lootName}<br></br></span>
-                                    <span>{item.redeemableStatus}<br></br></span>
+                                    <br></br>
+                                    <span>{item.displayCategories}<br></br></span>
+                                    <span>{item.itemDesc} x{item.count}<br></br></span>
                                 </div>
                             </div>)
 
@@ -247,6 +245,7 @@ export default function LootContainer({loot}) {
                 }
             </div>
             <button onClick={() => {sendDisenchantLoot()}}>Disenchant DEBUG</button>
+            <button onClick={() => {sendRerollLoot()}}>Reroll DEBUG</button>
             {awaitingDisenchant ? (
                 <div className={styles.overlayBackground}>
 

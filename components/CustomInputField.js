@@ -30,11 +30,11 @@ export default function CustomInputField({wrapperKey, backendType , placeholder,
         return type;
     }
 
-    const createOption = (option, index) => {
+    const createOption = (option, index, currentValue) => {
         if (option === undefined) return (<></>);
         if (option.name === undefined) return (<></>);
         if (option.value === undefined) return (<></>);
-        return (<option value={option.value} key={"Option"+index}>{option.name}</option>);
+        return (<option value={option.value} key={"Option"+index} selected={option.value === currentValue}>{option.name}</option>);
     }
 
     const createInputField = (backendType) => {
@@ -45,10 +45,11 @@ export default function CustomInputField({wrapperKey, backendType , placeholder,
                     console.error("Options are undefined");
                     return (<></>);
                 }
+                let currentValue = (defaultValue === undefined) ? "" : defaultValue;
                 inputField = <select className={"customInputField"} onChange={onChange}>
-                    <option value={""} key={"unselected"}>-</option>
+                    <option value={""} key={"unselected"} selected={currentValue === ""} disabled={true}>Select an option</option>
                     {options.map((option, index) => {
-                        return createOption(option, index);
+                        return createOption(option, index, currentValue);
                     })}
                 </select>
             break;

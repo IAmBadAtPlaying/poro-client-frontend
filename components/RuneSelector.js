@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
 import * as Globals from "../globals";
-import styles from "../styles/RuneSelector.module.css";
+import styles from "../styles/champSelect/RuneSelector.module.css";
 
 export default function RuneSelector({setVisible}) {
 

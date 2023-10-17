@@ -1,9 +1,8 @@
 import {useRef, useState} from "react";
-import {send} from "../pages";
+import {axiosSend, send} from "../pages";
 import * as Globals from "../globals";
-import RuneSelector from "./RuneSelector";
-import Image from "next/image";
 import styles from "../styles/ProfileContainer.module.css";
+import FriendMessageWindow from "./messaging/FriendMessageWindow";
 
 
 export default function ProfileContainer() {
@@ -19,6 +18,8 @@ export default function ProfileContainer() {
     const profileIconOverrideRef = useRef(undefined);
 
     const [runesOpen, setRunesOpen] = useState(true);
+
+
 
     const sendValues = () => {
         console.log("Sending values");
@@ -51,7 +52,7 @@ export default function ProfileContainer() {
             body["title"] = titleId;
         }
         if (Globals.isJsonObjectEmpty(body)) return;
-        send([0, "POST", "/lol-challenges/v1/update-player-preferences", JSON.stringify(body)]);
+        axiosSend("POST", "/lol-challenges/v1/update-player-preferences", JSON.stringify(body));
     }
 
     const handleBannerConfigChange = (crestBorderLevel, borderType) => {
@@ -61,7 +62,8 @@ export default function ProfileContainer() {
         body["preferredCrestType"] = borderType;
         body["selectedPrestigeCrest"] = parseInt(crestBorderLevel);
 
-        send([0, "PUT", "/lol-regalia/v2/current-summoner/regalia", JSON.stringify(body)]);
+
+        axiosSend("PUT", "/lol-regalia/v2/current-summoner/regalia", JSON.stringify(body));
     }
 
     const handleProfileIconChange = (profileIconId, iconOverride) => {
@@ -71,13 +73,13 @@ export default function ProfileContainer() {
             case "chatOverride":
                 body["icon"] = parseInt(profileIconId);
 
-                send([0, "PUT", "/lol-chat/v1/me", JSON.stringify(body)]);
+                axiosSend("PUT", "/lol-chat/v1/me", JSON.stringify(body));
                 break;
             case "normal":
             default:
                 body["profileIconId"] = parseInt(profileIconId);
 
-                send([0, "PUT", "/lol-summoner/v1/current-summoner/icon", JSON.stringify(body)]);
+                axiosSend("PUT", "/lol-summoner/v1/current-summoner/icon", JSON.stringify(body));
                 break;
         }
     }
@@ -91,7 +93,7 @@ export default function ProfileContainer() {
         body["title"] = "";
         body["prestigeCrestLevel"] = 0;
 
-        send([0, "POST", "/lol-challenges/v1/update-player-preferences", JSON.stringify(body)]);
+        axiosSend("POST", "/lol-challenges/v1/update-player-preferences", JSON.stringify(body));
     }
 
     return (

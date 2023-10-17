@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import * as Globals from '../globals';
 import TaskConfiguration from "./TaskConfiguration";
-import styles from  '../styles/TaskContainer.module.css';
+import styles from  '../styles/tasks/TaskContainer.module.css';
 import axios from "axios";
 
 export default function TaskContainer() {

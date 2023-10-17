@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import styles from '../styles/TaskConfiguration.module.css'
+import styles from '../styles/tasks/TaskConfiguration.module.css'
 import * as Globals from '../globals';
 import axios from "axios";
 import {act} from "react-dom/test-utils";
