@@ -2,25 +2,81 @@ import Head from 'next/head';
 import styles from '../styles/Home.module.css';
 import * as Globals from '../globals';
 import {useEffect, useRef, useState} from 'react';
-import axios from 'axios';
 import LoadingComponent from "../components/LoadingComponent";
 import FriendComponent from "../components/FriendComponent";
 import LobbyContainer from "../components/LobbyContainer";
 import TaskContainer from "../components/TaskContainer";
 import MatchmakingContainer from "../components/MatchmakingContainer";
-import ChampionSelectContainer from "../components/ChampionSelectContainer";
+import ReworkedChampionSelectContainer from "../components/ReworkedChampSelectContainer";
 import LobbyGamemodeSelector from "../components/LobbyGamemodeSelector";
 import ReadyCheckContainer from "../components/ReadyCheckContainer";
 import ConfigContainer from "../components/ConfigContainer";
 import LootContainer from "../components/LootContainer";
 import ProfileContainer from "../components/ProfileContainer";
+import axios from "axios";
+import FriendMessageWindow from "../components/messaging/FriendMessageWindow";
 export var socket
 
 let pktNr = 0;
 const availabilityOrder = ['','chat','dnd', 'online', 'away', 'mobile', 'offline'];
 
 let audio;
-let globalChampions;
+let globalChampions = {};
+let globalChatIdentity = {};
+let globalSpells;
+let globalChromaSkins;
+
+const messageMap = new Map();
+
+export function subscribeToMessageUpdates(conversationId, callback) {
+    console.log("Subscribing to message updates: " +conversationId)
+    if (conversationId === undefined || callback === undefined) return;
+    if (messageMap.has(conversationId)) {
+        messageMap.get(conversationId).push(callback);
+    } else {
+        messageMap.set(conversationId, [callback]);
+    }
+}
+
+
+export function unsubscribeFromMessageUpdates(conversationId, callback) {
+    if (conversationId === undefined || callback === undefined) {
+        console.error("Invalid conversationId or callback");
+        return;
+    }
+    if (messageMap.has(conversationId)) {
+        const callbacks = messageMap.get(conversationId);
+        const index = callbacks.indexOf(callback);
+        if (index > -1) {
+            callbacks.splice(index, 1);
+        }
+    } else console.error("No callbacks for conversationId: " + conversationId+ ", How did you get here?");
+}
+
+export function axiosSend(method, url, body) {
+    if (method === undefined || url === undefined) return;
+    url = Globals.PROXY_PREFIX + url;
+    switch (method) {
+        case 'GET':
+            axios.get(url, body).then((response) => {console.log(response)}).catch((error) => {console.log(error)});
+        break;
+        case 'POST':
+            axios.post(url, body).then((response) => {console.log(response)}).catch((error) => {console.log(error)});
+        break;
+        case 'PUT':
+            axios.put(url, body).then((response) => {console.log(response)}).catch((error) => {console.log(error)});
+        break;
+        case 'DELETE':
+            axios.delete(url, body).then((response) => {console.log(response)}).catch((error) => {console.log(error)});
+        break
+        case 'PATCH':
+                axios.patch(url, body).then((response) => {console.log(response)}).catch((error) => {console.log(error)});
+        break;
+        default:
+            console.error("Invalid request type: " + method);
+        break;
+    }
+}
 
 export function send(jsonArray) {
     if (jsonArray instanceof Array) {
@@ -46,8 +102,20 @@ export function AUDIO_PLAY_BIG_BUTTON() {
 }
 
 
+export function getChatIdentity() {
+    return globalChatIdentity;
+}
+
 export function getChampions() {
     return globalChampions;
+}
+
+export function getSpells() {
+    return globalSpells;
+}
+
+export function getChromaSkins() {
+    return globalChromaSkins;
 }
 
 export default function Home() {
@@ -61,6 +129,8 @@ export default function Home() {
     const [championSelectState, setChampionSelectState] = useState({});
     const [isConnected, setIsConnected] = useState(false);
     const [loot,setLoot] = useState({});
+    const [taskList, setTaskList] = useState([]);
+    const [currentChatFriend, setCurrentChatFriend] = useState({});
     function connect(host) {
             socket = new WebSocket(host);
             socket.onopen = function (msg) {
@@ -87,6 +157,9 @@ export default function Home() {
         send([4]);
     }
 
+    function closeCurrentChat() {
+        setCurrentChatFriend({});
+    }
 
     function createKeepAlive() {
         setTimeout(createKeepAlive, 250000)
@@ -97,6 +170,21 @@ export default function Home() {
         setFriends({});
     }
 
+    function triggerUpdateMessage(conversationId, message) {
+        console.log("Triggering update message");
+        if (conversationId === undefined || message === undefined) return;
+        if (messageMap.has(conversationId)) {
+            const callbacks = messageMap.get(conversationId);
+            console.log(callbacks.length)
+            callbacks.forEach((callback) => {
+                callback(message);
+            });
+        } else {
+            console.log("No callbacks for conversationId: " + conversationId);
+        }
+    }
+
+
     function handleMessage(messageText) {
         if (!messageText.isEmpty) {
             try {
@@ -105,10 +193,10 @@ export default function Home() {
                     console.log(message.event)
                     switch (message.event) {
                         case 'FriendListUpdate':
-                            const { puuid, availability, statusMessage, summonerId, iconId, name, lol} = message.data;
+                            const { puuid, availability, statusMessage, summonerId, iconId, name, lol, id} = message.data;
                             setFriends(prevFriends => {
                                 console.log("Updating "+name+": " + availability +" - " + lol);
-                                prevFriends[puuid] = { iconId, name, puuid, summonerId,  availability, statusMessage, lol};
+                                prevFriends[puuid] = { iconId, name, puuid, summonerId,  availability, statusMessage, lol, id};
                                 return prevFriends;
                             });
                             break;
@@ -130,14 +218,56 @@ export default function Home() {
                             const currentChampSelectState = message.data;
                             setChampionSelectState(currentChampSelectState);
                         break;
+                        case 'TaskUpdate':
+                        case 'InitialTaskUpdate':
+                            const currentTasks = message.data;
+                            setTaskList(currentTasks);
+                        break;
                         case 'InitialQueues':
                             const currentQueues = message.data;
                             setQueues(currentQueues);
                         break;
+                        case 'MessageUpdate':
+                            const messagePayload = message.data;
+                            if (messagePayload === undefined) return;
+                            console.log(messagePayload)
+                            const conversationId = messagePayload.conversationId;
+                            const messageData = messagePayload.message;
+                            triggerUpdateMessage(conversationId, messageData);
+                        break;
+                        case 'ConversationUpdate':
+                            const conversationPayload = message.data;
+                            if (conversationPayload === undefined) return;
+                            const conversationId2 = conversationPayload.id;
+                            const messages = conversationPayload.messages;
+                            console.log(messages)
+                            triggerUpdateMessage(conversationId2, messages);
+                            break;
                         case 'InitialLoot':
                         case 'LootUpdate':
                             const currentLoot = message.data;
+                            console.log("Loot Update")
                             setLoot(currentLoot);
+                        break;
+                        case 'DataTransfer':
+                            const currentData = message.data;
+                            const dataTransferType = currentData.dataType;
+                            const dataTransferData = currentData.data;
+                            if (dataTransferType === undefined) return;
+                            console.log(message.data);
+                            switch (dataTransferType) {
+                                case 'Champions':
+                                    globalChampions = dataTransferData;
+                                break;
+                                case 'SummonerSpells':
+                                    globalSpells = dataTransferData;
+                                break;
+                                case 'ChromaSkins':
+                                    globalChromaSkins = dataTransferData;
+                                break;
+                                default:
+                                break;
+                            }
                         break;
                         default:
                         break;
@@ -148,6 +278,8 @@ export default function Home() {
             }
         }
     }
+
+
 
     useEffect(() => {
         if (typeof document !== 'undefined') {
@@ -161,6 +293,10 @@ export default function Home() {
             audio.src = Globals.PROXY_STATIC_PREFIX+ "/lol-game-data/assets/assets/events/ps2021/audio/sfx-ps-ui-champ-button-click.ogg";
             audio.load();
 
+            window.onbeforeunload = function(){
+                // return 'Are you sure you want to leave?';
+            };
+
 
             if (typeof mainDiv !== 'undefined') {
                 mainDiv.current.style.backgroundImage = `url(${Globals.STATIC_PREFIX}/assets/png/background.png)`
@@ -168,21 +304,21 @@ export default function Home() {
         }
     }, []);
     useEffect(() => {
-        async function fetchChampions() {
-            try {
-                const response = await axios.get(Globals.PROXY_STATIC_PREFIX+'/lol-game-data/assets/v1/champion-summary.json');
-                const data = response.data;
-                setChampions(data);
-                globalChampions = response.data;
-            } catch (error) {
-                console.error('Error fetching champion data:', error);
-            }
-        }
-
-        fetchChampions();
-
         connect("ws://127.0.0.1:8887");
     }, []);
+
+    useEffect(() => {
+        if (isConnected) {
+            axios.get(Globals.PROXY_PREFIX + "/lol-chat/v1/me").then((response) => {
+                globalChatIdentity = response.data;
+                console.log("Chat Identity");
+                console.log(response.data);
+            }).catch((error) => {
+                console.log(error);
+            });
+        }
+
+    }, [isConnected])
 
 
 
@@ -191,7 +327,7 @@ export default function Home() {
             case 'lobby':
                 return renderLobby(gameflowState);
             case 'tasks':
-                return <TaskContainer />;
+                return <TaskContainer taskList={taskList} />;
             case 'loot':
                 return <LootContainer loot={loot}/>;
             case 'profile':
@@ -220,7 +356,7 @@ export default function Home() {
                 return <ReadyCheckContainer />
             break;
             case 'ChampSelect':
-                return <></>;
+                return <ReworkedChampionSelectContainer session={championSelectState}/>;
             break;
             case 'GameStart':
                 return <div>GAME - START</div>;
@@ -255,8 +391,8 @@ export default function Home() {
 
   const renderFullScreen = (gameflowState) => {
     switch (gameflowState) {
-        case 'ChampSelect':
-            return (<ChampionSelectContainer session={championSelectState}/>)
+        // case 'ChampSelect':
+        //     return (<ChampionSelectContainer session={championSelectState}/>)
         default:
             return renderNormalLobby()
         break;
@@ -307,11 +443,18 @@ export default function Home() {
                                     }
                                 })
                                 .map((friend) => (
-                                    <FriendComponent key={friend.puuid} friend={friend} />
+                                    <FriendComponent key={friend.puuid} friend={friend} setCurrentConversationFriend={setCurrentChatFriend} />
                                 ))
                         }
                     </div>
                 </div>
+                {
+                    Globals.isJsonObjectEmpty(currentChatFriend) ?
+                        (<></>) :
+                        (<div className={styles.friendsChatWindow}>
+                            <FriendMessageWindow friend={currentChatFriend} onClose={closeCurrentChat}/>
+                        </div>)
+                }
             </>
         )
   }

@@ -1,0 +1,33 @@
+.clientClickOption {
+    width: 100%;
+    position: relative;
+    display: inline-block;
+    border: red solid;
+}
+
+.clientVisibilityOptionsContainer {
+    border: green solid;
+    justify-content: flex-start;
+    display: flex;
+}
+
+.clientVisibilityOption {
+    min-height: 5vh;
+    margin: 2%;
+}
+
+.exitOptionsContainer {
+    border: blue solid;
+    justify-content: left;
+    display: flex;
+}
+
+.exitOption {
+    margin: 2%;
+}
+
+.taskUploadContainer {
+    border: orange solid;
+    justify-content: space-around;
+    display: flex;
+}

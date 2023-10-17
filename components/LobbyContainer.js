@@ -6,10 +6,11 @@ import {useEffect, useState} from "react";
 import LobbyContainerRoleSelection from "./LobbyContainerRoleSelection";
 import LobbyGamemodeSelector from "./LobbyGamemodeSelector";
 import {PROXY_STATIC_PREFIX} from "../globals";
+import {axiosSend} from "../pages/index";
 
 function startMatchmaking () {
     console.log("Starting Matchmaking")
-    Index.send([0,"POST","/lol-lobby/v2/lobby/matchmaking/search", ""])
+    axiosSend("POST", "/lol-lobby/v2/lobby/matchmaking/search", "");
 }
 
 
@@ -24,7 +25,7 @@ export default function LobbyContainer({lobbyConfig, availableQueues}) {
         if (secondPref === undefined || secondPref === "UNSELECTED") return;
         if (firstPref === secondPref) return;
         console.log(firstPref +" "+ secondPref)
-        Index.send([0, "PUT","/lol-lobby/v1/lobby/members/localMember/position-preferences", "{\"firstPreference\":\""+firstPref+"\",\"secondPreference\": \""+secondPref+"\"}"])
+        axiosSend("PUT", "/lol-lobby/v1/lobby/members/localMember/position-preferences", "{\"firstPreference\":\""+firstPref+"\",\"secondPreference\": \""+secondPref+"\"}");
     }
 
     const updateFirstPositionPreference = (firstPref) => {

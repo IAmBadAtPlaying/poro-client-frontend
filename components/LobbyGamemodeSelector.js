@@ -2,7 +2,7 @@ import * as Globals from '../globals';
 import styles from '../styles/LobbyGamemodeSelector.module.css'
 import GamemodeElement from "./GamemodeElement";
 import {useEffect, useState} from "react";
-import {AUDIO_PLAY_BIG_BUTTON, send} from "../pages/index";
+import {AUDIO_PLAY_BIG_BUTTON, axiosSend, send} from "../pages/index";
 import {isJsonObjectEmpty} from "../globals";
 
 
@@ -23,19 +23,12 @@ export default function LobbyGamemodeSelector({showFunction, availableQueues}) {
         if (showFunction !== undefined) {
             showFunction(false)
         }
-        send([0,"POST","/lol-lobby/v2/lobby", JSON.stringify({queueId: qID})]);
+        axiosSend("POST", "/lol-lobby/v2/lobby", JSON.stringify({queueId: qID}));
     }
 
     return (
         <>
             <div className={styles.gamemodeSelectorContainer}>
-            {/*{*/}
-            {/*    Object.values(availableGamemodes).map((gamemode) => {*/}
-            {/*        return (*/}
-            {/*            <GamemodeElement key={gamemode[0]} gamemode={gamemode} isActive={activeElement === gamemode[0]} setActive={setActiveElement} setQueueId={setQueueID}/>*/}
-            {/*        )*/}
-            {/*    })*/}
-            {/*}*/}
                 {
                     Object.values(pvpQueues).reverse().map((queue, index) => {
                         if (!queue[0]) return <div key={"Undefined " + index}></div>;

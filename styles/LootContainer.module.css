@@ -1,6 +1,5 @@
 .content {
     height: 100%;
-    border: green solid;
 }
 
 
@@ -24,7 +23,7 @@
     overflow-y: scroll;
     height: 90%;
     left: 60%;
-    width: 40%;
+    width: 39.6%;
     display: flex;
     flex-wrap: wrap;
     border: green solid;
