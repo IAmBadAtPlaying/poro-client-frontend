@@ -22,6 +22,8 @@
 .position_image {
     flex: 1;
     height: 100%;
+    max-height: 100%;
+    max-width: 100%;
 }
 
 .position_image:hover {
@@ -38,4 +40,6 @@
     background: transparent;
     border: solid #888888 2px;
     border-radius: 10%;
+    align-items: center;
+    justify-content: center;
 }

@@ -305,8 +305,6 @@ export default function ChampionSelectContainer({session}) {
             console.log("Summoner error")
             return errorDefault;
         }
-        console.log(currentSummoner.stateDebug);
-        console.log(currentSummoner.state);
 
         return renderState(currentSummoner, index);
 
@@ -316,7 +314,7 @@ export default function ChampionSelectContainer({session}) {
         if (!currentSummoner) return (<></>);
         if (!currentSummoner.state) return (<></>);
 
-        let state = currentSummoner.stateDebug;
+        let state = currentSummoner.state;
         console.log("" + index + " " + state)
         switch (state) {
             case 'PREPARATION':

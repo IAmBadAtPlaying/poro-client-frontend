@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import styles from '../styles/Home.module.css';
+import styles from '../styles/indexRework.module.css';
 import * as Globals from '../globals';
 import {useEffect, useRef, useState} from 'react';
 import LoadingComponent from "../components/LoadingComponent";
@@ -16,6 +16,7 @@ import ProfileContainer from "../components/ProfileContainer";
 import axios from "axios";
 import FriendMessageWindow from "../components/messaging/FriendMessageWindow";
 import ChampionSelectContainer from "../components/ChampionSelectContainer";
+import CustomBackground from "../components/backgrounds/CustomBackground";
 export var socket
 
 let pktNr = 0;
@@ -60,22 +61,22 @@ export function axiosSend(method, url, body) {
     switch (method) {
         case 'GET':
             axios.get(url, body).then((response) => {console.log(response)}).catch((error) => {console.log(error)});
-        break;
+            break;
         case 'POST':
             axios.post(url, body).then((response) => {console.log(response)}).catch((error) => {console.log(error)});
-        break;
+            break;
         case 'PUT':
             axios.put(url, body).then((response) => {console.log(response)}).catch((error) => {console.log(error)});
-        break;
+            break;
         case 'DELETE':
             axios.delete(url, body).then((response) => {console.log(response)}).catch((error) => {console.log(error)});
-        break
+            break
         case 'PATCH':
-                axios.patch(url, body).then((response) => {console.log(response)}).catch((error) => {console.log(error)});
-        break;
+            axios.patch(url, body).then((response) => {console.log(response)}).catch((error) => {console.log(error)});
+            break;
         default:
             console.error("Invalid request type: " + method);
-        break;
+            break;
     }
 }
 
@@ -120,7 +121,6 @@ export function getChromaSkins() {
 }
 
 export default function Home() {
-    const mainDiv = useRef();
     const [queues, setQueues] = useState({});
     const [champions, setChampions] = useState([]);
     const [friends, setFriends] = useState({});
@@ -133,25 +133,25 @@ export default function Home() {
     const [taskList, setTaskList] = useState([]);
     const [currentChatFriend, setCurrentChatFriend] = useState({});
     function connect(host) {
-            socket = new WebSocket(host);
-            socket.onopen = function (msg) {
-                setIsConnected(true);
-                console.log("Connected to " + host);
-                createKeepAlive();
-                getInitialData();
-            }
-            socket.onmessage = function (msg) {
-                handleMessage(msg.data)
-            }
-            socket.onclose = function (msg) {
-                setIsConnected(false);
-                resetAll();
-                setTimeout(() => {connect(host)}, 5000);
-                console.log("Disconnected from Host!");
-            }
-            socket.onerror = function (msg) {
+        socket = new WebSocket(host);
+        socket.onopen = function (msg) {
+            setIsConnected(true);
+            console.log("Connected to " + host);
+            createKeepAlive();
+            getInitialData();
+        }
+        socket.onmessage = function (msg) {
+            handleMessage(msg.data)
+        }
+        socket.onclose = function (msg) {
+            setIsConnected(false);
+            resetAll();
+            setTimeout(() => {connect(host)}, 5000);
+            console.log("Disconnected from Host!");
+        }
+        socket.onerror = function (msg) {
 
-            }
+        }
     }
 
     function getInitialData() {
@@ -214,20 +214,20 @@ export default function Home() {
                         case 'GameflowPhaseUpdate':
                             const currentGameflowState = message.data;
                             setGameflowState(currentGameflowState.GameflowPhase);
-                        break;
+                            break;
                         case 'ChampSelectUpdate':
                             const currentChampSelectState = message.data;
                             setChampionSelectState(currentChampSelectState);
-                        break;
+                            break;
                         case 'TaskUpdate':
                         case 'InitialTaskUpdate':
                             const currentTasks = message.data;
                             setTaskList(currentTasks);
-                        break;
+                            break;
                         case 'InitialQueues':
                             const currentQueues = message.data;
                             setQueues(currentQueues);
-                        break;
+                            break;
                         case 'MessageUpdate':
                             const messagePayload = message.data;
                             if (messagePayload === undefined) return;
@@ -235,7 +235,7 @@ export default function Home() {
                             const conversationId = messagePayload.conversationId;
                             const messageData = messagePayload.message;
                             triggerUpdateMessage(conversationId, messageData);
-                        break;
+                            break;
                         case 'ConversationUpdate':
                             const conversationPayload = message.data;
                             if (conversationPayload === undefined) return;
@@ -249,7 +249,7 @@ export default function Home() {
                             const currentLoot = message.data;
                             console.log("Loot Update")
                             setLoot(currentLoot);
-                        break;
+                            break;
                         case 'DataTransfer':
                             const currentData = message.data;
                             const dataTransferType = currentData.dataType;
@@ -259,19 +259,19 @@ export default function Home() {
                             switch (dataTransferType) {
                                 case 'Champions':
                                     globalChampions = dataTransferData;
-                                break;
+                                    break;
                                 case 'SummonerSpells':
                                     globalSpells = dataTransferData;
-                                break;
+                                    break;
                                 case 'ChromaSkins':
                                     globalChromaSkins = dataTransferData;
-                                break;
+                                    break;
                                 default:
-                                break;
+                                    break;
                             }
-                        break;
+                            break;
                         default:
-                        break;
+                            break;
                     }
                 }
             } catch (e) {
@@ -298,10 +298,6 @@ export default function Home() {
                 // return 'Are you sure you want to leave?';
             };
 
-
-            if (typeof mainDiv !== 'undefined') {
-                mainDiv.current.style.backgroundImage = `url(${Globals.STATIC_PREFIX}/assets/png/background.png)`
-            }
         }
     }, []);
     useEffect(() => {
@@ -349,59 +345,59 @@ export default function Home() {
         switch (state) {
             case 'Lobby':
                 return <LobbyContainer lobbyConfig={lobby} availableQueues={queues} />;
-            break;
+                break;
             case 'Matchmaking':
                 return <MatchmakingContainer lobbyConfig={lobby}/>
-            break;
+                break;
             case 'ReadyCheck':
                 return <ReadyCheckContainer />
-            break;
+                break;
             case 'ChampSelect':
                 return <ReworkedChampionSelectContainer session={championSelectState}/>;
-            break;
+                break;
             case 'GameStart':
                 return <div>GAME - START</div>;
-            break;
+                break;
             case 'InProgress':
                 return <div>GAME - INPROGRESS</div>;
-            break;
+                break;
             case 'Reconnect':
                 return <div>RECONNECT - COMPONENT</div>;
-            break;
+                break;
             case 'WaitingForStats':
                 return <div>WAITING FOR STATS</div>
-            break;
+                break;
             case 'PreEndOfGame':
                 return <div>PRE END OF GAME</div>
-            break;
+                break;
             case 'EndOfGame':
                 return <div>END OF GAME</div>
-            break;
+                break;
             case 'None':
             case 'TerminatedInError': //Really Rare Edge Case
                 return <LobbyGamemodeSelector availableQueues={queues}/>
-            break;
+                break;
             case 'CheckedIntoTournament':
                 return <div>This client doesnt support clash tournaments, please use the League Client</div>
                 break;
             default:
                 return <div>Unknown State : {state}</div>
-            break;
+                break;
         }
     }
 
-  const renderFullScreen = (gameflowState) => {
-    switch (gameflowState) {
-        // case 'ChampSelect':
-        //     return (<ChampionSelectContainer session={championSelectState}/>)
-        default:
-            return renderNormalLobby()
-        break;
+    const renderFullScreen = (gameflowState) => {
+        switch (gameflowState) {
+            // case 'ChampSelect':
+            //     return (<ChampionSelectContainer session={championSelectState}/>)
+            default:
+                return renderNormalLobby()
+                break;
+        }
     }
-  }
 
 
-  const renderNormalLobby = () => {
+    const renderNormalLobby = () => {
         return (
             <>
                 <div className={styles.mainContent}>
@@ -458,22 +454,37 @@ export default function Home() {
                 }
             </>
         )
-  }
+    }
 
-  return (
-    <div className={styles.container}>
-      <Head>
-        <title>{Globals.BROWSER_TITLE}</title>
-        <link rel="icon" href={`${Globals.STATIC_PREFIX}/assets/svg/icon.svg`} />
-      </Head>
-      <main>
-          <div className={styles.mainContainer} ref={mainDiv}>
-              {
-                  renderFullScreen(gameflowState)
-              }
-          </div>
-      </main>
-        {isConnected ? (null): (<LoadingComponent reason={`Waiting for the League Client to start`}/>)}
-    </div>
-  )
+    return (
+        <div className={styles.appContainer}>
+            <Head>
+                <title>{Globals.BROWSER_TITLE}</title>
+                <link rel="icon" href={`${Globals.STATIC_PREFIX}/assets/svg/icon.svg`} />
+            </Head>
+            <div className={styles.navbar}>
+
+            </div>
+            <div className={styles.content}>
+                <CustomBackground backgroundType={Globals.BACKGROUND_TYPE_LCU_IMAGE} background={"/lol-game-data/assets/v1/champion-splashes/uncentered/103/103076.jpg"} backgroundFileExtension={"jpg"} filterOpacity={0.3}/>
+            </div>
+            <div className={styles}>
+
+            </div>
+            {/*<div className={styles.container}>*/}
+            {/*    <Head>*/}
+            {/*        <title>{Globals.BROWSER_TITLE}</title>*/}
+            {/*        <link rel="icon" href={`${Globals.STATIC_PREFIX}/assets/svg/icon.svg`} />*/}
+            {/*    </Head>*/}
+            {/*    <main>*/}
+            {/*        <div className={styles.mainContainer} ref={mainDiv}>*/}
+            {/*            {*/}
+            {/*                renderFullScreen(gameflowState)*/}
+            {/*            }*/}
+            {/*        </div>*/}
+            {/*    </main>*/}
+            {/*    {isConnected ? (null): (<LoadingComponent reason={`Waiting for the League Client to start`}/>)}*/}
+            {/*</div>*/}
+        </div>
+    )
 }

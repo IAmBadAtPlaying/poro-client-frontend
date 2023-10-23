@@ -74,7 +74,7 @@ export default function LobbyContainerRoleSelection({ setPositionPreference, pos
     return (
         <>
             <button onClick={handleOpenOverlay} className={styles.overlay_button}>
-                <img draggable={false} src={Globals.STATIC_PREFIX +"/assets/svg/positions/"+positionPreference.toLowerCase()+".svg"} alt={positionPreference.toLowerCase()}></img>
+                <img draggable={false} src={Globals.STATIC_PREFIX +"/assets/svg/positions/"+positionPreference.toLowerCase()+".svg"} alt={positionPreference.toLowerCase()} className={styles.position_image}></img>
             </button>
             {doRender(isOverlayOpen)}
         </>

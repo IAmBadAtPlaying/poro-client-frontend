@@ -192,111 +192,36 @@
     src: url("http://127.0.0.1:35199/static/assets/fonts/Spiegel-TTF/SemiBoldItalic.ttf") format("truetype");
 }
 
-/* Styles */
-.mainContainer {
-    user-select: none;
+.appContainer {
     font-family: "Beaufort for LOL";
-    color: white;
+    position: absolute;
+    top: 0;
+    left: 0;
     height: 100vh;
     width: 100vw;
-    background-size: 100% 100%;
-    background-position: center;
-    z-index: -1;
+    margin: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+
+    background-color: #181a1b;
+    color: #f0f0f0;
 }
 
-.videoContainer {
-    position: absolute;
-    height: 100vh;
-    width: 82.50vw;
-    z-index: 0;
-}
-
-.video {
+.navbar {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
     height: 100%;
     width: 100%;
-    object-fit: cover;
 }
 
-.mainContent {
-    position: absolute;
-    height: 100vh;
-    width: 82.50vw;
-    background-color: transparent;
-    z-index: 1;
-}
-
-.friendsTab {
-    position: absolute;
-    top: 10vh;
-    height: 90vh;
-    width: 17.50vw;
-    left: 82.50vw;
-    z-index: 1;
-    background-color: transparent;
-    overflow-y: auto;
-    overflow-x: hidden;
-}
-
-.friendsChatWindow {
-    box-sizing: border-box;
-    background-color: rgba(25, 25, 25, 0.9);
-    position: absolute;
-    bottom: 0;
-    height: 30vh;
-    width: 30vw;
-    left: 82.50vw;
-    transform: translateX(-100.5%);
-    z-index: 100;
-}
-
-.friendsGrid {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-content: flex-start;
-}
-
-.containerSelector {
-    display: flex;
-    top: 0;
-    color: white;
-    height: 10%;
-    width: 65%;
-}
-
-
-.containerButton {
-    flex: 1 0 0;
-    border-radius: 0;
-    border: none;
-    color: white;
-    background: #5B5A56;
-}
-
-.containerButton:hover {
-    background: #3C3C41;
-}
-
-.contentContainer {
+.content {
     position: relative;
-    height: 90%;
+    flex: 9;
+    height: 100%;
     width: 100%;
-    background-color: transparent;
-    z-index: 1;
-}
-
-.friendsGrid::-webkit-scrollbar-track {
-    background:transparent;
-    color: transparent;
-    visibility: hidden;
-}
-
-.friendsGrid::-webkit-scrollbar {
-    width: 10px;
-}
-
-.friendsGrid::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 100px;
 }

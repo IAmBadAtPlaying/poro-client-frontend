@@ -203,6 +203,8 @@ export default function ReworkedChampSelectContainer({session}) {
         return bans;
     }
 
+
+
     const renderMyTeamStrategy = (session) => {
         if (!session) return (<></>);
         let myTeam = session.myTeam;
@@ -237,9 +239,9 @@ export default function ReworkedChampSelectContainer({session}) {
 
     const renderFriendlyState = (currentSummoner, index) => {
         if (!currentSummoner) return (<></>);
-        if (!currentSummoner.stateDebug) return (<></>);
+        if (!currentSummoner.state) return (<></>);
 
-        let state = currentSummoner.stateDebug;
+        let state = currentSummoner.state;
         switch (state) {
             case "PREPARATION":
                  return renderSummonerPREPARATION(currentSummoner, index);
@@ -490,6 +492,45 @@ export default function ReworkedChampSelectContainer({session}) {
         if (position === undefined || position === "") return (<></>);
         return (
             <img src={`${STATIC_PREFIX}/assets/svg/positions/${position}.svg`} className={styles.positionImage} draggable={false}/>
+        )
+    }
+
+    const renderTheirTeamStrategy = (session) => {
+        if (!session) return (<></>);
+        let theirTeam = session.theirTeam;
+        let timer = session.timer;
+        if (!timer) return <>Unknown Timer Phase</>
+        let timerPhase = session.timer.phase;
+        console.log("Current Phase " + timerPhase);
+        switch (timerPhase) {
+            case 'PLANNING':
+            case 'BAN_PICK':
+            case 'FINALIZATION':
+                return renderTheirTeam(theirTeam);
+            default:
+                return <>Unknown Timer Phase: {timerPhase}</>
+        }
+    }
+
+    const renderTheirTeam = (theirTeam) => {
+        const theirTeamArray = [];
+
+        for (let index = 0; index < Globals.CHAMP_SELECT_MAX_MEMBERS_PER_TEAM; index++) {
+
+            const currentSummoner = theirTeam[index];
+            {
+                theirTeamArray.push(
+                    renderEnemyState(currentSummoner, index)
+                )
+            }
+        }
+        return theirTeamArray;
+    }
+
+
+    const renderEnemyState = (currentSummoner, index) => {
+        return (
+            <></>
         )
     }
 

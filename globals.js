@@ -11,6 +11,11 @@ export const STATIC_PREFIX = BASE_URL+APPLICATION_PORT+"/static";
 export const CONFIG_PREFIX = BASE_URL+APPLICATION_PORT+"/config";
 export const REST_PREFIX = BASE_URL+APPLICATION_PORT+"/rest";
 
+const CONFIG_USERDATA_PREFIX = CONFIG_PREFIX+"/userdata";
+
+export const CONFIG_USER_BACKGROUND_IMAGE = CONFIG_USERDATA_PREFIX+"/bgImage";
+export const CONFIG_USER_BACKGROUND_VIDEO = CONFIG_USERDATA_PREFIX+"/bgVideo";
+
 export const SOCKET_URL = "ws://127.0.0.1:"+SOCKET_PORT;
 
 export const VERSION_SHORT = "v"+VERSION;
@@ -20,6 +25,12 @@ export const BROWSER_TITLE = "Poro-Client " + VERSION_SHORT;
 
 export const CHAMP_SELECT_MAX_BANS_PER_TEAM = 5;
 export const CHAMP_SELECT_MAX_MEMBERS_PER_TEAM = 5;
+
+export const BACKGROUND_TYPE_IMAGE = "LOCAL_IMAGE";
+export const BACKGROUND_TYPE_VIDEO = "LOCAL_VIDEO";
+export const BACKGROUND_TYPE_LCU_IMAGE = "LCU_IMAGE";
+export const BACKGROUND_TYPE_LCU_VIDEO = "LCU_VIDEO";
+export const BACKGROUND_TYPE_NONE = "NONE";
 
 export const GITHUB_ISSUES_LINK = "https://github.com/IAmBadAtPlaying/poro-client-frontend/issues";
 
