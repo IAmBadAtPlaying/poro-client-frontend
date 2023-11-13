@@ -24,8 +24,10 @@ const availabilityOrder = ['','chat','dnd', 'online', 'away', 'mobile', 'offline
 let audio;
 let globalChampions = {};
 let globalChatIdentity = {};
-let globalSpells;
-let globalChromaSkins;
+let globalSpells = {};
+let globalChromaSkins = {};
+let globalMapAssets = {}
+
 
 const messageMap = new Map();
 
@@ -117,6 +119,10 @@ export function getSpells() {
 
 export function getChromaSkins() {
     return globalChromaSkins;
+}
+
+export function getAssetMap() {
+    return globalMapAssets;
 }
 
 export default function Home() {
@@ -213,7 +219,7 @@ export default function Home() {
                         case 'InitialGameflowUpdate':
                         case 'GameflowPhaseUpdate':
                             const currentGameflowState = message.data;
-                            setGameflowState(currentGameflowState.GameflowPhase);
+                            setGameflowState(currentGameflowState.phase );
                         break;
                         case 'ChampSelectUpdate':
                             const currentChampSelectState = message.data;
@@ -270,6 +276,16 @@ export default function Home() {
                                 break;
                             }
                         break;
+                        case 'PlaySound':
+                            setTimeout(() => {
+                                const soundData = message.data;
+                                if (soundData === undefined) return;
+                                let audioSrc = Globals.PROXY_PREFIX+soundData.source;
+                                const audio = new Audio(audioSrc);
+                                audio.volume = 0.3;
+                                audio.play();
+                            }, 0);
+                        break;
                         default:
                         break;
                     }
@@ -304,21 +320,90 @@ export default function Home() {
             }
         }
     }, []);
+
     useEffect(() => {
         connect("ws://127.0.0.1:8887");
     }, []);
 
-    useEffect(() => {
-        if (isConnected) {
-            axios.get(Globals.PROXY_PREFIX + "/lol-chat/v1/me").then((response) => {
-                globalChatIdentity = response.data;
-                console.log("Chat Identity");
-                console.log(response.data);
-            }).catch((error) => {
-                console.log(error);
+    const fetchChampions = () => {
+        axios.get(Globals.PROXY_PREFIX + "/lol-game-data/assets/v1/champion-summary.json").then((response) => {
+            let intermediate = {}
+            if (response.data.errorCode) {
+                console.error("Failed to load champions");
+                return;
+            }
+            response.data.forEach((champion) => {
+                intermediate[champion.id] = champion;
             });
-        }
+            globalChampions = intermediate;
+        })
+    }
 
+    const fetchSummonerSpells = () => {
+        axios.get(Globals.PROXY_PREFIX + "/lol-game-data/assets/v1/summoner-spells.json").then((response) => {
+            let intermediate = {};
+            if (response.data.errorCode) {
+                console.error("Failed to load summoner spells");
+                return;
+            }
+            response.data.forEach((spell) => {
+                intermediate[spell.id] = spell;
+            });
+            globalSpells = intermediate;
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
+
+    const fetchChromaSkins = () => {
+        axios.get(Globals.PROXY_PREFIX + "/lol-game-data/assets/v1/skins.json").then((response) => {
+            let intermediate = {};
+            if (response.data.errorCode) {
+                console.error("Failed to load skins");
+                return;
+            }
+            Object.values(response.data).forEach((skin) => {
+                if (skin.chromas) {
+                    skin.chromas.forEach((chroma) => {
+                        intermediate[chroma.id] = skin.id;
+                    });
+                }
+                intermediate[skin.id] = skin.id;
+            });
+            globalChromaSkins = intermediate;
+            setTimeout(() => {
+                console.log(globalChampions);
+                console.log(getChampions())
+            },1000);
+        }).catch(() => {});
+    }
+
+    const fetchMapAssets = () => {
+        axios.get(Globals.PROXY_PREFIX + "/lol-game-data/assets/v1/map-assets/map-assets.json").then((response) => {
+            let intermediate = {};
+            if (response.data.errorCode) {
+                console.error("Failed to load map assets");
+                return;
+            }
+            Object.keys(response.data).forEach((key) => {
+                if (intermediate[key] === undefined) {
+                    const asset = response.data[key];
+                    if (asset.length > 0) {
+                        intermediate[key] = asset[0].assets;
+                    }
+                }
+            });
+            globalMapAssets = intermediate;
+            console.log(globalMapAssets);
+        }).catch(() => {});
+    }
+
+    useEffect(() => {
+        if (!isConnected) return;
+        fetchMapAssets();
+        fetchChampions();
+        fetchSummonerSpells();
+        fetchChromaSkins();
     }, [isConnected])
 
 
@@ -354,7 +439,7 @@ export default function Home() {
                 return <MatchmakingContainer lobbyConfig={lobby}/>
             break;
             case 'ReadyCheck':
-                return <ReadyCheckContainer />
+                // return <ReadyCheckContainer />
             break;
             case 'ChampSelect':
                 return <ReworkedChampionSelectContainer session={championSelectState}/>;

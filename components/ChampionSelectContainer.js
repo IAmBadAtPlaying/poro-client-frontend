@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import styles from '../styles/champSelect/ChampionSelectContainer.module.css';
-import {getChampions, getChromaSkins, getSpells} from "../pages";
+import {getChampions, getChromaSkins, getSpells} from "../pages/index";
 import * as Globals from "../globals";
 import ChampionCard from "./ChampionCard";
 import {PROXY_STATIC_PREFIX} from "../globals";

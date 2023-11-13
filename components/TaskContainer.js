@@ -35,9 +35,6 @@ export default function TaskContainer() {
 
     return(
         <div className={styles.task_container}>
-            <div className={styles.header}>
-                <h1>TASKS</h1>
-            </div>
             <div className={styles.tasks_container}>
                 {
                     taskList.map((task, index) => {

@@ -1,5 +1,5 @@
 import styles from "../styles/Config.module.css";
-import {axiosSend, send} from "../pages";
+import {axiosSend, send} from "../pages/indexRework";
 import * as Globals from "../globals";
 
 export default function ConfigContainer() {

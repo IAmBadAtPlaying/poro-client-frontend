@@ -1,10 +1,11 @@
-import {getChampions, getChromaSkins, getSpells} from "../pages";
+import {getChampions, getChromaSkins, getSpells} from "../pages/indexRework";
 import {useEffect, useRef, useState} from "react";
 import axios from "axios";
 import * as Globals from "../globals";
 import {PROXY_STATIC_PREFIX, STATIC_PREFIX} from "../globals";
 import styles from "../styles/champSelect/ReworkedChampSelectContainer.module.css";
 import ChampionCard from "./ChampionCard";
+import RuneSelector from "./RuneSelector";
 
 
 export default function ReworkedChampSelectContainer({session}) {
@@ -662,6 +663,7 @@ export default function ReworkedChampSelectContainer({session}) {
                         {
                             renderChampionSelector(session)
                         }
+                        <button onClick={() => {setRunesVisible(true)}}>Runes</button>
                 </div>
             </div>
             <div className={styles.theirTeamSection}>
@@ -679,6 +681,9 @@ export default function ReworkedChampSelectContainer({session}) {
 
                 </div>
             </div>
+            {
+                runesVisible ? (<RuneSelector setVisible={setRunesVisible}/>) : (<></>)
+            }
         </div>
     )
 }

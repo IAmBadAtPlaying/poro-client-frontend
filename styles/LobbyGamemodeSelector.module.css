@@ -14,14 +14,25 @@
 }
 
 .gamemodeSelectorIcon {
-    object-fit: fill;
+    object-fit: contain;
+    object-position: 50% 50%;
     height: 100%;
+    width: 100%;
+    opacity: 1;
+    outline: none;
+    border: none;
+
 }
 
 .gamemodeSelectorIconVideo {
-    position: relative;
-    object-fit: fill;
+    object-fit: contain;
+    object-position: 50% 50%;
     height: 100%;
+    width: 100%;
+    scale: 106.75%;
+    opacity: 1;
+    outline: none;
+    border: none;
 }
 
 
@@ -29,8 +40,10 @@
     position: relative;
     top: 10%;
     height: 12%;
-    left: 37.5%;
+    left: 50.0%;
     width: 25%;
+
+    transform: translateX(-50%);
 }
 
 .gamemodeSelectorHeader {
@@ -40,9 +53,13 @@
     margin-top: 2%;
     position: relative;
     text-align: center;
+    align-items: center;
+    align-content: center;
     height: 10%;
-    width: 21%;
-    left: 40%;
+    width: 25%;
+    left: 50%;
+
+    transform: translateX(-50%);
 }
 
 .gamemodeDescription {

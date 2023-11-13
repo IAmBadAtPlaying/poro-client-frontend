@@ -6,7 +6,7 @@ import {useEffect, useState} from "react";
 import LobbyContainerRoleSelection from "./LobbyContainerRoleSelection";
 import LobbyGamemodeSelector from "./LobbyGamemodeSelector";
 import {PROXY_STATIC_PREFIX} from "../globals";
-import {axiosSend} from "../pages/index";
+import {axiosSend} from "../pages/indexRework";
 
 function startMatchmaking () {
     console.log("Starting Matchmaking")

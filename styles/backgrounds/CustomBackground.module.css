@@ -6,6 +6,7 @@
     max-height: 100%;
     max-width: 100%;
 
+    user-select: none;
 }
 
 .filter {
@@ -13,7 +14,7 @@
     height: 100%;
     width: 100%;
     background-color: rgba(24, 26, 27, 1);
-    z-index: 1;
+    z-index: 0;
 }
 
 .backgroundImage {

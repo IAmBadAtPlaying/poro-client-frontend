@@ -1,0 +1,116 @@
+.container {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    border-radius: 1000000px;
+    box-sizing: border-box;
+
+    border: #181a1b solid 5px;
+
+    background-color: rgba(24, 26, 27);
+
+    user-select: none;
+}
+
+.profileImageWrapper {
+    left: 0;
+    top: 0;
+    position: absolute;
+    height: 100%;
+    aspect-ratio: 1;
+    border-radius: 1000000000px;
+
+    overflow: hidden;
+
+    box-sizing: border-box;
+    border: gold solid 4px;
+}
+
+.profileIcon {
+    object-fit: cover;
+
+    height: 100%;
+    aspect-ratio: 1;
+}
+
+.socialInfo {
+    display: flex;
+    flex-direction: column;
+
+    position: absolute;
+    height: 100%;
+    width: 70%;
+    right: 5%;
+
+    box-sizing: border-box;
+}
+
+.socialInfoName {
+    flex: 2;
+
+    align-items: center;
+    justify-content: center;
+    text-align: right;
+
+    font-weight: bold;
+    font-size: 1.2em;
+
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+}
+
+.socialInfoStatus {
+    flex: 1;
+
+    align-items: center;
+    justify-content: center;
+
+    font-weight: 400;
+    font-size: 1.1em;
+
+    display: flex;
+}
+
+.statusDotWrapper {
+    height: 100%;
+    aspect-ratio: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    padding-right: 2px;
+}
+
+.statusDot {
+    height: 75%;
+    aspect-ratio: 1;
+
+    box-sizing: border-box;
+
+    border-radius: 1000px;
+}
+
+.statusAvailable {
+    border: green solid 2px;
+    background-color: darkgreen;
+}
+
+.statusAway {
+    border: red solid 2px;
+    background-color: #8B0000FF;
+}
+
+.statusDnd {
+    border: #00d8ff solid 2px;
+    background-color: #00648b;
+}
+
+.statusOffline {
+    border: gray solid 2px;
+    background-color: darkgray;
+}

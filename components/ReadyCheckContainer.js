@@ -1,6 +1,6 @@
 import {useEffect} from "react";
 import {PROXY_STATIC_PREFIX} from "../globals";
-import {axiosSend, send} from "../pages";
+import {axiosSend, send} from "../pages/indexRework";
 
 
 export default function ReadyCheckContainer() {

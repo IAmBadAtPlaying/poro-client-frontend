@@ -1,7 +1,7 @@
 import {isJsonObjectEmpty, PROXY_STATIC_PREFIX} from "../globals";
 import {useEffect, useState} from "react";
 import styles from "../styles/LootContainer.module.css";
-import {send} from "../pages";
+import {send} from "../pages/indexRework";
 import Image from "next/image";
 
 

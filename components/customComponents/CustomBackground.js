@@ -17,7 +17,7 @@ export default function CustomBackground({backgroundType, background, background
         switch (backgroundType) {
             case Globals.BACKGROUND_TYPE_IMAGE:
                 return (
-                    <img src={Globals.CONFIG_USER_BACKGROUND_IMAGE + "." + backgroundFileExtension} alt="" className={styles.backgroundImage} onError={() => {acknowledgeError(this)}}/>
+                    <img src={Globals.CONFIG_USER_BACKGROUND_IMAGE + "." + backgroundFileExtension} alt="" className={styles.backgroundImage} onError={(event) => {acknowledgeError(event.target)}}/>
                 )
             case Globals.BACKGROUND_TYPE_VIDEO:
                 return (
@@ -31,7 +31,7 @@ export default function CustomBackground({backgroundType, background, background
                 )
             case Globals.BACKGROUND_TYPE_LCU_VIDEO:
                 return (
-                    <video autoPlay={true} muted={true} loop={true} className={styles.backgroundVideo} onError={() => {acknowledgeError(this)}}>
+                    <video autoPlay={true} muted={true} loop={true} className={styles.backgroundVideo} onError={(event) => {acknowledgeError(event.target)}}>
                         <source src={Globals.PROXY_STATIC_PREFIX + background} type={createType("video",  backgroundFileExtension)}/>
                     </video>
                 )

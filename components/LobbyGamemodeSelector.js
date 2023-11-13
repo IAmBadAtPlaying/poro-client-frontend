@@ -2,7 +2,7 @@ import * as Globals from '../globals';
 import styles from '../styles/LobbyGamemodeSelector.module.css'
 import GamemodeElement from "./GamemodeElement";
 import {useEffect, useState} from "react";
-import {AUDIO_PLAY_BIG_BUTTON, axiosSend, send} from "../pages/index";
+import {AUDIO_PLAY_BIG_BUTTON, axiosSend, send} from "../pages/indexRework";
 import {isJsonObjectEmpty} from "../globals";
 
 
@@ -15,6 +15,7 @@ export default function LobbyGamemodeSelector({showFunction, availableQueues}) {
     useEffect(() => {
         if (isJsonObjectEmpty(availableQueues)) return;
         setPvPQueues(availableQueues["PvP"])
+        console.log(availableQueues["PvP"])
     },[availableQueues]);
 
     const createLobby = (qID) => {
