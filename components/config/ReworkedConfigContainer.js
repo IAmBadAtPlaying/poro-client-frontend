@@ -1,6 +1,7 @@
 import PatcherStatus from "./PatcherStatus";
 import styles from "../../styles/config/ReworkedConfigContainer.module.css"
 import UIControl from "./UIControl";
+import ShutdownControl from "./ShutdownControl";
 
 export default function ReworkedConfigContainer({patcherStatus}) {
     return (
@@ -12,6 +13,9 @@ export default function ReworkedConfigContainer({patcherStatus}) {
                 </div>
                 <div className={styles.singleContent} style={{height: "20%"}}>
                     <PatcherStatus patcherStatus={patcherStatus}/>
+                </div>
+                <div className={styles.singleContent}>
+                    <ShutdownControl/>
                 </div>
             </div>
         </div>

@@ -8,6 +8,7 @@ export default function CustomBackground({backgroundType, background, background
     }
 
     const acknowledgeError = (target) => {
+        if (!target) return;
         console.error("Failed to load background!");
         console.log("Tried to load " + target.src);
         target.style.display='none';

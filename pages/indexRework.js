@@ -479,7 +479,7 @@ export default function Home() {
                             Loot
                         </div>
                         <div className={styles.activityContent}>
-                            <LootContainer loot={loot}/>;
+                            <LootContainer loot={loot}/>
                         </div>
                     </div>
                 )
@@ -490,7 +490,7 @@ export default function Home() {
             case CONTAINER_COLLECTION:
                 return <div>Collection</div>
             default:
-                return (<>{activeTab}</>);
+                return (<></>);
         }
     };
 

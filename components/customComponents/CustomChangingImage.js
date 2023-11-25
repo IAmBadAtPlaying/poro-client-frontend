@@ -10,6 +10,7 @@ export default function CustomChangingImage({containerClassName, containerStyle,
             <img src={image} alt={"Image not found"}
                  style={imageStyle}
                  className={imageClassName}
+                 draggable={"false"}
                  onMouseEnter={() => setImage(hoverImageSrc)}
                  onMouseLeave={() => setImage(defaultImageSrc)}/>
         )

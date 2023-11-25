@@ -9,7 +9,7 @@ import RuneSelector from "./RuneSelector";
 
 
 export default function ReworkedChampSelectContainer({session}) {
-    let champions = getChampions();
+    const champions = getChampions();
 
     const [runesVisible, setRunesVisible] = useState(false);
     const [searchInput, setSearchInput] = useState("");
@@ -65,6 +65,14 @@ export default function ReworkedChampSelectContainer({session}) {
             }
         }
         setFilteredChampions(Object.values(champions).filter(champion => filterChampions(champion)));
+    }
+
+    const getChampionNameFromId = (championId) => {
+        if (championId === undefined) return "";
+        if (championId === -1) return "None";
+
+        return champions[championId] === undefined ? "" : champions[championId].name;
+
     }
 
     const getPositionFromInternalName = (internalName) => {
@@ -294,6 +302,9 @@ export default function ReworkedChampSelectContainer({session}) {
                 <div className={styles.borderBox}>
                     <div className={styles.banningBGContainer}>
                         {
+                            console.log(getChampions())
+                        }
+                        {
                             validChampionId(currentSummoner.banAction.championId) ? (
                                 <>
                                     <img src={`${Globals.PROXY_STATIC_PREFIX}/lol-game-data/assets/v1/champion-splashes/${currentSummoner.banAction.championId}/${currentSummoner.banAction.championId+"000"}.jpg`}
@@ -310,7 +321,14 @@ export default function ReworkedChampSelectContainer({session}) {
                     </div>
                     <div className={styles.teammateContent}>
                         <div className={styles.statusContainer}>
-                            Banning...
+                            <div className={styles.singleStatus}>
+                                Banning...
+                            </div>
+                            <div className={styles.singleStatus}>
+                                {
+                                    getChampionNameFromId(currentSummoner.banAction.championId)
+                                }
+                            </div>
                         </div>
                         <div className={styles.positionContainer}>
                             {
@@ -394,7 +412,13 @@ export default function ReworkedChampSelectContainer({session}) {
                     </div>
                     <div className={styles.teammateContent}>
                         <div className={styles.statusContainer}>
+                            <div className={styles.singleStatus}>
                                 Picking...
+                            </div>
+                            <div className={styles.singleStatus}>
+                                {getChampionNameFromId(currentSummoner.pickAction.championId)}
+                            </div>
+
                         </div>
                         <div className={styles.positionContainer}>
                             {
@@ -664,6 +688,9 @@ export default function ReworkedChampSelectContainer({session}) {
                             renderChampionSelector(session)
                         }
                         <button onClick={() => {setRunesVisible(true)}}>Runes</button>
+                </div>
+                <div className={styles.selectLockin}>
+                    <button>Lock In</button>
                 </div>
             </div>
             <div className={styles.theirTeamSection}>
