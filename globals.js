@@ -1,7 +1,7 @@
 export const APPLICATION_PORT = 35199;
 export const SOCKET_PORT = 8887;
 
-const VERSION = "0.1.3";
+const VERSION = "0.1.4";
 
 const BASE_URL = "http://127.0.0.1:"
 
@@ -11,10 +11,9 @@ export const STATIC_PREFIX = BASE_URL+APPLICATION_PORT+"/static";
 export const CONFIG_PREFIX = BASE_URL+APPLICATION_PORT+"/config";
 export const REST_PREFIX = BASE_URL+APPLICATION_PORT+"/rest";
 
-const CONFIG_USERDATA_PREFIX = CONFIG_PREFIX+"/userdata";
+const CONFIG_USERDATA_PREFIX = REST_PREFIX+"/dynamic/userdata";
 
-export const CONFIG_USER_BACKGROUND_IMAGE = CONFIG_USERDATA_PREFIX+"/bgImage";
-export const CONFIG_USER_BACKGROUND_VIDEO = CONFIG_USERDATA_PREFIX+"/bgVideo";
+export const CONFIG_USER_BACKGROUND = CONFIG_USERDATA_PREFIX+"/background";
 
 export const SOCKET_URL = "ws://127.0.0.1:"+SOCKET_PORT;
 
@@ -46,7 +45,33 @@ export function isJsonObjectEmpty(jsonObj) {
     return false;
 }
 
-export const TASKS = {};
+/*
+*
+* GAMEFLOW
+*
+ */
+
+export const GAMEFLOW_NONE = "None";
+export const GAMEFLOW_TERMINATED_IN_ERROR = "TerminatedInError";
+export const GAMEFLOW_LOBBY = "Lobby";
+export const GAMEFLOW_READY_CHECK = "ReadyCheck";
+export const GAMEFLOW_CHAMP_SELECT = "ChampSelect";
+export const GAMEFLOW_GAME_START = "GameStart";
+export const GAMEFLOW_IN_PROGRESS = "InProgress";
+export const GAMEFLOW_RECONNECT = "Reconnect";
+export const GAMEFLOW_MATCHMAKING = "Matchmaking";
+export const GAMEFLOW_WAITING_FOR_STATS = "WaitingForStats";
+export const GAMEFLOW_END_OF_GAME = "EndOfGame";
+export const GAMEFLOW_PRE_END_OF_GAME = "PreEndOfGame";
+export const GAMEFLOW_CHECKED_INTO_TOURNAMENT = "CheckedIntoTournament";
+
+export const CONTAINER_NONE = "";
+export const CONTAINER_PLAY = "Play";
+export const CONTAINER_COLLECTION = "Collection";
+export const CONTAINER_LOOT = "Loot";
+export const CONTAINER_PROFILE = "Profile";
+export const CONTAINER_TASKS = "Tasks";
+export const CONTAINER_CONFIG = "Configuration";
 
 export const TASK_AUTO_ACCEPT_QUEUE = {name: "Auto Accept Queue", parameters: [{name: "Delay", description: "Time till Ready-Check gets accepted", backendKey: "delay"}]};
 export const TASK_AUTO_PICK_CHAMP = {name: "Auto Pick Champion", parameters: [{name: "Delay", description: "Time until the champion gets picked", backendKey: "delay"},{name:"Champion ID", description:"Champion ID of the champion you want to get picked", backendKey: "championId"}]};

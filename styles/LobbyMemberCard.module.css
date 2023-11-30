@@ -104,17 +104,15 @@
     margin: 0;
     position: absolute;
     width: 80%;
+    aspect-ratio: 1;
     left: 10%;
+    object-fit: contain;
+    max-height: 100%;
     max-width: 100%;
-    height: 0;
-    top: 14%;
-    padding: 0 0 80%;
+    top: 10%;
+    overflow: hidden;
 }
 
-.profileContainer::before {
-    content: "";
-    padding-top: 100%; /* TODO: I shouldnt need to do this, rethink approach*/
-}
 
 .profileImage {
     padding: 0;
@@ -151,7 +149,7 @@
     height: 150%;
     width: 150%;
     left: 0;
-    transform: translate(-17%,-30%);
+    transform: translate(-16.5%,-29.5%);
     border: transparent;
 }
 

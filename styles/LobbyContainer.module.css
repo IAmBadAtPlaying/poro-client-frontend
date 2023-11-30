@@ -1,9 +1,9 @@
 .lobby_type_display {
     position: absolute;
-    text-align: left;
+    text-align: right;
     font-weight: 500;
     font-family: "Beaufort for LOL";
-    width: 96.6%;
+    width: 96.0%;
     top: 2%;
     left: 2%;
     font-size: 120%;

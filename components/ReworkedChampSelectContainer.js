@@ -174,36 +174,20 @@ export default function ReworkedChampSelectContainer({session}) {
             console.log(`${index} ${championValue}`);
 
             if (index >= maxBans) {
-                bans.push(
-                    <div className={styles.theirTeamBansComponent} key={"MyTeamBan-" + index}>
-                        <div className={styles.theirTeamBansImageContainer}>
-                        </div>
-                    </div>
-                )
                 continue;
             }
             if (!championValue) {
                 bans.push(
-                    <div className={styles.theirTeamBansComponent} key={"MyTeamBan-" + index}>
-                        <div className={styles.theirTeamBansImageContainer}>
-                            <img
-                                src={`${Globals.PROXY_STATIC_PREFIX}/lol-game-data/assets/v1/champion-icons/-1.png`}
-                                alt="Icon"
-                                className={styles.theirTeamBansImage}
-                            />
-                        </div>
+                    <div className={styles.singleBanContainer} key={"TheirTeamBan-" + index}>
+                        <img className={styles.banImage} src={`${Globals.PROXY_STATIC_PREFIX}/lol-game-data/assets/v1/champion-icons/-1.png`} alt={""}/>
+                        <div className={styles.banFilter}></div>
                     </div>
                 );
             } else {
                 bans.push(
-                    <div className={styles.theirTeamBansComponent} key={"MyTeamBan-" + index}>
-                        <div className={styles.theirTeamBansImageContainer}>
-                            <img
-                                src={`${Globals.PROXY_STATIC_PREFIX}/lol-game-data/assets/v1/champion-icons/${championValue}.png`}
-                                alt="Icon"
-                                className={styles.theirTeamBansImage}
-                            />
-                        </div>
+                    <div className={styles.singleBanContainer} key={"TheirTeamBan-" + index}>
+                        <img className={styles.banImage} src={`${Globals.PROXY_STATIC_PREFIX}/lol-game-data/assets/v1/champion-icons/${championValue}.png`} alt={""}/>
+                        <div className={styles.banFilter}></div>
                     </div>
                 );
             }
@@ -355,14 +339,14 @@ export default function ReworkedChampSelectContainer({session}) {
                         <div className={styles.finalizationContentSummonerSpellContainer}>
                             <img className={styles.champSelectComponentSummonerSpellImage}
                                  draggable={false}
-                                 alt={"Summoner Spell"}
+                                 alt={" "}
                                  src={getPathFromSpellId(currentSummoner.spell1Id)}
                             />
                         </div>
                         <div className={styles.finalizationContentSummonerSpellContainer}>
                             <img className={styles.champSelectComponentSummonerSpellImage}
                                  draggable={false}
-                                 alt={"Summoner Spell"}
+                                 alt={" "}
                                  src={getPathFromSpellId(currentSummoner.spell2Id)}
                             />
                         </div>
@@ -445,21 +429,21 @@ export default function ReworkedChampSelectContainer({session}) {
                         <div className={styles.finalizationContentSummonerSpellContainer}>
                             <img className={styles.champSelectComponentSummonerSpellImage}
                                  draggable={false}
-                                 alt={"Summoner Spell"}
+                                 alt={" "}
                                  src={getPathFromSpellId(currentSummoner.spell1Id)}
                             />
                         </div>
                         <div className={styles.finalizationContentSummonerSpellContainer}>
                             <img className={styles.champSelectComponentSummonerSpellImage}
                                  draggable={false}
-                                 alt={"Summoner Spell"}
+                                 alt={" "}
                                  src={getPathFromSpellId(currentSummoner.spell2Id)}
                             />
                         </div>
                     </div>
                     <div className={styles.championNameContainer}>
                         {
-                            champions[currentSummoner.championId] ? champions[currentSummoner.championId].name : ""
+                            currentSummoner.championId ? (champions[currentSummoner.championId] ? champions[currentSummoner.championId].name : "") : ""
                         }
                     </div>
                     <div className={styles.positionContainer}>
@@ -486,14 +470,14 @@ export default function ReworkedChampSelectContainer({session}) {
                         <div className={styles.finalizationContentSummonerSpellContainer}>
                             <img className={styles.champSelectComponentSummonerSpellImage}
                                  draggable={false}
-                                 alt={"Summoner Spell"}
+                                 alt={" "}
                                  src={getPathFromSpellId(currentSummoner.spell1Id)}
                             />
                         </div>
                         <div className={styles.finalizationContentSummonerSpellContainer}>
                             <img className={styles.champSelectComponentSummonerSpellImage}
                                  draggable={false}
-                                 alt={"Summoner Spell"}
+                                 alt={" "}
                                  src={getPathFromSpellId(currentSummoner.spell2Id)}
                             />
                         </div>
@@ -554,9 +538,27 @@ export default function ReworkedChampSelectContainer({session}) {
 
 
     const renderEnemyState = (currentSummoner, index) => {
-        return (
-            <></>
-        )
+        if (!currentSummoner) return (<></>);
+        if (!currentSummoner.state) return (<></>);
+        switch (currentSummoner.state) {
+            case 'PREPARATION':
+                return renderSummonerPREPARATION(currentSummoner, index);
+            case 'BANNING':
+                return renderSummonerBANNING(currentSummoner, index);
+            case 'AWAITING_PICK':
+                return renderSummonerAWAITING_PICK(currentSummoner, index);
+            case 'AWAITING_BAN_RESULT':
+                return renderSummonerAWAITING_BAN_RESULT(currentSummoner, index);
+            case 'PICKING_WITH_BAN':
+            case 'PICKING_WITHOUT_BAN':
+                return renderSummonerPICKING(currentSummoner, index);
+            case 'AWAITING_FINALIZATION':
+                return renderSummonerAWAITING_FINALIZATION(currentSummoner, index);
+            case 'FINALIZATION':
+                return renderSummonerFINALIZATION(currentSummoner, index);
+            default:
+                return <>Unknown State: {currentSummoner.state}</>
+        }
     }
 
     const renderChampionSelector = (session) => {
@@ -695,13 +697,15 @@ export default function ReworkedChampSelectContainer({session}) {
             </div>
             <div className={styles.theirTeamSection}>
                 <div className={styles.banContainer}>
-                    {/*{*/}
-                    {/*    renderTheirTeamBans(session.bans.theirTeamBans, session.bans.numBans / 2)*/}
-                    {/*}*/}
+                    <div className={styles.banWrapper}>
+                        {
+                            renderTheirTeamBans(session.bans.theirTeamBans, session.bans.numBans / 2)
+                        }
+                    </div>
                 </div>
                 <div className={styles.teamContainer}>
                     {
-
+                        renderTheirTeamStrategy(session)
                     }
                 </div>
                 <div className={styles.utilContainer}>

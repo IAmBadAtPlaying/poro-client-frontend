@@ -22,7 +22,7 @@ export default function ConfigContainer() {
         const file = fileInput.files[0];
 
         const xhr = new XMLHttpRequest();
-        xhr.open("POST", Globals.CONFIG_PREFIX+"/upload", true);
+        xhr.open("POST", "http://localhost:35199/rest/dynamic/userdata/background", true);
 
         xhr.upload.onprogress = function (event) {
             if (event.lengthComputable) {
@@ -80,7 +80,7 @@ export default function ConfigContainer() {
             <div className={styles.taskUploadContainer}>
                 <div>
                     <form id="uploadForm" method="POST" encType="multipart/form-data">
-                        <input type="file" accept=".java" name="jarFile"></input>
+                        <input type="file" accept="image/png, image/jpeg, video/webm, video/mp4" name="jarFile"></input>
                         <input type="button" value="Send Jar File" onClick={uploadFile}></input>
                     </form>
                     <div id="status"></div>

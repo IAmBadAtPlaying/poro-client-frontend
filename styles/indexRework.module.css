@@ -210,25 +210,6 @@
     color: #f0f0f0;
 }
 
-.navbar {
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 10%;
-    display: flex;
-    flex-direction: column;
-    background-color: #181a1b;
-    z-index: 4;
-
-    transition: left ease-in-out 0.25s;
-}
-
-.collapsed {
-    left: -10%;
-
-    transition: left ease-in-out 0.25s;
-}
 
 /*.reducer {*/
 /*    position: absolute;*/
@@ -292,7 +273,62 @@
     position: absolute;
     height: 100%;
     width: 100%;
+    overflow: hidden;
 }
+
+.currentContainer {
+    position: absolute;
+    height: 95%;
+    width: 96%;
+    bottom: 0;
+    overflow: hidden;
+}
+
+.backButtonContainer {
+    position: absolute;
+    display: flex;
+
+    font-weight: 700;
+    text-wrap: none;
+
+    align-items: center;
+    justify-content: left;
+    margin-left: 2%;
+    left: 0;
+    height: 5%;
+    font-size: 1.5em;
+    width: 20%;
+    overflow: hidden;
+    z-index: 0;
+
+}
+
+.backButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: fit-content;
+    height: 100%;
+    margin-left: 2%;
+    overflow: visible;
+}
+
+.backButton::before {
+    content: "<<";
+    position: relative;
+    transform: translateX(-20%);
+}
+
+.backButtonCurrentContainer {
+    margin-left: 2%;
+}
+
+.backButton:hover {
+    cursor: pointer;
+    color: #0070f3;
+}
+
 .displayContent {
     position: absolute;
 
@@ -540,4 +576,95 @@
     overflow-x: hidden;
 
     user-select: none;
+}
+
+.selectContainer {
+    font-family: "Beaufort for LOL";
+    font-weight: 800;
+
+    top: 20%;
+
+    position: absolute;
+    height: 60%;
+    width: 25%;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+
+    user-select: none;
+}
+
+.spacer{
+    position: relative;
+    flex: 0;
+    width: 80%;
+    left: 10%;
+    border-top: white solid 2px;
+}
+
+.selectElement {
+    flex: 1;
+    font-size: 2.5em;
+
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    margin-left: 10%;
+    border-left: transparent solid 0;
+
+    justify-content: left;
+
+    transition: border-left-width ease-in-out 0.15s;
+}
+
+.selectElement:hover {
+    margin-left: 10%;
+    border-left: transparent solid 1vw;
+    cursor: pointer;
+    color: #0397AB;
+
+    transition: border-left-width ease-in-out 0.15s;
+}
+
+.selectElementPlay {
+    flex: 1.3;
+    font-size: 3.5em;
+
+    color: #C89B3C;
+}
+
+.selectElementPlay:hover {
+    color: #0397AB;
+}
+
+.selectElement::before {
+    content: "";
+    position: absolute;
+    height: 1.5%;
+    aspect-ratio: 1;
+    background: white;
+    left: 5%;
+    rotate: 45deg;
+
+    transition: ease-in-out 0.15s;
+}
+
+.selectElementPlay::before {
+    background: #C89B3C;
+}
+
+.selectElement:hover::before {
+    content: "";
+    background: #0397AB;
+    rotate: 135deg;
+    scale: 1.5;
+
+    transition: ease-in-out 0.15s;
+}
+.selectElementPlay:hover::before {
+    background: #0397AB;
+
+    transition: ease-in-out 0.15s;
 }

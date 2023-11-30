@@ -9,7 +9,7 @@
  * @returns {JSX.Element}
  * @author IAmBadAtPlaying
  */
-
+import styles from "../styles/CustomInputField.module.css";
 
 
 export const INPUT_FIELD_TYPE = {
@@ -46,7 +46,7 @@ export default function CustomInputField({wrapperKey, backendType , placeholder,
                     return (<></>);
                 }
                 let currentValue = (defaultValue === undefined) ? "" : defaultValue;
-                inputField = <select className={"customInputField"} onChange={onChange}>
+                inputField = <select className={styles.customInputField} onChange={onChange}>
                     <option value={""} key={"unselected"} selected={currentValue === ""} disabled={true}>Select an option</option>
                     {options.map((option, index) => {
                         return createOption(option, index, currentValue);
@@ -54,7 +54,7 @@ export default function CustomInputField({wrapperKey, backendType , placeholder,
                 </select>
             break;
             default:
-                inputField = <input className={"customInputField"} type={backendTypeToType(backendType)} placeholder={placeholder} onChange={onChange} defaultValue={defaultValue}></input>
+                inputField = <input className={styles.customInputField} type={backendTypeToType(backendType)} placeholder={placeholder} onChange={onChange} defaultValue={defaultValue}></input>
             break;
         }
 

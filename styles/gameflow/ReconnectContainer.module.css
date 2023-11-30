@@ -1,0 +1,67 @@
+.reconnectContainer {
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.reconnectContent {
+    height: 40%;
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    border: #785A28 solid 3px;
+}
+
+.reconnectText {
+    flex: 5;
+    height: 100%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.reconnectTextTitle {
+    font-size: 2em;
+    font-weight: 700;
+    text-align: center;
+}
+
+.reconnectTextBody {
+    font-size: 1.5em;
+    text-align: center;
+}
+
+.reconnectSpacer {
+    flex: 1;
+}
+
+.reconnectButton {
+    text-align: center;
+    display: flex;
+
+    flex: 1;
+
+    font-weight: 700;
+    font-size: 2em;
+
+    align-items: center;
+    justify-content: center;
+
+    aspect-ratio: 5;
+
+    border: #785A28 solid 10px;
+}
+
+.reconnectButton:hover {
+    font-size: 2.2em;
+    cursor: pointer;
+    border: #C89B3C solid 10px;
+}

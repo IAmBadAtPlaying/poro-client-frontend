@@ -23,6 +23,16 @@
     width: 100%;
 }
 
+.task_configuration_parameter_container::-webkit-outer-spin-button,
+.task_configuration_parameter_container::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.task_configuration_parameter[type=number] {
+    -moz-appearance: textfield;
+}
+
 .singleTaskConfig {
     flex: 0;
     margin-left: 10px;
@@ -35,13 +45,4 @@
     margin: 5px 0 5px 0;
     border-radius: 5px;
 
-}
-
-.task_configuration_parameter:active {
-    background: red;
-}
-
-.task_configuration_parameter:focus {
-    background: green;
-    outline: none;
 }

@@ -231,7 +231,7 @@ export default function LootContainer({loot}) {
                     }).map((item, index) => {
                         return (<div key={"Loot-"+index} className={styles.lootElement} draggable={true} onDragStart={(e) => handleDragStart(e, item, DROP_ORIGIN_SELECTION)} onClick={() => moveOneElement(item, disenchantLoot, displayLoot, setDisenchantLoot, setDisplayLoot)}>
                             <div className={styles.imageContainer}>
-                                <Image  className={styles.lootImage} src={PROXY_STATIC_PREFIX + item.tilePath} alt={""+item.tilePath}  draggable={false} loading={"lazy"}></Image>
+                                <Image fill className={styles.lootImage} src={PROXY_STATIC_PREFIX + item.tilePath} alt={""+item.tilePath}  draggable={false} loading={"lazy"}></Image>
                             </div>
                                 <div className={styles.lootDescription} draggable={false}>
                                     <br></br>

@@ -15,6 +15,8 @@ import axios from "axios";
 import CustomBackground from "../components/customComponents/CustomBackground";
 import StatusProfile from "../components/indexReworked/StatusProfile";
 import ReworkedConfigContainer from "../components/config/ReworkedConfigContainer";
+import FriendList from "../components/social/FriendList";
+import ReconnectContainer from "../components/gameflow/ReconnectContainer";
 
 export let socket
 
@@ -144,11 +146,12 @@ export function getAssetMap() {
 }
 
 export default function Home() {
+
     const [queues, setQueues] = useState({});
     const [champions, setChampions] = useState([]);
     const [friends, setFriends] = useState({});
     const [lobby, setLobby] = useState({});
-    const [container, setContainer] = useState("none");
+    const [container, setContainer] = useState(Globals.CONTAINER_NONE);
     const [gameflowState, setGameflowState] = useState("None");
     const [championSelectState, setChampionSelectState] = useState({});
     const [isConnected, setIsConnected] = useState(false);
@@ -156,16 +159,11 @@ export default function Home() {
     const [taskList, setTaskList] = useState([]);
     const [currentChatFriend, setCurrentChatFriend] = useState({});
     const [presence, setPresence] = useState({});
-    const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+    const [friendListCollapsed, setFriendListCollapsed] = useState(true);
     const [patcherStatus, setPatcherStatus] = useState({});
-
-
-    const CONTAINER_COLLECTION = "collection";
-    const CONTAINER_LOOT = "loot";
-    const CONTAINER_PLAY = "play";
-    const CONTAINER_TASKS = "tasks";
-    const CONTAINER_CONFIG = "config";
-    const CONTAINER_PROFILE = "profile";
+    const [config, setConfig] = useState({});
+    const [backgroundFilterOpacity, setBackgroundFilterOpacity] = useState(0.3);
+    const [backgroundVolume, setBackgroundVolume] = useState(0.8);
 
     useEffect(() => {
         if (!isConnected) return;
@@ -173,7 +171,16 @@ export default function Home() {
         fetchChampions();
         fetchSummonerSpells();
         fetchChromaSkins();
+        fetchUserConfig();
     }, [isConnected])
+
+    const fetchUserConfig = () => {
+        axios.get(Globals.REST_PREFIX + "/userconfig").then((response) => {
+            setConfig(response.data);
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
 
     const fetchChampions = () => {
         axios.get(Globals.PROXY_PREFIX + "/lol-game-data/assets/v1/champion-summary.json").then((response) => {
@@ -409,7 +416,6 @@ export default function Home() {
         }
     }
 
-
     useEffect(() => {
         if (typeof document !== 'undefined') {
             document.body.style.overflow = "hidden";
@@ -445,92 +451,43 @@ export default function Home() {
 
     }, [isConnected])
 
-    const changeContainer = (containerName) => {
-        setSidebarCollapsed(true)
-        setContainer(containerName);
-    }
-
-    const renderContent = (activeTab) => {
-        switch (activeTab) {
-            case CONTAINER_PLAY:
-                return (
-                    <div className={styles.activityContainer}>
-                        <div className={styles.activityHeader}>Play</div>
-                        <div className={styles.activityContent}>
-                            {renderLobby(gameflowState)}
-                        </div>
-                    </div>
-                )
-            case CONTAINER_TASKS:
-                return (
-                    <div className={styles.activityContainer}>
-                        <div className={styles.activityHeader}>
-                            Tasks
-                        </div>
-                        <div className={styles.activityContent}>
-                            <TaskContainer taskList={taskList}/>
-                        </div>
-                    </div>
-                )
-            case CONTAINER_LOOT:
-                return (
-                    <div className={styles.activityContainer}>
-                        <div className={styles.activityHeader}>
-                            Loot
-                        </div>
-                        <div className={styles.activityContent}>
-                            <LootContainer loot={loot}/>
-                        </div>
-                    </div>
-                )
-            case CONTAINER_PROFILE:
-                return <ProfileContainer/>;
-            case CONTAINER_CONFIG:
-                return <ReworkedConfigContainer patcherStatus={patcherStatus}/>
-            case CONTAINER_COLLECTION:
-                return <div>Collection</div>
-            default:
-                return (<></>);
-        }
-    };
 
 
     const renderLobby = (state) => {
         switch (state) {
-            case 'Lobby':
-                return <LobbyContainer lobbyConfig={lobby} availableQueues={queues}/>;
+            case Globals.GAMEFLOW_READY_CHECK:
+            case Globals.GAMEFLOW_LOBBY:
+                return <LobbyContainer lobbyConfig={lobby} availableQueues={queues}/>
                 break;
-            case 'Matchmaking':
+            case Globals.GAMEFLOW_MATCHMAKING:
                 return <MatchmakingContainer lobbyConfig={lobby}/>
                 break;
-            case 'ReadyCheck':
-                break;
-            case 'ChampSelect':
+            case Globals.GAMEFLOW_CHAMP_SELECT:
                 return <ReworkedChampionSelectContainer session={championSelectState}/>;
                 break;
-            case 'GameStart':
+            case Globals.GAMEFLOW_GAME_START:
                 return <div>GAME - START</div>;
                 break;
-            case 'InProgress':
+            case Globals.GAMEFLOW_IN_PROGRESS:
                 return <div>GAME - INPROGRESS</div>;
                 break;
-            case 'Reconnect':
-                return <div>RECONNECT - COMPONENT</div>;
+            case Globals.GAMEFLOW_RECONNECT:
+                return <ReconnectContainer/>
                 break;
-            case 'WaitingForStats':
+            case Globals.GAMEFLOW_WAITING_FOR_STATS:
                 return <div>WAITING FOR STATS</div>
                 break;
-            case 'PreEndOfGame':
+            case Globals.GAMEFLOW_PRE_END_OF_GAME:
                 return <div>PRE END OF GAME</div>
                 break;
-            case 'EndOfGame':
+            case Globals.GAMEFLOW_END_OF_GAME:
                 return <div>END OF GAME</div>
                 break;
-            case 'None':
-            case 'TerminatedInError': //Really Rare Edge Case
+            case Globals.GAMEFLOW_NONE:
+            case Globals.GAMEFLOW_TERMINATED_IN_ERROR: //Really Rare Edge Case
                 return <LobbyGamemodeSelector availableQueues={queues}/>
                 break;
-            case 'CheckedIntoTournament':
+            case Globals.GAMEFLOW_CHECKED_INTO_TOURNAMENT:
                 return <div>This client doesnt support clash tournaments, please use the League Client</div>
                 break;
             default:
@@ -539,15 +496,6 @@ export default function Home() {
         }
     }
 
-
-    const renderNormalLobby = () => {
-        return (
-            <div className={getDisplayContentClass()}>
-                {renderCurrentActivity()}
-                {(renderContent(container))}
-            </div>
-        )
-    }
 
     const renderReadyCheck = (state) => {
         let result = (<div></div>)
@@ -561,57 +509,106 @@ export default function Home() {
         return result;
     }
 
-    const getSidebarClass = () => {
-        if (sidebarCollapsed) {
-            return styles.navbar; // +" "+styles.collapsed
-        } else {
-            return styles.navbar;
-        }
+    const changeContainer = (newContainer) => {
+        if (newContainer === container) return;
+        setContainer(newContainer);
     }
 
-    const renderCurrentActivity = () => {
-        if (container === CONTAINER_PLAY || container === 'none') return (
-            <div className={styles.activityHidden}>{renderActivityContent()}</div>)
-        return (<div className={styles.activity}
-                     onClick={() => setContainer(CONTAINER_PLAY)}>{renderActivityContent()}</div>)
+    const renderCurrentStateReminder = () => {
+        return <></>
     }
 
-    const renderActivityContent = () => {
-        switch (gameflowState) {
-            case 'Lobby':
-                return (<div>You are currently in a Lobby</div>)
-            case 'Matchmaking':
-                return (<div>You are in the search queue</div>)
-            case 'ReadyCheck':
-                return (<div>Ready Check should be displayed</div>)
-            case 'ChampSelect':
-                return (<div>You are in champ Select</div>)
-            case 'GameStart':
-                return (<div>The game is starting</div>)
-            case 'InProgress':
-                return (<div>The game is in progress</div>)
-            case 'Reconnect':
-                return (<div>You may reconnect to the game</div>)
-            case 'WaitingForStats':
-                return (<div>Waiting for stats</div>)
-            case 'PreEndOfGame':
-                return (<div>You may honor teammates!</div>)
-            case 'EndOfGame':
-                return (<div>End of Game</div>)
-            case 'None':
-            case 'TerminatedInError': //Really Rare Edge Case
-                return (<div>You are currently not in a game</div>)
-            case 'CheckedIntoTournament':
-                return (<div>This client doesnt support clash tournaments, please use the League Client</div>)
+    const renderActualContent = () => {
+        return (
+            <>
+                <div className={styles.content}>
+                    <CustomBackground clientProperties={config.clientProperties} currentContainer={container} currentGameflow={gameflowState}/>
+                    {renderBackButton()}
+                    <div className={styles.currentContainer}>
+                        {renderContainer()}
+                    </div>
+                    <FriendList friends={friends} collapsed={friendListCollapsed} self={presence}/>
+                </div>
+                {renderReadyCheck(gameflowState)}
+                {renderCurrentStateReminder()}
+            </>
+        )
+    }
+
+    const renderContainer = () => {
+        switch (container) {
+            case Globals.CONTAINER_NONE:
+                return (
+                    <>
+                        <div>
+                            <div className={styles.selectContainer}>
+                                <div className={styles.selectElement + " " +styles.selectElementPlay} onClick={() => {changeContainer(Globals.CONTAINER_PLAY)}}>
+                                    PLAY
+                                </div>
+                                <div className={styles.selectElement} onClick={() => {setContainer(Globals.CONTAINER_COLLECTION)}}>
+                                    Collection
+                                </div>
+                                <div className={styles.selectElement} onClick={() => {setContainer(Globals.CONTAINER_LOOT)}}>
+                                    Loot
+                                </div>
+                                <div className={styles.selectElement} onClick={() => {setContainer(Globals.CONTAINER_PROFILE)}}>
+                                    Profile
+                                </div>
+                                <div className={styles.selectElement} onClick={() => {setContainer(Globals.CONTAINER_TASKS)}}>
+                                    Tasks
+                                </div>
+                                <div className={styles.selectElement} onClick={() => {setContainer(Globals.CONTAINER_CONFIG)}}>
+                                    Configuration
+                                </div>
+                            </div>
+                        </div>
+                    </>
+                )
+            case Globals.CONTAINER_PLAY:
+                return (
+                    renderLobby(gameflowState)
+                )
+            case Globals.CONTAINER_COLLECTION:
+                return (
+                    <>TODO: COLLECTION</>
+                )
+            case Globals.CONTAINER_LOOT:
+                return (
+                    <LootContainer loot={loot}/>
+                )
+            case Globals.CONTAINER_PROFILE:
+                return (
+                    <>TODO: PROFILE</>
+                )
+            case Globals.CONTAINER_TASKS:
+                return (
+                    <TaskContainer taskList={taskList}/>
+                )
+            case Globals.CONTAINER_CONFIG:
+                return (
+                    <ReworkedConfigContainer config={config} patcherStatus={patcherStatus}/>
+                )
             default:
-                return (<div>Unknown State : {gameflowState}</div>)
+                return (
+                    <div></div>
+                )
         }
     }
 
-    const getDisplayContentClass = () => {
-        if (container === "none") return styles.displayContentNoFilter;
-        return styles.displayContent
+    const renderBackButton = () => {
+        if (container === Globals.CONTAINER_NONE) return <></>;
+        return (
+            <div className={styles.backButtonContainer} >
+                <div className={styles.backButton} onClick={() => {changeContainer(Globals.CONTAINER_NONE)}}>
+                    Back
+                </div>
+                <div className={styles.backButtonCurrentContainer} >
+                    &#47;&#47; {container}
+                </div>
+            </div>
+        )
     }
+
 
     return (
         <div className={styles.appContainer}>
@@ -619,70 +616,8 @@ export default function Home() {
                 <title>{Globals.BROWSER_TITLE}</title>
                 <link rel="icon" href={`${Globals.STATIC_PREFIX}/assets/svg/icon.svg`}/>
             </Head>
-            {
-                sidebarCollapsed ? (
-                    <div className={styles.expander} onClick={() => {
-                        setSidebarCollapsed(false)
-                    }}>
 
-                    </div>
-                ) : (
-                    <div className={styles.reducer} onClick={() => {
-                        setSidebarCollapsed(true)
-                    }}>
-
-                    </div>
-                )
-            }
-            <div className={getSidebarClass()}>
-                <div className={styles.navLeague}>
-                    <div className={styles.navButton + " " + styles.navCollection} onClick={() => {
-                        changeContainer(CONTAINER_COLLECTION)
-                    }}>
-                        Collection
-                    </div>
-                    <div className={styles.navButton + " " + styles.navLoot} onClick={() => {
-                        changeContainer(CONTAINER_LOOT)
-                    }}>
-                        Loot
-                    </div>
-                </div>
-                <div className={styles.navButton + " " + styles.navPlay} draggable={false} onClick={() => {
-                    changeContainer(CONTAINER_PLAY)
-                }}>
-                    <div>
-                        PLAY
-                    </div>
-                </div>
-                <div className={styles.navSystem}>
-                    <div className={styles.navButton + " " + styles.navTasks} onClick={() => {
-                        changeContainer(CONTAINER_TASKS)
-                    }}>
-                        Tasks
-                    </div>
-                    <div className={styles.navButton + " " + styles.navConfig} onClick={() => {
-                        changeContainer(CONTAINER_CONFIG)
-                    }}>
-                        Config
-                    </div>
-                </div>
-            </div>
-            <div className={styles.content}>
-                <CustomBackground backgroundType={Globals.BACKGROUND_TYPE_LCU_IMAGE}
-                                  background={isConnected ? ("/lol-game-data/assets/v1/champion-splashes/uncentered/267/267024.jpg") : ("")}
-                                  backgroundFileExtension={"svg"} filterOpacity={0.3}/>
-                <div>
-                    {renderNormalLobby()}
-                </div>
-            </div>
-            <div className={styles.profile}>
-                <StatusProfile presence={presence}/>
-            </div>
-
-            {/*<div className={styles.social}>*/}
-            {/*</div>*/}
-            {renderReadyCheck(gameflowState)}
-            {isConnected ? (null) : (<LoadingComponent reason={`Waiting for the League Client to start`}/>)}
+            {isConnected ? renderActualContent() : (<LoadingComponent reason={`Waiting for the League Client to start`}/>)}
         </div>
     )
 }
