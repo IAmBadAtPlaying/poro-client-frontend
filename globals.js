@@ -73,11 +73,9 @@ export const CONTAINER_PROFILE = "Profile";
 export const CONTAINER_TASKS = "Tasks";
 export const CONTAINER_CONFIG = "Configuration";
 
-export const TASK_AUTO_ACCEPT_QUEUE = {name: "Auto Accept Queue", parameters: [{name: "Delay", description: "Time till Ready-Check gets accepted", backendKey: "delay"}]};
-export const TASK_AUTO_PICK_CHAMP = {name: "Auto Pick Champion", parameters: [{name: "Delay", description: "Time until the champion gets picked", backendKey: "delay"},{name:"Champion ID", description:"Champion ID of the champion you want to get picked", backendKey: "championId"}]};
-export const GAME_STATUS_TO_STRING = {inGame: "In Game", championSelect: "Champ Select", outOfGame: "Game ended", hosting_ARAM_UNRANKED_5x5: "Creating ARAM", hosting_NORMAL: "Creating Normal", hosting_RANKED_SOLO_5x5: "Creating Ranked"};
-export const GAME_MODE_TO_STRING = {CLASSIC: "Summoner´s Rift", ARAM: "ARAM"};
 
+export const GAME_STATUS_TO_STRING = {inGame: "In Game", championSelect: "Champ Select", outOfGame: "Game ended", hosting_ARAM_UNRANKED_5x5: "Creating ARAM", hosting_NORMAL: "Creating Normal", hosting_RANKED_SOLO_5x5: "Creating Ranked"};
+export const AVAILABILITY_ORDER = ['','chat','dnd', 'online', 'away', 'mobile', 'offline'];
 
 /*
 *

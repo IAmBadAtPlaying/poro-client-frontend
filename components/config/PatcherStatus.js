@@ -1,10 +1,6 @@
 import styles from "../../styles/config/PatcherStatus.module.css"
-import {getChampions} from "../../pages/indexRework";
 
 export default function PatcherStatus({patcherStatus}) {
-    const renderIdleStatus = () => {
-
-    }
 
     const renderSingleComponent = (component, index) => {
         if (!component) return <div key={"Key-" + index}></div>;
@@ -48,21 +44,12 @@ export default function PatcherStatus({patcherStatus}) {
             <div className={styles.singleComponent} key={component.id}>
                 <div className={styles.componentName}>Component {id}</div>
                 <div>
-                    {console.log(getChampions())}
                     <div>
                         <div>Primary Work: {progressPrimaryWork}</div>
                         <div>Network: {networkingMBComplete}/{networkingMBRequired} MB ({networkingPercentComplete}%)</div>
                         <div>Total: {totalMBComplete}/{totalMBRequired} MB ({totalPercentComplete}%)</div>
                     </div>
                 </div>
-            </div>
-        )
-    }
-
-    const renderNoComponent = () => {
-        return (
-            <div className={styles.singleComponent}>
-                No updates in progress
             </div>
         )
     }

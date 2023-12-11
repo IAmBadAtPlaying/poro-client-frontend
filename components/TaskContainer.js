@@ -4,7 +4,7 @@ import TaskConfiguration from "./TaskConfiguration";
 import styles from  '../styles/tasks/TaskContainer.module.css';
 import axios from "axios";
 
-export default function TaskContainer() {
+export default function TaskContainer({champions}) {
     //TODO: Communicate Task Updates, right now its a static request
 
     const callbackArray = [];
@@ -39,7 +39,7 @@ export default function TaskContainer() {
                 {
                     taskList.map((task, index) => {
                         return (
-                                <TaskConfiguration task={task} key={index} functionArray={callbackArray} index={index}></TaskConfiguration>
+                                <TaskConfiguration task={task} key={index} functionArray={callbackArray} index={index} champions={champions}></TaskConfiguration>
                         )
                     })
                 }

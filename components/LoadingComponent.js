@@ -28,6 +28,14 @@ export default function LoadingComponent({ reason }) {
         <div className={style.loadingContainer}>
             <div className={style.loadingBackground}></div>
             <div className={style.loadingOverlay}></div>
+            <div className={style.clientLogo}>
+                <div className={style.clientLogoImageWrapper}>
+                    <img src={Globals.STATIC_PREFIX + '/assets/svg/icon.svg'}/>
+                </div>
+                <div className={style.clientLogoText}>
+                    Poro-Client
+                </div>
+            </div>
             <div className={style.loadingContent}>
                 <img
                     src={Globals.STATIC_PREFIX + '/assets/gifs/Poro.gif'}

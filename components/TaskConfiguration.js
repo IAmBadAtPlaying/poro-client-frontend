@@ -3,8 +3,9 @@ import styles from '../styles/tasks/TaskConfiguration.module.css'
 import * as Globals from '../globals';
 import axios from "axios";
 import CustomInputField from "./CustomInputField";
+import {INPUT_FIELD_TYPE} from "./CustomInputField";
 
-export default function TaskConfiguration({task, functionArray, index}) {
+export default function TaskConfiguration({task, functionArray, index, champions}) {
 
 
     const [isTaskActive, setIsTaskActive] = useState(task.running);
@@ -91,7 +92,9 @@ export default function TaskConfiguration({task, functionArray, index}) {
             </div>
             <div className={styles.task_configuration_parameter_container}>
                 {Object.values(task.args).map((parameter, index) => (
-                    <CustomInputField key={task.name + "-" + index} wrapperKey={"Child-"+task.name + "-" + index} placeholder={parameter.displayName} wrapperClassName={styles.singleTaskConfig} backendType={parameter.type} options={parameter.options} defaultValue={parameter.currentValue} onChange={(e) => handleParameterChange(parameter.backendKey, parameter.type, e.target.value)}/>
+                    (parameter.type.toLowerCase() === INPUT_FIELD_TYPE.CHAMPION_SELECT) ?
+                        (<CustomInputField key={task.name + "-" + index} wrapperKey={"Child-"+task.name + "-" + index} placeholder={parameter.displayName} wrapperClassName={styles.singleTaskConfig} backendType={parameter.type} options={champions} defaultValue={parameter.currentValue} onChange={(e) => handleParameterChange(parameter.backendKey, parameter.type, e.target.value)}/>) :
+                        (<CustomInputField key={task.name + "-" + index} wrapperKey={"Child-"+task.name + "-" + index} placeholder={parameter.displayName} wrapperClassName={styles.singleTaskConfig} backendType={parameter.type} options={parameter.options} defaultValue={parameter.currentValue} onChange={(e) => handleParameterChange(parameter.backendKey, parameter.type, e.target.value)}/>)
 
                 ))}
             </div>

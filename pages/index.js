@@ -19,7 +19,7 @@ import ChampionSelectContainer from "../components/ChampionSelectContainer";
 export var socket
 
 let pktNr = 0;
-const availabilityOrder = ['','chat','dnd', 'online', 'away', 'mobile', 'offline'];
+
 
 let audio;
 let globalChampions = {};

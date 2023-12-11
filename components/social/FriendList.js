@@ -22,7 +22,6 @@ export default function FriendList({friends, self}) {
                 }
                 setGroups(intermediateGroups);
                 updateFriendGroups();
-                console.log(intermediateGroups);
             }
         ).catch(
             (error) => {
@@ -37,7 +36,6 @@ export default function FriendList({friends, self}) {
 
     const updateFriendGroups = () => {
         let intermediateFriendsByGroup = {};
-        console.log(friends)
         if (Globals.isJsonObjectEmpty(friends)) return;
         for (let friendId in friends) {
             let friend = friends[friendId];
@@ -62,7 +60,7 @@ export default function FriendList({friends, self}) {
         setGroups({...groups, [groupId]: {...groups[groupId], collapsed: false}})
     }
 
-    const renderGroup = (groupId) => {
+    const renderGroup = (groupId, groupIndex) => {
         if (groups[groupId] === undefined) return <></>;
 
         let group = groups[groupId];
@@ -76,7 +74,7 @@ export default function FriendList({friends, self}) {
 
         if (isCollapsed) {
             return (
-                <div className={styles.groupContainer}>
+                <div className={styles.groupContainer} key={"Group-"+groupIndex}>
                     <div className={styles.groupCountContainer}>
                         {friendsByGroup[groupId].length}
                     </div>
@@ -89,7 +87,7 @@ export default function FriendList({friends, self}) {
                 </div>
             )
         } else return (
-            <>
+            <div key={"Group-"+groupIndex}>
                 <div className={styles.groupContainer}>
                     <div className={styles.groupCountContainer}>
                         {friendsByGroup[groupId].length}
@@ -102,18 +100,18 @@ export default function FriendList({friends, self}) {
                     </div>
                 </div>
                 {
-                    Object.values(friendsByGroup[groupId]).map((friend) => {
-                        return renderFriend(friend);
+                    Object.values(friendsByGroup[groupId]).map((friend, index) => {
+                        return renderFriend(friend, index);
                     })
 
                 }
-            </>
+            </div>
         )
     }
 
-    const renderFriend = (friend) => {
+    const renderFriend = (friend, index) => {
         return (
-            <div className={styles.singleFriendContainer}>
+            <div className={styles.singleFriendContainer} key={"Friend-"+index}>
                 <div className={styles.friendIconContainer}>
                     <div className={styles.iconContainer}>
                         <Image
@@ -128,6 +126,9 @@ export default function FriendList({friends, self}) {
                 </div>
                 <div className={styles.friendInfoContainer}>
                     {friend.name}
+                    {
+
+                    }
                 </div>
             </div>
         )
@@ -154,14 +155,18 @@ export default function FriendList({friends, self}) {
             <div className={styles.singleFriendContainer}>
                 <div className={styles.friendIconContainer}>
                     <div className={styles.iconContainer}>
-                        <Image
-                            src={`${Globals.PROXY_STATIC_PREFIX}/lol-game-data/assets/v1/profile-icons/${self.icon}.jpg`}
-                            alt="Icon"
-                            fill={true}
-                            className={styles.friendIcon}
-                            draggable={false}
-                            loading="lazy"
-                        />
+                        {
+                            self.icon === undefined ? <></> :
+                                <Image
+                                    src={`${Globals.PROXY_STATIC_PREFIX}/lol-game-data/assets/v1/profile-icons/${self.icon}.jpg`}
+                                    alt="Icon"
+                                    fill={true}
+                                    className={styles.friendIcon}
+                                    draggable={false}
+                                    loading="lazy"
+                                />
+                        }
+
                     </div>
                 </div>
                 <div className={styles.friendInfoContainer}>
@@ -170,8 +175,8 @@ export default function FriendList({friends, self}) {
             </div>
             {
                 (Globals.isJsonObjectEmpty(friendsByGroup)) ? <></> :
-                Object.keys(friendsByGroup).map((groupId) => {
-                    return renderGroup( groupId);
+                Object.keys(friendsByGroup).map((groupId, groupIndex) => {
+                    return renderGroup(groupId, groupIndex);
                 })
             }
         </div>

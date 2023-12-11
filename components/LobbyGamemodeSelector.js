@@ -6,7 +6,7 @@ import {AUDIO_PLAY_BIG_BUTTON, axiosSend, send} from "../pages/indexRework";
 import {isJsonObjectEmpty} from "../globals";
 
 
-export default function LobbyGamemodeSelector({showFunction, availableQueues}) {
+export default function LobbyGamemodeSelector({showFunction, availableQueues, assetMap}) {
     const [ activeElement, setActiveElement] = useState("");
     const [ queueId, setQueueID] = useState();
 
@@ -36,7 +36,7 @@ export default function LobbyGamemodeSelector({showFunction, availableQueues}) {
                         if (!queue[0].gameMode) return <div key={"Undefined" + index}></div>;
                         if (queue[0].gameMode.startsWith("TUTORIAL_MODULE")) return <div key={"Undefined" + index}></div>;
                         return (
-                            <GamemodeElement key={queue[0].id} queue={queue} isActive={activeElement === queue[0].gameMode} setActive={setActiveElement} setQueueId={setQueueID}/>
+                            <GamemodeElement key={queue[0].id} queue={queue} isActive={activeElement === queue[0].gameMode} setActive={setActiveElement} setQueueId={setQueueID} assetMap={assetMap}/>
                         )
                     })
                 }

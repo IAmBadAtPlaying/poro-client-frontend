@@ -1,9 +1,14 @@
 import styles from "../../styles/config/ShutdownControl.module.css";
 import * as Globals from "../../globals";
 import axios from "axios";
+import {useRef} from "react";
 
 
 export default function ShutdownControl() {
+
+    const normalShutdownButton = useRef();
+    const completeShutdownButton = useRef();
+
     const shutdownPoroClient = () => {
         const body = {
             type: "shutdown"
@@ -32,10 +37,10 @@ export default function ShutdownControl() {
                 Poro Client Shutdown Control
             </div>
             <div className={styles.controls}>
-                <div className={styles.singleControl} onClick={shutdownPoroClient}>
+                <div className={styles.singleControl} onClick={shutdownPoroClient} ref={normalShutdownButton}>
                     Shutdown Poro Client
                 </div>
-                <div className={styles.singleControl} onClick={shutdownPoroAndLeagueClient}>
+                <div className={styles.singleControl} onClick={shutdownPoroAndLeagueClient} ref={completeShutdownButton}>
                     Shutdown Poro Client and League Client
                 </div>
             </div>

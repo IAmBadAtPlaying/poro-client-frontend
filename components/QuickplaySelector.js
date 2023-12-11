@@ -1,8 +1,4 @@
-import {getChampions} from "../pages/indexRework";
-
-
-export default function QuickplaySelector() {
-    const champions = getChampions();
+export default function QuickplaySelector({champions}) {
 
     const POSITIONS = {
         TOP: "TOP",

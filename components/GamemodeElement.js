@@ -1,15 +1,15 @@
 import * as Globals from "../globals";
-import {AUDIO_PLAY_BIG_BUTTON, getAssetMap} from "../pages/indexRework";
+import {AUDIO_PLAY_BIG_BUTTON} from "../pages/indexRework";
 import styles from "../styles/LobbyGamemodeSelector.module.css";
 import {useEffect, useState} from "react";
 import CustomChangingImage from "./customComponents/CustomChangingImage";
-export default function GamemodeElement({ queue, isActive, setActive, setQueueId }) {
+export default function GamemodeElement({ queue, isActive, setActive, setQueueId, assetMap}) {
 
     const [activeElement, setActiveElement] = useState(0);
 
     const getImageLink = (mapKey) => {
         if (!mapKey) return "";
-        const assetsForMap = getAssetMap()[mapKey];
+        const assetsForMap = assetMap[mapKey];
         if (!assetsForMap) return "";
 
         return Globals.PROXY_STATIC_PREFIX + "/"+assetsForMap["game-select-icon-default"];
@@ -17,7 +17,7 @@ export default function GamemodeElement({ queue, isActive, setActive, setQueueId
 
     const getHoverImageLink = (mapKey) => {
         if (!mapKey) return "";
-        const assetsForMap = getAssetMap()[mapKey];
+        const assetsForMap = assetMap[mapKey];
         if (!assetsForMap) return "";
 
         return Globals.PROXY_STATIC_PREFIX + "/"+assetsForMap["game-select-icon-hover"];
@@ -25,7 +25,7 @@ export default function GamemodeElement({ queue, isActive, setActive, setQueueId
 
     const getVideoLink = (key) => {
         if (!key) return "";
-        const assetsForMap = getAssetMap()[key];
+        const assetsForMap = assetMap[key];
         if (!assetsForMap) return "";
 
         return Globals.PROXY_STATIC_PREFIX + "/"+ assetsForMap["game-select-icon-active-video"];
@@ -51,6 +51,8 @@ export default function GamemodeElement({ queue, isActive, setActive, setQueueId
             setActiveElement(0);
         }
     }, [isActive]);
+
+    if (assetMap === undefined) return <></>;
 
     return (
         <div className={styles.gamemodeSelectorElement}>

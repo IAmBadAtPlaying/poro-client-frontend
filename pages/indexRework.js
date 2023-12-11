@@ -17,6 +17,7 @@ import StatusProfile from "../components/indexReworked/StatusProfile";
 import ReworkedConfigContainer from "../components/config/ReworkedConfigContainer";
 import FriendList from "../components/social/FriendList";
 import ReconnectContainer from "../components/gameflow/ReconnectContainer";
+import Collection from "../components/Collection";
 
 export let socket
 
@@ -125,45 +126,40 @@ export function AUDIO_PLAY_BIG_BUTTON() {
 
 }
 
-export function getChatIdentity() {
-    return globalChatIdentity;
-}
-
-export const getChampions = () => {
-    return globalChampions;
-}
-
-export const getSpells = () => {
-    return globalSpells;
-}
-
-export const getChromaSkins = () => {
-    return globalChromaSkins;
-}
-
-export function getAssetMap() {
-    return globalMapAssets;
-}
-
 export default function Home() {
-
+    // --- SHARED STATIC STATES ---
     const [queues, setQueues] = useState({});
+    const [icons, setIcons] = useState({});
+    const [wards, setWards] = useState({});
     const [champions, setChampions] = useState([]);
+    const [skins, setSkins] = useState({});
+    const [skinsByChampion, setSkinsByChampion] = useState({});
+    const [emotes, setEmotes] = useState({});
+    const [mapAssets, setMapAssets] = useState({});
+    const [summonerSpells, setSummonerSpells] = useState({});
+
+
+    // --- SHARED DYNAMIC STATES ---
     const [friends, setFriends] = useState({});
-    const [lobby, setLobby] = useState({});
-    const [container, setContainer] = useState(Globals.CONTAINER_NONE);
+    const [presence, setPresence] = useState({});
+
     const [gameflowState, setGameflowState] = useState("None");
+    const [lobby, setLobby] = useState({});
     const [championSelectState, setChampionSelectState] = useState({});
-    const [isConnected, setIsConnected] = useState(false);
+
     const [loot, setLoot] = useState({});
+
+    const [config, setConfig] = useState({});
+    const [patcherStatus, setPatcherStatus] = useState({});
+
+    // --- INTERNAL STATES ---
+    const [isConnected, setIsConnected] = useState(false);
+    const [container, setContainer] = useState(Globals.CONTAINER_NONE);
     const [taskList, setTaskList] = useState([]);
     const [currentChatFriend, setCurrentChatFriend] = useState({});
-    const [presence, setPresence] = useState({});
     const [friendListCollapsed, setFriendListCollapsed] = useState(true);
-    const [patcherStatus, setPatcherStatus] = useState({});
-    const [config, setConfig] = useState({});
-    const [backgroundFilterOpacity, setBackgroundFilterOpacity] = useState(0.3);
-    const [backgroundVolume, setBackgroundVolume] = useState(0.8);
+
+
 
     useEffect(() => {
         if (!isConnected) return;
@@ -192,7 +188,7 @@ export default function Home() {
             response.data.forEach((champion) => {
                 intermediate[champion.id] = champion;
             });
-            globalChampions = intermediate;
+            setChampions(intermediate)
         })
     }
 
@@ -206,15 +202,18 @@ export default function Home() {
             response.data.forEach((spell) => {
                 intermediate[spell.id] = spell;
             });
-            globalSpells = intermediate;
+            setSummonerSpells(intermediate)
         }).catch((error) => {
             console.log(error);
         });
     }
 
     const fetchChromaSkins = () => {
+        console.log("[Fetch] Skins");
         axios.get(Globals.PROXY_PREFIX + "/lol-game-data/assets/v1/skins.json").then((response) => {
             let intermediate = {};
+            let intermediateByChampion = {};
+            let currentChampionID = -1;
             if (response.data.errorCode) {
                 console.error("Failed to load skins");
                 return;
@@ -225,18 +224,25 @@ export default function Home() {
                         intermediate[chroma.id] = skin.id;
                     });
                 }
+                if (skin.isBase) {
+                    currentChampionID = skin.id.toString().substring(0, skin.id.toString().length - 3);
+                    intermediateByChampion[currentChampionID] = {};
+                }
+                if (currentChampionID !== -1) {
+                    intermediateByChampion[currentChampionID][skin.id] = skin;
+                }
                 intermediate[skin.id] = skin.id;
             });
-            globalChromaSkins = intermediate;
-            setTimeout(() => {
-                console.log(globalChampions);
-                console.log(getChampions())
-            }, 1000);
+
+            setSkins(intermediate);
+            setSkinsByChampion(intermediateByChampion);
+            console.log("[Fetch] Skins - Done");
         }).catch(() => {
         });
     }
 
     const fetchMapAssets = () => {
+        console.log("[Fetch] Map Assets");
         axios.get(Globals.PROXY_PREFIX + "/lol-game-data/assets/v1/map-assets/map-assets.json").then((response) => {
             let intermediate = {};
             if (response.data.errorCode) {
@@ -251,8 +257,8 @@ export default function Home() {
                     }
                 }
             });
-            globalMapAssets = intermediate;
-            console.log(globalMapAssets);
+            setMapAssets(intermediate)
+            console.log("[Fetch] Map Assets - Done");
         }).catch(() => {
         });
     }
@@ -457,13 +463,13 @@ export default function Home() {
         switch (state) {
             case Globals.GAMEFLOW_READY_CHECK:
             case Globals.GAMEFLOW_LOBBY:
-                return <LobbyContainer lobbyConfig={lobby} availableQueues={queues}/>
+                return <LobbyContainer lobbyConfig={lobby} availableQueues={queues} assetMap={mapAssets}/>
                 break;
             case Globals.GAMEFLOW_MATCHMAKING:
                 return <MatchmakingContainer lobbyConfig={lobby}/>
                 break;
             case Globals.GAMEFLOW_CHAMP_SELECT:
-                return <ReworkedChampionSelectContainer session={championSelectState}/>;
+                return <ReworkedChampionSelectContainer session={championSelectState} champions={champions} summonerSpells={summonerSpells} chromaSkins={skins}/>;
                 break;
             case Globals.GAMEFLOW_GAME_START:
                 return <div>GAME - START</div>;
@@ -485,7 +491,7 @@ export default function Home() {
                 break;
             case Globals.GAMEFLOW_NONE:
             case Globals.GAMEFLOW_TERMINATED_IN_ERROR: //Really Rare Edge Case
-                return <LobbyGamemodeSelector availableQueues={queues}/>
+                return <LobbyGamemodeSelector availableQueues={queues} assetMap={mapAssets}/>
                 break;
             case Globals.GAMEFLOW_CHECKED_INTO_TOURNAMENT:
                 return <div>This client doesnt support clash tournaments, please use the League Client</div>
@@ -570,7 +576,7 @@ export default function Home() {
                 )
             case Globals.CONTAINER_COLLECTION:
                 return (
-                    <>TODO: COLLECTION</>
+                    <Collection skinsByChampion={skinsByChampion}/>
                 )
             case Globals.CONTAINER_LOOT:
                 return (
@@ -582,7 +588,7 @@ export default function Home() {
                 )
             case Globals.CONTAINER_TASKS:
                 return (
-                    <TaskContainer taskList={taskList}/>
+                    <TaskContainer champions={champions}/>
                 )
             case Globals.CONTAINER_CONFIG:
                 return (

@@ -15,7 +15,7 @@ function startMatchmaking () {
 
 
 
-export default function LobbyContainer({lobbyConfig, availableQueues}) {
+export default function LobbyContainer({lobbyConfig, availableQueues, assetMap}) {
     let [showSelector, setShowSelector] = useState(false);
     let [firstPositionPreference, setFirstPositionPreference] = useState("UNSELECTED");
     let [secondPositionPreference, setSecondPositionPreference] = useState("UNSELECTED");
@@ -108,7 +108,7 @@ export default function LobbyContainer({lobbyConfig, availableQueues}) {
     return (
         <div className={styles.lobby_container}>
             {showSelector ? (
-                <LobbyGamemodeSelector showFunction={setShowSelector} availableQueues={availableQueues}/>
+                <LobbyGamemodeSelector showFunction={setShowSelector} availableQueues={availableQueues} assetMap={assetMap}/>
             ) : (
                 renderFunction()
             )}
