@@ -9,7 +9,7 @@ export default function ExternalLink({link, text}) {
     }
 
     return (
-        <a href={link} onClick={showWarning} style={{color: "white"}}>
+        <a href={link} target={"_blank"} rel={"noreferrer"} onClick={showWarning} style={{color: "white"}}>
             {text}
         </a>
     )

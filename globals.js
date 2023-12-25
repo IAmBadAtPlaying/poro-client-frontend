@@ -1,7 +1,7 @@
 export const APPLICATION_PORT = 35199;
 export const SOCKET_PORT = 8887;
 
-const VERSION = "0.1.3";
+const VERSION = "0.1.4";
 
 const BASE_URL = "http://127.0.0.1:"
 
@@ -10,6 +10,10 @@ export const PROXY_PREFIX =  BASE_URL+ APPLICATION_PORT+"/proxy";
 export const STATIC_PREFIX = BASE_URL+APPLICATION_PORT+"/static";
 export const CONFIG_PREFIX = BASE_URL+APPLICATION_PORT+"/config";
 export const REST_PREFIX = BASE_URL+APPLICATION_PORT+"/rest";
+
+const CONFIG_USERDATA_PREFIX = REST_PREFIX+"/dynamic/userdata";
+
+export const CONFIG_USER_BACKGROUND = CONFIG_USERDATA_PREFIX+"/background";
 
 export const SOCKET_URL = "ws://127.0.0.1:"+SOCKET_PORT;
 
@@ -20,6 +24,12 @@ export const BROWSER_TITLE = "Poro-Client " + VERSION_SHORT;
 
 export const CHAMP_SELECT_MAX_BANS_PER_TEAM = 5;
 export const CHAMP_SELECT_MAX_MEMBERS_PER_TEAM = 5;
+
+export const BACKGROUND_TYPE_IMAGE = "LOCAL_IMAGE";
+export const BACKGROUND_TYPE_VIDEO = "LOCAL_VIDEO";
+export const BACKGROUND_TYPE_LCU_IMAGE = "LCU_IMAGE";
+export const BACKGROUND_TYPE_LCU_VIDEO = "LCU_VIDEO";
+export const BACKGROUND_TYPE_NONE = "NONE";
 
 export const GITHUB_ISSUES_LINK = "https://github.com/IAmBadAtPlaying/poro-client-frontend/issues";
 
@@ -35,13 +45,37 @@ export function isJsonObjectEmpty(jsonObj) {
     return false;
 }
 
-export const TASKS = {};
+/*
+*
+* GAMEFLOW
+*
+ */
 
-export const TASK_AUTO_ACCEPT_QUEUE = {name: "Auto Accept Queue", parameters: [{name: "Delay", description: "Time till Ready-Check gets accepted", backendKey: "delay"}]};
-export const TASK_AUTO_PICK_CHAMP = {name: "Auto Pick Champion", parameters: [{name: "Delay", description: "Time until the champion gets picked", backendKey: "delay"},{name:"Champion ID", description:"Champion ID of the champion you want to get picked", backendKey: "championId"}]};
+export const GAMEFLOW_NONE = "None";
+export const GAMEFLOW_TERMINATED_IN_ERROR = "TerminatedInError";
+export const GAMEFLOW_LOBBY = "Lobby";
+export const GAMEFLOW_READY_CHECK = "ReadyCheck";
+export const GAMEFLOW_CHAMP_SELECT = "ChampSelect";
+export const GAMEFLOW_GAME_START = "GameStart";
+export const GAMEFLOW_IN_PROGRESS = "InProgress";
+export const GAMEFLOW_RECONNECT = "Reconnect";
+export const GAMEFLOW_MATCHMAKING = "Matchmaking";
+export const GAMEFLOW_WAITING_FOR_STATS = "WaitingForStats";
+export const GAMEFLOW_END_OF_GAME = "EndOfGame";
+export const GAMEFLOW_PRE_END_OF_GAME = "PreEndOfGame";
+export const GAMEFLOW_CHECKED_INTO_TOURNAMENT = "CheckedIntoTournament";
+
+export const CONTAINER_NONE = "";
+export const CONTAINER_PLAY = "Play";
+export const CONTAINER_COLLECTION = "Collection";
+export const CONTAINER_LOOT = "Loot";
+export const CONTAINER_PROFILE = "Profile";
+export const CONTAINER_TASKS = "Tasks";
+export const CONTAINER_CONFIG = "Configuration";
+
+
 export const GAME_STATUS_TO_STRING = {inGame: "In Game", championSelect: "Champ Select", outOfGame: "Game ended", hosting_ARAM_UNRANKED_5x5: "Creating ARAM", hosting_NORMAL: "Creating Normal", hosting_RANKED_SOLO_5x5: "Creating Ranked"};
-export const GAME_MODE_TO_STRING = {CLASSIC: "Summoner´s Rift", ARAM: "ARAM"};
-
+export const AVAILABILITY_ORDER = ['','chat','dnd', 'online', 'away', 'mobile', 'offline'];
 
 /*
 *

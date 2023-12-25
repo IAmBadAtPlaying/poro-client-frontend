@@ -1,11 +1,14 @@
 .lobby_type_display {
     position: absolute;
-    text-align: left;
-    width: 96.6%;
+    text-align: right;
+    font-weight: 500;
+    font-family: "Beaufort for LOL";
+    width: 96.0%;
     top: 2%;
     left: 2%;
     font-size: 120%;
 }
+
 
 
 .positionSelectContainer {
@@ -19,6 +22,8 @@
 
 
 .lobby_container {
+    font-family: "Beaufort for LOL";
+    font-weight: 500;
     padding: 0;
     margin: 0;
     position: relative;
@@ -34,7 +39,7 @@
     display: flex;
     left: 1%;
     top: 5%;
-    height: 80%;
+    height: 85%;
     width: 98%;
 }
 
@@ -43,7 +48,7 @@
     height: 6%;
     width: 14%;
     left: 50%;
-    top: 88%;
+    top: 91.5%;
     transform: translateX(-50%);
     align-content: center;
 }

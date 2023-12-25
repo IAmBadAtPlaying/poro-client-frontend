@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import styles from '../styles/champSelect/ChampionSelectContainer.module.css';
-import {getChampions, getChromaSkins, getSpells} from "../pages";
+import {getChampions, getChromaSkins, getSpells} from "../pages/index";
 import * as Globals from "../globals";
 import ChampionCard from "./ChampionCard";
 import {PROXY_STATIC_PREFIX} from "../globals";
@@ -22,7 +22,7 @@ export default function ChampionSelectContainer({session}) {
             championId: currentBanSelected,
             lockIn: false
         }).catch((error) => {
-            console.log(error);
+
         })
     }, [currentBanSelected])
 
@@ -31,7 +31,7 @@ export default function ChampionSelectContainer({session}) {
             championId: currentPickSelected,
             lockIn: false
         }).catch((error) => {
-            console.log(error);
+
         })
     }, [currentPickSelected])
 
@@ -40,7 +40,7 @@ export default function ChampionSelectContainer({session}) {
             championId: currentPickSelected,
             lockIn: true
         }).catch((error) => {
-            console.log(error);
+
         })
     }
 
@@ -60,7 +60,6 @@ export default function ChampionSelectContainer({session}) {
         for (let index = 0; index < Globals.CHAMP_SELECT_MAX_BANS_PER_TEAM; index++) {
             const championValue = passedBans[index];
 
-            console.log(`${index} ${championValue}`);
 
             if (index >= maxBans) {
                 bans.push(
@@ -145,7 +144,6 @@ export default function ChampionSelectContainer({session}) {
         for (let index = 0; index < Globals.CHAMP_SELECT_MAX_BANS_PER_TEAM; index++) {
             const championValue = passedBans[index];
 
-            console.log(`${index} ${championValue}`);
 
             if (index >= maxBans) {
                 bans.push(
@@ -300,13 +298,9 @@ export default function ChampionSelectContainer({session}) {
                     </div>
                 </div>
             </div>);
-        console.log("-------INDEX " + index + "-------")
         if (!currentSummoner) {
-            console.log("Summoner error")
             return errorDefault;
         }
-        console.log(currentSummoner.stateDebug);
-        console.log(currentSummoner.state);
 
         return renderState(currentSummoner, index);
 
@@ -316,8 +310,7 @@ export default function ChampionSelectContainer({session}) {
         if (!currentSummoner) return (<></>);
         if (!currentSummoner.state) return (<></>);
 
-        let state = currentSummoner.stateDebug;
-        console.log("" + index + " " + state)
+        let state = currentSummoner.state;
         switch (state) {
             case 'PREPARATION':
                 return renderSummonerPREPARATION(currentSummoner, index);
@@ -329,7 +322,6 @@ export default function ChampionSelectContainer({session}) {
                 return renderSummonerAWAITING_BAN_RESULT(currentSummoner, index);
             case 'PICKING_WITH_BAN':
             case 'PICKING_WITHOUT_BAN':
-                console.log("PICKING_WITH_BAN")
                 return renderSummonerPICKING(currentSummoner, index);
             case 'AWAITING_FINALIZATION':
                 return renderSummonerAWAITING_FINALIZATION(currentSummoner, index);
@@ -347,7 +339,7 @@ export default function ChampionSelectContainer({session}) {
             currentSummoner.championPickIntent = -1;
         }
 
-        console.log(currentSummoner.assignedPosition)
+
         if (currentSummoner.assignedPosition === undefined) {
             currentSummoner.assignedPosition = "";
         }
@@ -690,7 +682,16 @@ export default function ChampionSelectContainer({session}) {
     const renderChampionSelector = (session) => {
         let errorResponse = (<></>);
         if (session === undefined) return errorResponse;
-        if (session.localPlayerPhase === undefined) return errorResponse;
+        let localPlayer = undefined;
+        console.log("Local Player Cell Id " + session.localPlayerCellId);
+        console.log(session.myTeam)
+        for (let summoner of session.myTeam) {
+            if (summoner.cellId === session.localPlayerCellId) {
+                localPlayer = summoner;
+                break;
+            }
+        }
+        if (localPlayer === undefined) return errorResponse;
         switch (session.localPlayerPhase) {
             case 'PREPARATION':
                 return renderPickContainer(false)
@@ -769,7 +770,6 @@ export default function ChampionSelectContainer({session}) {
                 championId: currentBanSelected,
                 lockIn: true
             }).catch((error) => {
-                console.log(error);
             })
         }
 

@@ -1,0 +1,68 @@
+.container {
+    position: relative;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    flex: 1;
+    font-size: 1.4em;
+
+    font-weight: 700;
+}
+
+.statusContainer {
+    flex: 4;
+    height:  100%;
+    width: 100%;
+
+    display: flex;
+
+
+}
+
+.statusChecks {
+    flex: 1;
+
+    display: flex;
+
+    flex-direction: column;
+}
+
+
+.singleStatusCheck {
+    flex: 1;
+    display: flex;
+
+    align-items: center;
+
+}
+
+.statusDetailed {
+    flex: 1;
+
+    display: flex;
+
+    flex-direction: column;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+}
+
+.singleComponent {
+    flex: 1;
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.componentName {
+    font-size: 1.2em;
+    font-weight: 500;
+}

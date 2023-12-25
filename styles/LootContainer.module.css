@@ -1,13 +1,14 @@
 .content {
     height: 100%;
+    width: 100%;
 }
 
 
 
 .currentLootContainer {
     position: absolute;
-    overflow-y: scroll;
-    height: 90%;
+    overflow: hidden;
+    height: 85%;
     width: 40%;
     display: flex;
     flex-wrap: wrap;
@@ -16,12 +17,14 @@
     align-content: flex-start;
 
     scroll-behavior: smooth;
+
+    overflow-y: scroll;
 }
 
 .disenchantLootContainer {
     position: absolute;
     overflow-y: scroll;
-    height: 90%;
+    height: 85%;
     left: 60%;
     width: 39.6%;
     display: flex;
@@ -31,6 +34,7 @@
     align-content: flex-start;
 
     scroll-behavior: smooth;
+    overflow-y: scroll;
 }
 
 
@@ -41,7 +45,7 @@
     max-height: 19%;
     height: 19%;
     display: flex;
-    border: gray solid 2px;
+    border: rgb(128, 128, 128) solid 2px;
 }
 
 .imageContainer {
@@ -55,8 +59,8 @@
 }
 
 .lootImage {
-    position: relative;
-    object-fit: scale-down;
+    object-fit: cover;
+    object-position: 50% 50%;
 }
 
 .lootDescription {

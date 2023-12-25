@@ -1,8 +1,9 @@
 .lobbyMemberCard {
     position: relative;
-    flex: 1; /* Distribute equal width among the cards */
+    flex: 1;
     margin: 10px;
     padding: 0px;
+    max-width: 20vw;
     align-content: center;
     text-align: center;
     border: #5B5A56 solid;
@@ -103,18 +104,14 @@
 .profileContainer {
     margin: 0;
     position: absolute;
-    width: 80%;
-    left: 10%;
-    max-width: 100%;
-    height: 0;
-    top: 14%;
-    padding: 0 0 80%;
+    width: 70%;
+    aspect-ratio: 1;
+    left: 15%;
+    object-fit: contain;
+    top: 15%;
+    overflow: visible;
 }
 
-.profileContainer::before {
-    content: "";
-    padding-top: 100%; /* TODO: I shouldnt need to do this, rethink approach*/
-}
 
 .profileImage {
     padding: 0;
@@ -151,7 +148,7 @@
     height: 150%;
     width: 150%;
     left: 0;
-    transform: translate(-17%,-30%);
+    transform: translate(-16.5%,-29.5%);
     border: transparent;
 }
 

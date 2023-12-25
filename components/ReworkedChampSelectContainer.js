@@ -1,14 +1,13 @@
-import {getChampions, getChromaSkins, getSpells} from "../pages";
 import {useEffect, useRef, useState} from "react";
 import axios from "axios";
 import * as Globals from "../globals";
 import {PROXY_STATIC_PREFIX, STATIC_PREFIX} from "../globals";
 import styles from "../styles/champSelect/ReworkedChampSelectContainer.module.css";
 import ChampionCard from "./ChampionCard";
+import RuneSelector from "./RuneSelector";
 
 
-export default function ReworkedChampSelectContainer({session}) {
-    let champions = getChampions();
+export default function ReworkedChampSelectContainer({session, champions, chromaSkins, summonerSpells}) {
 
     const [runesVisible, setRunesVisible] = useState(false);
     const [searchInput, setSearchInput] = useState("");
@@ -22,7 +21,7 @@ export default function ReworkedChampSelectContainer({session}) {
             championId: currentBanSelected,
             lockIn: false
         }).catch((error) => {
-            console.log(error);
+
         })
     }, [currentBanSelected]);
 
@@ -31,7 +30,7 @@ export default function ReworkedChampSelectContainer({session}) {
             championId: currentPickSelected,
             lockIn: false
         }).catch((error) => {
-            console.log(error);
+
         })
     }, [currentPickSelected]);
 
@@ -66,6 +65,14 @@ export default function ReworkedChampSelectContainer({session}) {
         setFilteredChampions(Object.values(champions).filter(champion => filterChampions(champion)));
     }
 
+    const getChampionNameFromId = (championId) => {
+        if (championId === undefined) return "";
+        if (championId === -1) return "None";
+
+        return champions[championId] === undefined ? "" : champions[championId].name;
+
+    }
+
     const getPositionFromInternalName = (internalName) => {
         if (internalName === undefined) return "";
         switch (internalName) {
@@ -97,9 +104,8 @@ export default function ReworkedChampSelectContainer({session}) {
     }
 
     const getPathFromSpellId = (spellId) => {
-        const spellObject = getSpells();
-        if (spellObject === undefined) return console.error("Spell object is undefined");
-        const spell = spellObject[spellId];
+        if (summonerSpells === undefined) return console.error("Spell object is undefined");
+        const spell = summonerSpells[spellId];
         if (spell === undefined) return console.error("Spell is undefined");
         const spellPath = spell.iconPath;
 
@@ -107,9 +113,7 @@ export default function ReworkedChampSelectContainer({session}) {
     }
 
     const getSplashArtFromChromaId = (chromaId) => {
-        const chromaMap = getChromaSkins();
-        if (chromaMap === undefined) return console.error("Chroma map is undefined");
-        const splashId = chromaMap[chromaId];
+        const splashId = chromaSkins[chromaId];
 
         return splashId;
     }
@@ -131,7 +135,7 @@ export default function ReworkedChampSelectContainer({session}) {
         for (let index = 0; index < Globals.CHAMP_SELECT_MAX_BANS_PER_TEAM; index++) {
             const championValue = passedBans[index];
 
-            console.log(`${index} ${championValue}`);
+
 
             if (index >= maxBans) {
                 continue;
@@ -162,39 +166,21 @@ export default function ReworkedChampSelectContainer({session}) {
         for (let index = 0; index < Globals.CHAMP_SELECT_MAX_BANS_PER_TEAM; index++) {
             const championValue = passedBans[index];
 
-            console.log(`${index} ${championValue}`);
-
             if (index >= maxBans) {
-                bans.push(
-                    <div className={styles.theirTeamBansComponent} key={"MyTeamBan-" + index}>
-                        <div className={styles.theirTeamBansImageContainer}>
-                        </div>
-                    </div>
-                )
                 continue;
             }
             if (!championValue) {
                 bans.push(
-                    <div className={styles.theirTeamBansComponent} key={"MyTeamBan-" + index}>
-                        <div className={styles.theirTeamBansImageContainer}>
-                            <img
-                                src={`${Globals.PROXY_STATIC_PREFIX}/lol-game-data/assets/v1/champion-icons/-1.png`}
-                                alt="Icon"
-                                className={styles.theirTeamBansImage}
-                            />
-                        </div>
+                    <div className={styles.singleBanContainer} key={"TheirTeamBan-" + index}>
+                        <img className={styles.banImage} src={`${Globals.PROXY_STATIC_PREFIX}/lol-game-data/assets/v1/champion-icons/-1.png`} alt={""}/>
+                        <div className={styles.banFilter}></div>
                     </div>
                 );
             } else {
                 bans.push(
-                    <div className={styles.theirTeamBansComponent} key={"MyTeamBan-" + index}>
-                        <div className={styles.theirTeamBansImageContainer}>
-                            <img
-                                src={`${Globals.PROXY_STATIC_PREFIX}/lol-game-data/assets/v1/champion-icons/${championValue}.png`}
-                                alt="Icon"
-                                className={styles.theirTeamBansImage}
-                            />
-                        </div>
+                    <div className={styles.singleBanContainer} key={"TheirTeamBan-" + index}>
+                        <img className={styles.banImage} src={`${Globals.PROXY_STATIC_PREFIX}/lol-game-data/assets/v1/champion-icons/${championValue}.png`} alt={""}/>
+                        <div className={styles.banFilter}></div>
                     </div>
                 );
             }
@@ -202,6 +188,8 @@ export default function ReworkedChampSelectContainer({session}) {
 
         return bans;
     }
+
+
 
     const renderMyTeamStrategy = (session) => {
         if (!session) return (<></>);
@@ -237,9 +225,9 @@ export default function ReworkedChampSelectContainer({session}) {
 
     const renderFriendlyState = (currentSummoner, index) => {
         if (!currentSummoner) return (<></>);
-        if (!currentSummoner.stateDebug) return (<></>);
+        if (!currentSummoner.state) return (<></>);
 
-        let state = currentSummoner.stateDebug;
+        let state = currentSummoner.state;
         switch (state) {
             case "PREPARATION":
                  return renderSummonerPREPARATION(currentSummoner, index);
@@ -265,7 +253,7 @@ export default function ReworkedChampSelectContainer({session}) {
 
     const renderSummonerPREPARATION = (currentSummoner, index) => {
         return (
-            <div className={styles.champSelectBANNING} key={"MyTeamPick-" + index}>
+            <div className={styles.champSelectFINALIZATION} key={"MyTeamPick-" + index}>
                 <div className={styles.borderBox}>
                     {
                         renderBGImageFromPickIntent(currentSummoner.championPickIntent)
@@ -307,7 +295,14 @@ export default function ReworkedChampSelectContainer({session}) {
                     </div>
                     <div className={styles.teammateContent}>
                         <div className={styles.statusContainer}>
-                            Banning...
+                            <div className={styles.singleStatus}>
+                                Banning...
+                            </div>
+                            <div className={styles.singleStatus}>
+                                {
+                                    getChampionNameFromId(currentSummoner.banAction.championId)
+                                }
+                            </div>
                         </div>
                         <div className={styles.positionContainer}>
                             {
@@ -334,14 +329,14 @@ export default function ReworkedChampSelectContainer({session}) {
                         <div className={styles.finalizationContentSummonerSpellContainer}>
                             <img className={styles.champSelectComponentSummonerSpellImage}
                                  draggable={false}
-                                 alt={"Summoner Spell"}
+                                 alt={" "}
                                  src={getPathFromSpellId(currentSummoner.spell1Id)}
                             />
                         </div>
                         <div className={styles.finalizationContentSummonerSpellContainer}>
                             <img className={styles.champSelectComponentSummonerSpellImage}
                                  draggable={false}
-                                 alt={"Summoner Spell"}
+                                 alt={" "}
                                  src={getPathFromSpellId(currentSummoner.spell2Id)}
                             />
                         </div>
@@ -391,7 +386,13 @@ export default function ReworkedChampSelectContainer({session}) {
                     </div>
                     <div className={styles.teammateContent}>
                         <div className={styles.statusContainer}>
+                            <div className={styles.singleStatus}>
                                 Picking...
+                            </div>
+                            <div className={styles.singleStatus}>
+                                {getChampionNameFromId(currentSummoner.pickAction.championId)}
+                            </div>
+
                         </div>
                         <div className={styles.positionContainer}>
                             {
@@ -418,21 +419,21 @@ export default function ReworkedChampSelectContainer({session}) {
                         <div className={styles.finalizationContentSummonerSpellContainer}>
                             <img className={styles.champSelectComponentSummonerSpellImage}
                                  draggable={false}
-                                 alt={"Summoner Spell"}
+                                 alt={" "}
                                  src={getPathFromSpellId(currentSummoner.spell1Id)}
                             />
                         </div>
                         <div className={styles.finalizationContentSummonerSpellContainer}>
                             <img className={styles.champSelectComponentSummonerSpellImage}
                                  draggable={false}
-                                 alt={"Summoner Spell"}
+                                 alt={" "}
                                  src={getPathFromSpellId(currentSummoner.spell2Id)}
                             />
                         </div>
                     </div>
                     <div className={styles.championNameContainer}>
                         {
-                            champions[currentSummoner.championId] ? champions[currentSummoner.championId].name : ""
+                            currentSummoner.championId ? (champions[currentSummoner.championId] ? champions[currentSummoner.championId].name : "") : ""
                         }
                     </div>
                     <div className={styles.positionContainer}>
@@ -446,6 +447,8 @@ export default function ReworkedChampSelectContainer({session}) {
     }
 
     const renderSummonerFINALIZATION = (currentSummoner, index) => {
+        if (champions[currentSummoner.championId] === undefined) return (<></>);
+
         return (
             <div className={styles.champSelectFINALIZATION} key={"MyTeamPick-" + index}>
                 <div className={styles.finalizationBGContainer}>
@@ -459,14 +462,14 @@ export default function ReworkedChampSelectContainer({session}) {
                         <div className={styles.finalizationContentSummonerSpellContainer}>
                             <img className={styles.champSelectComponentSummonerSpellImage}
                                  draggable={false}
-                                 alt={"Summoner Spell"}
+                                 alt={" "}
                                  src={getPathFromSpellId(currentSummoner.spell1Id)}
                             />
                         </div>
                         <div className={styles.finalizationContentSummonerSpellContainer}>
                             <img className={styles.champSelectComponentSummonerSpellImage}
                                  draggable={false}
-                                 alt={"Summoner Spell"}
+                                 alt={" "}
                                  src={getPathFromSpellId(currentSummoner.spell2Id)}
                             />
                         </div>
@@ -493,11 +496,78 @@ export default function ReworkedChampSelectContainer({session}) {
         )
     }
 
+    const renderTheirTeamStrategy = (session) => {
+        if (!session) return (<></>);
+        let theirTeam = session.theirTeam;
+        let timer = session.timer;
+        if (!timer) return <>Unknown Timer Phase</>
+        let timerPhase = session.timer.phase;
+        console.log("Current Phase " + timerPhase);
+        switch (timerPhase) {
+            case 'PLANNING':
+            case 'BAN_PICK':
+            case 'FINALIZATION':
+                return renderTheirTeam(theirTeam);
+            default:
+                return <>Unknown Timer Phase: {timerPhase}</>
+        }
+    }
+
+    const renderTheirTeam = (theirTeam) => {
+        const theirTeamArray = [];
+
+        for (let index = 0; index < Globals.CHAMP_SELECT_MAX_MEMBERS_PER_TEAM; index++) {
+
+            const currentSummoner = theirTeam[index];
+            {
+                theirTeamArray.push(
+                    renderEnemyState(currentSummoner, index)
+                )
+            }
+        }
+        return theirTeamArray;
+    }
+
+
+    const renderEnemyState = (currentSummoner, index) => {
+        if (!currentSummoner) return (<></>);
+        if (!currentSummoner.state) return (<></>);
+        switch (currentSummoner.state) {
+            case 'PREPARATION':
+                return renderSummonerPREPARATION(currentSummoner, index);
+            case 'BANNING':
+                return renderSummonerBANNING(currentSummoner, index);
+            case 'AWAITING_PICK':
+                return renderSummonerAWAITING_PICK(currentSummoner, index);
+            case 'AWAITING_BAN_RESULT':
+                return renderSummonerAWAITING_BAN_RESULT(currentSummoner, index);
+            case 'PICKING_WITH_BAN':
+            case 'PICKING_WITHOUT_BAN':
+                return renderSummonerPICKING(currentSummoner, index);
+            case 'AWAITING_FINALIZATION':
+                return renderSummonerAWAITING_FINALIZATION(currentSummoner, index);
+            case 'FINALIZATION':
+                return renderSummonerFINALIZATION(currentSummoner, index);
+            default:
+                return <>Unknown State: {currentSummoner.state}</>
+        }
+    }
+
     const renderChampionSelector = (session) => {
         let emptyResponse = (<></>);
         if (session === undefined) return emptyResponse;
-        if (session.localPlayerPhase === undefined) return emptyResponse;
-        switch (session.localPlayerPhase) {
+        let localPlayer = undefined;
+        console.log(session.myTeam)
+        console.log(session.localPlayerCellId)
+        for (let summoner of session.myTeam) {
+            if (summoner.cellId === session.localPlayerCellId) {
+                localPlayer = summoner;
+                break;
+            }
+        }
+
+        if (!localPlayer) return emptyResponse;
+        switch (localPlayer.state) {
             case 'PREPARATION':
                 return renderPickContainer(false)
             case 'BANNING':
@@ -524,7 +594,7 @@ export default function ReworkedChampSelectContainer({session}) {
                 championId: currentPickSelected,
                 lockIn: true
             }).catch((error) => {
-                console.log(error);
+
             })
         }
 
@@ -564,7 +634,6 @@ export default function ReworkedChampSelectContainer({session}) {
                 championId: currentBanSelected,
                 lockIn: true
             }).catch((error) => {
-                console.log(error);
             })
         }
 
@@ -621,23 +690,32 @@ export default function ReworkedChampSelectContainer({session}) {
                         {
                             renderChampionSelector(session)
                         }
+                        <button onClick={() => {setRunesVisible(true)}}>Runes</button>
+                </div>
+                <div className={styles.selectLockin}>
+                    <button>Lock In</button>
                 </div>
             </div>
             <div className={styles.theirTeamSection}>
-                <div className={styles.banContainer}>
-                    {/*{*/}
-                    {/*    renderTheirTeamBans(session.bans.theirTeamBans, session.bans.numBans / 2)*/}
-                    {/*}*/}
+                <div className={styles.enemyBanContainer}>
+                    <div className={styles.banWrapper}>
+                        {
+                            renderTheirTeamBans(session.bans.theirTeamBans, session.bans.numBans / 2)
+                        }
+                    </div>
                 </div>
                 <div className={styles.teamContainer}>
                     {
-
+                        renderTheirTeamStrategy(session)
                     }
                 </div>
                 <div className={styles.utilContainer}>
 
                 </div>
             </div>
+            {
+                runesVisible ? (<RuneSelector setVisible={setRunesVisible}/>) : (<></>)
+            }
         </div>
     )
 }

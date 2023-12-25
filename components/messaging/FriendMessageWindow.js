@@ -125,6 +125,7 @@ export default function FriendMessageWindow({ friend, onClose}) {
                         if (message === undefined) return (<div key={"Undefined Message" + index}></div>)
                         if (message.id === undefined) return (<div key={"Undefined Message ID" + index}></div>)
                         let currentClass = (isFriendAuthor(message.fromPid)) ?  styles.receivedMessage : styles.ownMessage ;
+                        let isSystemMessage = (message.fromPi);
                         return (
                             <div key={message.id} className={styles.messageContainer}>
                                 <div  className={currentClass}>

@@ -1,4 +1,4 @@
-import {axiosSend, send} from "../pages";
+import {axiosSend} from "../pages";
 
 export default function FriendComponentContextMenu({x,y, onClose,friend}) {
     const style = {

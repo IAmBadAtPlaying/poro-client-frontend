@@ -1,0 +1,670 @@
+/* See https://lolstatic-a.akamaihd.net/webfonts/live/css/fonts/beaufortforlol.css*/
+@font-face {
+    font-family: "Beaufort for LOL";
+    src: url("http://127.0.0.1:35199/static/assets/fonts/BeaufortForLoL/Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Beaufort for LOL-Bold";
+    src: url("http://127.0.0.1:35199/static/assets/fonts/BeaufortForLoL/Bold.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Beaufort for LOL";
+    src: url("http://127.0.0.1:35199/static/assets/fonts/BeaufortForLoL/BoldItalic1.ttf") format("truetype");
+    font-weight: 700;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "Beaufort for LOL-BoldItalic";
+    src: url("http://127.0.0.1:35199/static/assets/fonts/BeaufortForLoL/BoldItalic1.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Beaufort for LOL";
+    src: url("http://127.0.0.1:35199/static/assets/fonts/BeaufortForLoL/Heavy.ttf") format("truetype");
+    font-weight: 800;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Beaufort for LOL-Heavy";
+    src: url("http://127.0.0.1:35199/static/assets/fonts/BeaufortForLoL/Heavy.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Beaufort for LOL";
+    src: url("http://127.0.0.1:35199/static/assets/fonts/BeaufortForLoL/HeavyItalic.ttf") format("truetype");
+    font-weight: 800;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "Beaufort for LOL-HeavyItalic";
+    src: url("http://127.0.0.1:35199/static/assets/fonts/BeaufortForLoL/HeavyItalic.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Beaufort for LOL";
+    src: url("http://127.0.0.1:35199/static/assets/fonts/BeaufortForLoL/Italic.ttf") format("truetype");
+    font-weight: 400;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "Beaufort for LOL-Italic";
+    src: url("http://127.0.0.1:35199/static/assets/fonts/BeaufortForLoL/Italic.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Beaufort for LOL";
+    src: url("http://127.0.0.1:35199/static/assets/fonts/BeaufortForLoL/Light.ttf") format("truetype");
+    font-weight: 200;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Beaufort for LOL-Light";
+    src: url("http://127.0.0.1:35199/static/assets/fonts/BeaufortForLoL/Light.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Beaufort for LOL";
+    src: url("http://127.0.0.1:35199/static/assets/fonts/BeaufortForLoL/LightItalic.ttf") format("truetype");
+    font-weight: 200;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "Beaufort for LOL-LightItalic";
+    src: url("http://127.0.0.1:35199/static/assets/fonts/BeaufortForLoL/LightItalic.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Beaufort for LOL";
+    src: url("http://127.0.0.1:35199/static/assets/fonts/BeaufortForLoL/Medium.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Beaufort for LOL-Medium";
+    src: url("http://127.0.0.1:35199/static/assets/fonts/BeaufortForLoL/Medium.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Beaufort for LOL";
+    src: url("http://127.0.0.1:35199/static/assets/fonts/BeaufortForLoL/MediumItalic.ttf") format("truetype");
+    font-weight: 500;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "Beaufort for LOL-MediumItalic";
+    src: url("http://127.0.0.1:35199/static/assets/fonts/BeaufortForLoL/MediumItalic.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Beaufort for LOL";
+    src: url("http://127.0.0.1:35199/static/assets/fonts/BeaufortForLoL/Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Beaufort for LOL-Regular";
+    src: url("http://127.0.0.1:35199/static/assets/fonts/BeaufortForLoL/Regular.ttf") format("truetype");
+}
+
+/* See https://lolstatic-a.akamaihd.net/webfonts/live/css/fonts/spiegel.css */
+@font-face {
+    font-family: "Spiegel";
+    src: url("http://127.0.0.1:35199/static/assets/fonts/Spiegel-TTF/Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Spiegel-Bold";
+    src: url("http://127.0.0.1:35199/static/assets/fonts/Spiegel-TTF/Bold.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Spiegel";
+    src: url("http://127.0.0.1:35199/static/assets/fonts/Spiegel-TTF/BoldItalic.ttf") format("truetype");
+    font-weight: 700;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "Spiegel-BoldItalic";
+    src: url("http://127.0.0.1:35199/static/assets/fonts/Spiegel-TTF/BoldItalic.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Spiegel";
+    src: url("http://127.0.0.1:35199/static/assets/fonts/Spiegel-TTF/Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Spiegel-Regular";
+    src: url("http://127.0.0.1:35199/static/assets/fonts/Spiegel-TTF/Regular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Spiegel";
+    src: url("http://127.0.0.1:35199/static/assets/fonts/Spiegel-TTF/RegularItalic.ttf") format("truetype");
+    font-weight: 400;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "Spiegel-RegularItalic";
+    src: url("http://127.0.0.1:35199/static/assets/fonts/Spiegel-TTF/RegularItalic.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Spiegel";
+    src: url("http://127.0.0.1:35199/static/assets/fonts/Spiegel-TTF/SemiBold.ttf") format("truetype");
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Spiegel-SemiBold";
+    src: url("http://127.0.0.1:35199/static/assets/fonts/Spiegel-TTF/SemiBold.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Spiegel";
+    src: url("http://127.0.0.1:35199/static/assets/fonts/Spiegel-TTF/SemiBoldItalic.ttf") format("truetype");
+    font-weight: 600;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "Spiegel-SemiBoldItalic";
+    src: url("http://127.0.0.1:35199/static/assets/fonts/Spiegel-TTF/SemiBoldItalic.ttf") format("truetype");
+}
+
+.appContainer {
+    font-family: "Beaufort for LOL";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+
+    background-color: #181a1b;
+    color: #f0f0f0;
+}
+
+
+/*.reducer {*/
+/*    position: absolute;*/
+/*    height: 8%;*/
+/*    aspect-ratio: 1;*/
+
+/*    top: 50%;*/
+/*    left: 10%;*/
+
+/*    background-color: #181a1b;*/
+
+/*    border: white solid 2px;*/
+
+/*    transform-origin: center;*/
+/*    transform: translateY(-50%)  translateX(-50%) rotate(45deg);*/
+
+/*    z-index: 2;*/
+
+/*    animation: reducerAppear ease-in-out 0.25s;*/
+/*}*/
+
+/*@keyframes reducerAppear {*/
+/*    0% {*/
+/*        left: 0;*/
+/*    }*/
+/*    100% {*/
+/*        left: 10%;*/
+/*    }*/
+/*}*/
+
+/*.expander {*/
+/*    position: absolute;*/
+/*    height: 8%;*/
+/*    aspect-ratio: 1;*/
+
+/*    top: 50%;*/
+/*    left: 0;*/
+
+/*    background-color: #181a1b;*/
+/*    border: white solid 2px;*/
+
+/*    transform-origin: center;*/
+/*    transform: translateY(-50%)  translateX(-50%) rotate(45deg);*/
+
+/*    z-index: 2;*/
+
+/*    animation: expanderAppear ease-in-out 0.25s;*/
+/*}*/
+
+/*@keyframes expanderAppear {*/
+/*    0% {*/
+/*        left: 10%;*/
+/*    }*/
+/*    100% {*/
+/*        left: 0;*/
+/*    }*/
+
+/*}*/
+
+.content {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+.currentContainer {
+    position: absolute;
+    height: 95%;
+    width: 96%;
+    bottom: 0;
+    overflow: hidden;
+}
+
+.backButtonContainer {
+    position: absolute;
+    display: flex;
+
+    font-weight: 700;
+    text-wrap: none;
+
+    align-items: center;
+    justify-content: left;
+    margin-left: 2%;
+    left: 0;
+    height: 5%;
+    font-size: 1.5em;
+    width: 20%;
+    overflow: hidden;
+    z-index: 0;
+
+}
+
+.backButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: fit-content;
+    height: 100%;
+    margin-left: 2%;
+    overflow: visible;
+}
+
+.backButton::before {
+    content: "<<";
+    position: relative;
+    transform: translateX(-20%);
+}
+
+.backButtonCurrentContainer {
+    margin-left: 2%;
+}
+
+.backButton:hover {
+    cursor: pointer;
+    color: #0070f3;
+}
+
+.displayContent {
+    position: absolute;
+
+    height: 100%;
+    width: 90%;
+    left: 10%;
+
+    backdrop-filter: grayscale(0.3) blur(10px);;
+}
+
+.displayContentNoFilter {
+    position: absolute;
+
+    height: 100%;
+    width: 90%;
+    left: 10%;
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    height: 8%;
+    width: 20%;
+    top: 1%;
+    right: 2%;
+    z-index: 0;
+}
+
+.social {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    height: 40%;
+    width: 30%;
+    bottom: 5%;
+    right: 5%;
+    z-index: 0;
+
+    border: green solid 2px;
+}
+
+.navButton {
+    font-family: "Beaufort for LOL";
+    font-size: 1.3em;
+    font-weight: 700;
+
+    display: flex;
+
+    flex: 1;
+
+    align-items: center;
+    justify-content: center;
+
+    user-select: none;
+
+    transition: ease-in-out 0.25s;
+}
+
+.navButton:hover {
+    font-size: 1.4em;
+    background-color: #2e3031;
+
+    transition: background-color ease-in-out 0.15s;
+}
+
+.navButton:active {
+    font-size: 1.2em;
+    transition: font-size ease-in-out 0.1s
+}
+
+.navLeague {
+    display: flex;
+
+    flex: 1;
+    flex-direction: column;
+}
+
+.navLoot{
+
+}
+
+.navCollection {
+
+}
+
+.navPlay {
+    font-size: 1.5em;
+    font-weight: 800;
+}
+
+.navPlay:hover {
+    font-size: 1.7em;
+    background-color: transparent;
+    transition: background-color ease-in-out 0.15s;
+}
+
+.navPlay:active {
+    font-size: 1.4em;
+}
+
+.navPlay:hover::after {
+    content: "";
+    position: absolute;
+
+    height: 8%;
+    aspect-ratio: 1;
+
+    background-color: transparent;
+
+    border: #0070f3 solid 10px;
+    transform: rotate(45deg);
+
+    transition: ease-in-out 0.15s;
+
+    overflow: hidden;
+
+    z-index: -1;
+}
+
+.navPlay::after {
+    content: "";
+    position: absolute;
+
+    height: 10%;
+    aspect-ratio: 1;
+
+    background-color: transparent;
+
+    border: #0070f3 solid 0px;
+    transform: rotate(-45deg);
+
+    transition: ease-in-out 0.15s;
+
+    z-index: -1;
+}
+
+@keyframes playRotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.navSystem {
+    display: flex;
+
+    flex: 1;
+    flex-direction: column;
+}
+
+.navTasks {
+}
+
+.navConfig {
+}
+
+.activity {
+    position: absolute;
+    top: 1%;
+    height: 6%;
+    width: 20%;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    border-radius: 100000px;
+    border: #0070f3 solid 4px;
+
+
+    color: white;
+    background-color: #181a1b;
+
+    transition: ease-in-out 0.25s;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    user-select: none;
+
+    z-index: 10;
+}
+
+.activityHidden {
+    position: absolute;
+    top: -10%;
+
+    height: 6%;
+    width: 20%;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    border-radius: 100000px;
+    border: #0070f3 solid 4px;
+
+
+    color: white;
+    background-color: #181a1b;
+
+    transition: ease-in-out 0.25s;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.activityContainer {
+    height: 100%;
+    width: 100%;
+
+    overflow: hidden;
+}
+
+.activityHeader {
+    display: flex;
+
+    align-items: center;
+
+    position: relative;
+    height: 10%;
+    width: 100%;
+
+    font-size: 1.8em;
+    font-weight: 800;
+
+    padding-left: 5%;
+
+}
+
+.activityContent {
+    position: relative;
+    height: 90%;
+    width: 100%;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    user-select: none;
+}
+
+.selectContainer {
+    font-family: "Beaufort for LOL";
+    font-weight: 800;
+
+    top: 20%;
+
+    position: absolute;
+    height: 60%;
+    width: 25%;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+
+    user-select: none;
+}
+
+.spacer{
+    position: relative;
+    flex: 0;
+    width: 80%;
+    left: 10%;
+    border-top: white solid 2px;
+}
+
+.selectElement {
+    flex: 1;
+    font-size: 2.5em;
+
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    margin-left: 10%;
+    border-left: transparent solid 0;
+
+    justify-content: left;
+
+    transition: border-left-width ease-in-out 0.15s;
+}
+
+.selectElement:hover {
+    margin-left: 10%;
+    border-left: transparent solid 1vw;
+    cursor: pointer;
+    color: #0397AB;
+
+    transition: border-left-width ease-in-out 0.15s;
+}
+
+.selectElementPlay {
+    flex: 1.3;
+    font-size: 3.5em;
+
+    color: #C89B3C;
+}
+
+.selectElementPlay:hover {
+    color: #0397AB;
+}
+
+.selectElement::before {
+    content: "";
+    position: absolute;
+    height: 1.5%;
+    aspect-ratio: 1;
+    background: white;
+    left: 5%;
+    rotate: 45deg;
+
+    transition: ease-in-out 0.15s;
+}
+
+.selectElementPlay::before {
+    background: #C89B3C;
+}
+
+.selectElement:hover::before {
+    content: "";
+    background: #0397AB;
+    rotate: 135deg;
+    scale: 1.5;
+
+    transition: ease-in-out 0.15s;
+}
+.selectElementPlay:hover::before {
+    background: #0397AB;
+
+    transition: ease-in-out 0.15s;
+}

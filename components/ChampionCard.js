@@ -1,6 +1,4 @@
 import styles from '../styles/ChampionCard.module.css';
-import BackgroundImage from './BackgroundImage';
-import Image from "next/image";
 import * as Globals from "../globals";
 
 export default function ChampionCard({ id,  championName, isActive, setActive}) {

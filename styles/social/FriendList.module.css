@@ -1,0 +1,116 @@
+.container {
+    font-family: "Beaufort for LOL";
+    font-weight: 500;
+    position: absolute;
+
+    flex-direction: column;
+
+    height: 100%;
+    right: 0;
+    top: 0;
+    width: 16%;
+
+    overflow-x: hidden;
+    overflow-y: scroll;
+
+    backdrop-filter: blur(10px) brightness(0.3);
+
+    transition: transform 0.3s ease-in-out;
+
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    z-index: 100;
+}
+
+.container::-webkit-scrollbar {
+    display: none;
+}
+
+.collapsed {
+    transform: translateX(75%);
+
+    transition: transform 0.3s ease-in-out;
+}
+
+.singleFriendContainer {
+    width: 100%;
+    aspect-ratio: 4;
+    user-select: none;
+
+    display: flex;
+}
+
+.friendIconContainer {
+    flex: 1;
+    display: flex;
+
+    user-select: all;
+
+    align-items: center;
+    justify-content: center;
+
+    height: 100%;
+    width: 100%;
+
+    overflow: hidden;
+}
+
+.iconContainer {
+    display: flex;
+
+    height: 85%;
+    width: 85%;
+    position: relative;
+}
+
+.friendIcon {
+    position: relative;
+    object-position: 50% 50%;
+    object-fit: cover;
+    user-select: all;
+}
+
+.friendInfoContainer {
+    flex: 3;
+}
+
+.groupContainer {
+    font-size: 1.1em;
+    font-weight: 600;
+    background: rgba(128, 128, 128, 0.3);
+    display: flex;
+
+    min-height: 4%;
+}
+
+.groupCountContainer {
+    flex: 2;
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+}
+
+.groupNameContainer {
+    flex: 5;
+
+    display: flex;
+
+    align-items: center;
+}
+
+.groupExpanderContainer {
+    font-size: 1.8em;
+
+    flex: 1;
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.groupExpanderContainer:hover {
+    cursor: pointer;
+}

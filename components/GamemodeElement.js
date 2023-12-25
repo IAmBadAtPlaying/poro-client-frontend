@@ -1,40 +1,34 @@
 import * as Globals from "../globals";
-import {AUDIO_PLAY_BIG_BUTTON} from "../pages/index";
+import {AUDIO_PLAY_BIG_BUTTON} from "../pages";
 import styles from "../styles/LobbyGamemodeSelector.module.css";
 import {useEffect, useState} from "react";
-export default function GamemodeElement({ queue, isActive, setActive, setQueueId }) {
+import CustomChangingImage from "./customComponents/CustomChangingImage";
+export default function GamemodeElement({ queue, isActive, setActive, setQueueId, assetMap}) {
 
     const [activeElement, setActiveElement] = useState(0);
 
-    const getImageLink = (key) => {
-        if (!key) return "";
-        switch (key.toLowerCase()) {
-            /*Solid naming scheme rito*/
-            case "cherry":
-                return Globals.PROXY_STATIC_PREFIX + "/lol-game-data/assets/content/src/leagueclient/gamemodeassets/gamemodex/img/icon-empty.png";
-            break;
-            case "classic":
-                return Globals.PROXY_STATIC_PREFIX + "/lol-game-data/assets/content/src/leagueclient/gamemodeassets/classic_sru/img/icon-empty.png";
-            break;
-            default:
-                return Globals.PROXY_STATIC_PREFIX + "/lol-game-data/assets/content/src/leagueclient/gamemodeassets/"+key+"/img/icon-empty.png";
-            break;
-        }
+    const getImageLink = (mapKey) => {
+        if (!mapKey) return "";
+        const assetsForMap = assetMap[mapKey];
+        if (!assetsForMap) return "";
+
+        return Globals.PROXY_STATIC_PREFIX + "/"+assetsForMap["game-select-icon-default"];
+    }
+
+    const getHoverImageLink = (mapKey) => {
+        if (!mapKey) return "";
+        const assetsForMap = assetMap[mapKey];
+        if (!assetsForMap) return "";
+
+        return Globals.PROXY_STATIC_PREFIX + "/"+assetsForMap["game-select-icon-hover"];
     }
 
     const getVideoLink = (key) => {
         if (!key) return "";
-        switch (key.toLowerCase()) {
-            case "cherry":
-                return Globals.PROXY_STATIC_PREFIX + "/lol-game-data/assets/content/src/leagueclient/gamemodeassets/gamemodex/video/game-select-icon-active.webm";
-            break;
-            case "classic":
-                return Globals.PROXY_STATIC_PREFIX + "/lol-game-data/assets/content/src/leagueclient/gamemodeassets/classic_sru/video/game-select-icon-active.webm";
-            break;
-            default:
-                return Globals.PROXY_STATIC_PREFIX + "/lol-game-data/assets/content/src/leagueclient/gamemodeassets/"+key+"/video/game-select-icon-active.webm";
-            break;
-        }
+        const assetsForMap = assetMap[key];
+        if (!assetsForMap) return "";
+
+        return Globals.PROXY_STATIC_PREFIX + "/"+ assetsForMap["game-select-icon-active-video"];
     }
 
     const handleClick = () => {
@@ -58,6 +52,8 @@ export default function GamemodeElement({ queue, isActive, setActive, setQueueId
         }
     }, [isActive]);
 
+    if (assetMap === undefined) return <></>;
+
     return (
         <div className={styles.gamemodeSelectorElement}>
             <div className={styles.gamemodeSelectorIconContainer} onClick={handleClick}>
@@ -71,21 +67,16 @@ export default function GamemodeElement({ queue, isActive, setActive, setQueueId
                                 loop={true}
                                 muted={true}
                                 preload={"auto"}
+                                poster={getImageLink(queue[0].mapId)}
                                 className={styles.gamemodeSelectorIconVideo}
                                 style={{display: `${isActive ? 'inline' : 'none'}`}}
                             >
                                 <source
                                     type="video/webm"
-                                    src={getVideoLink(queue[0].gameMode)}
+                                    src={getVideoLink(queue[0].mapId)}
                                 />
                             </video>
-                            <img
-                                alt="Img"
-                                src={getImageLink(queue[0].gameMode)}
-                                className={styles.gamemodeSelectorIcon}
-                                draggable={false}
-                                style={{display: `${isActive ? 'none': 'inline'}`}}
-                            />
+                            <CustomChangingImage defaultImageSrc={getImageLink(queue[0].mapId)} hoverImageSrc={getHoverImageLink(queue[0].mapId)} imageClassName={styles.gamemodeSelectorIcon} imageStyle={{display: `${isActive ? 'none': 'inline'}`}}/>
                         </>
 
                 }
