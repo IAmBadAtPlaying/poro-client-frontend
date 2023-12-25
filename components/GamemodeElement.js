@@ -1,5 +1,5 @@
 import * as Globals from "../globals";
-import {AUDIO_PLAY_BIG_BUTTON} from "../pages/indexRework";
+import {AUDIO_PLAY_BIG_BUTTON} from "../pages";
 import styles from "../styles/LobbyGamemodeSelector.module.css";
 import {useEffect, useState} from "react";
 import CustomChangingImage from "./customComponents/CustomChangingImage";

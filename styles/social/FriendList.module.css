@@ -36,6 +36,7 @@
 .singleFriendContainer {
     width: 100%;
     aspect-ratio: 4;
+    user-select: none;
 
     display: flex;
 }
@@ -43,6 +44,8 @@
 .friendIconContainer {
     flex: 1;
     display: flex;
+
+    user-select: all;
 
     align-items: center;
     justify-content: center;
@@ -62,10 +65,10 @@
 }
 
 .friendIcon {
-    user-select: none;
     position: relative;
     object-position: 50% 50%;
     object-fit: cover;
+    user-select: all;
 }
 
 .friendInfoContainer {
@@ -100,7 +103,6 @@
 
 .groupExpanderContainer {
     font-size: 1.8em;
-    user-select: none;
 
     flex: 1;
     display: flex;

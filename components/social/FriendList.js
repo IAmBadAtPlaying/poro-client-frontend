@@ -56,6 +56,13 @@ export default function FriendList({friends, self}) {
         setGroups({...groups, [groupId]: {...groups[groupId], collapsed: true}})
     }
 
+    const onDragStart = (event, friend) => {
+        console.log("Drag start");
+        console.log(friend);
+
+        event.dataTransfer.setData("text/plain", JSON.stringify(friend));
+    }
+
     const expandGroup = (groupId) => {
         setGroups({...groups, [groupId]: {...groups[groupId], collapsed: false}})
     }
@@ -111,7 +118,7 @@ export default function FriendList({friends, self}) {
 
     const renderFriend = (friend, index) => {
         return (
-            <div className={styles.singleFriendContainer} key={"Friend-"+index}>
+            <div className={styles.singleFriendContainer} key={"Friend-"+index} draggable={true} onDragStart={(e) => {onDragStart(e,friend)}}>
                 <div className={styles.friendIconContainer}>
                     <div className={styles.iconContainer}>
                         <Image

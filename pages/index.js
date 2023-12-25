@@ -1,25 +1,28 @@
 import Head from 'next/head';
-import styles from '../styles/Home.module.css';
+import styles from '../styles/indexRework.module.css';
 import * as Globals from '../globals';
-import {useEffect, useRef, useState} from 'react';
+import {useEffect, useState} from 'react';
 import LoadingComponent from "../components/LoadingComponent";
-import FriendComponent from "../components/FriendComponent";
 import LobbyContainer from "../components/LobbyContainer";
 import TaskContainer from "../components/TaskContainer";
 import MatchmakingContainer from "../components/MatchmakingContainer";
 import ReworkedChampionSelectContainer from "../components/ReworkedChampSelectContainer";
 import LobbyGamemodeSelector from "../components/LobbyGamemodeSelector";
-import ReadyCheckContainer from "../components/ReadyCheckContainer";
-import ConfigContainer from "../components/ConfigContainer";
+import ReadyCheckContainer from "../components/gameflow/ReadyCheckContainer";
 import LootContainer from "../components/LootContainer";
 import ProfileContainer from "../components/ProfileContainer";
 import axios from "axios";
-import FriendMessageWindow from "../components/messaging/FriendMessageWindow";
-import ChampionSelectContainer from "../components/ChampionSelectContainer";
-export var socket
+import CustomBackground from "../components/customComponents/CustomBackground";
+import StatusProfile from "../components/indexReworked/StatusProfile";
+import ReworkedConfigContainer from "../components/config/ReworkedConfigContainer";
+import FriendList from "../components/social/FriendList";
+import ReconnectContainer from "../components/gameflow/ReconnectContainer";
+import Collection from "../components/Collection";
+
+export let socket
 
 let pktNr = 0;
-
+const availabilityOrder = ['', 'chat', 'dnd', 'online', 'away', 'mobile', 'offline'];
 
 let audio;
 let globalChampions = {};
@@ -28,11 +31,10 @@ let globalSpells = {};
 let globalChromaSkins = {};
 let globalMapAssets = {}
 
-
 const messageMap = new Map();
 
 export function subscribeToMessageUpdates(conversationId, callback) {
-    console.log("Subscribing to message updates: " +conversationId)
+    console.log("Subscribing to message updates: " + conversationId)
     if (conversationId === undefined || callback === undefined) return;
     if (messageMap.has(conversationId)) {
         messageMap.get(conversationId).push(callback);
@@ -53,7 +55,7 @@ export function unsubscribeFromMessageUpdates(conversationId, callback) {
         if (index > -1) {
             callbacks.splice(index, 1);
         }
-    } else console.error("No callbacks for conversationId: " + conversationId+ ", How did you get here?");
+    } else console.error("No callbacks for conversationId: " + conversationId + ", How did you get here?");
 }
 
 export function axiosSend(method, url, body) {
@@ -61,23 +63,43 @@ export function axiosSend(method, url, body) {
     url = Globals.PROXY_PREFIX + url;
     switch (method) {
         case 'GET':
-            axios.get(url, body).then((response) => {console.log(response)}).catch((error) => {console.log(error)});
-        break;
+            axios.get(url, body).then((response) => {
+                console.log(response)
+            }).catch((error) => {
+                console.log(error)
+            });
+            break;
         case 'POST':
-            axios.post(url, body).then((response) => {console.log(response)}).catch((error) => {console.log(error)});
-        break;
+            axios.post(url, body).then((response) => {
+                console.log(response)
+            }).catch((error) => {
+                console.log(error)
+            });
+            break;
         case 'PUT':
-            axios.put(url, body).then((response) => {console.log(response)}).catch((error) => {console.log(error)});
-        break;
+            axios.put(url, body).then((response) => {
+                console.log(response)
+            }).catch((error) => {
+                console.log(error)
+            });
+            break;
         case 'DELETE':
-            axios.delete(url, body).then((response) => {console.log(response)}).catch((error) => {console.log(error)});
-        break
+            axios.delete(url, body).then((response) => {
+                console.log(response)
+            }).catch((error) => {
+                console.log(error)
+            });
+            break
         case 'PATCH':
-                axios.patch(url, body).then((response) => {console.log(response)}).catch((error) => {console.log(error)});
-        break;
+            axios.patch(url, body).then((response) => {
+                console.log(response)
+            }).catch((error) => {
+                console.log(error)
+            });
+            break;
         default:
             console.error("Invalid request type: " + method);
-        break;
+            break;
     }
 }
 
@@ -104,60 +126,165 @@ export function AUDIO_PLAY_BIG_BUTTON() {
 
 }
 
-
-export function getChatIdentity() {
-    return globalChatIdentity;
-}
-
-export function getChampions() {
-    return globalChampions;
-}
-
-export function getSpells() {
-    return globalSpells;
-}
-
-export function getChromaSkins() {
-    return globalChromaSkins;
-}
-
-export function getAssetMap() {
-    return globalMapAssets;
-}
-
 export default function Home() {
-    const mainDiv = useRef();
+    // --- SHARED STATIC STATES ---
     const [queues, setQueues] = useState({});
+    const [icons, setIcons] = useState({});
+    const [wards, setWards] = useState({});
     const [champions, setChampions] = useState([]);
+    const [skins, setSkins] = useState({});
+    const [skinsByChampion, setSkinsByChampion] = useState({});
+    const [emotes, setEmotes] = useState({});
+    const [mapAssets, setMapAssets] = useState({});
+    const [summonerSpells, setSummonerSpells] = useState({});
+
+
+    // --- SHARED DYNAMIC STATES ---
     const [friends, setFriends] = useState({});
-    const [lobby, setLobby] = useState({});
-    const [container, setContainer] = useState("lobby");
+    const [presence, setPresence] = useState({});
+
     const [gameflowState, setGameflowState] = useState("None");
+    const [lobby, setLobby] = useState({});
     const [championSelectState, setChampionSelectState] = useState({});
+
+    const [loot, setLoot] = useState({});
+
+    const [config, setConfig] = useState({});
+    const [patcherStatus, setPatcherStatus] = useState({});
+
+    // --- INTERNAL STATES ---
     const [isConnected, setIsConnected] = useState(false);
-    const [loot,setLoot] = useState({});
+    const [container, setContainer] = useState(Globals.CONTAINER_NONE);
     const [taskList, setTaskList] = useState([]);
     const [currentChatFriend, setCurrentChatFriend] = useState({});
-    function connect(host) {
-            socket = new WebSocket(host);
-            socket.onopen = function (msg) {
-                setIsConnected(true);
-                console.log("Connected to " + host);
-                createKeepAlive();
-                getInitialData();
-            }
-            socket.onmessage = function (msg) {
-                handleMessage(msg.data)
-            }
-            socket.onclose = function (msg) {
-                setIsConnected(false);
-                resetAll();
-                setTimeout(() => {connect(host)}, 5000);
-                console.log("Disconnected from Host!");
-            }
-            socket.onerror = function (msg) {
+    const [friendListCollapsed, setFriendListCollapsed] = useState(true);
 
+
+
+    useEffect(() => {
+        if (!isConnected) return;
+        fetchMapAssets();
+        fetchChampions();
+        fetchSummonerSpells();
+        fetchChromaSkins();
+        fetchUserConfig();
+    }, [isConnected])
+
+    const fetchUserConfig = () => {
+        axios.get(Globals.REST_PREFIX + "/userconfig").then((response) => {
+            setConfig(response.data);
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
+
+    const fetchChampions = () => {
+        axios.get(Globals.PROXY_PREFIX + "/lol-game-data/assets/v1/champion-summary.json").then((response) => {
+            let intermediate = {}
+            if (response.data.errorCode) {
+                console.error("Failed to load champions");
+                return;
             }
+            response.data.forEach((champion) => {
+                intermediate[champion.id] = champion;
+            });
+            setChampions(intermediate)
+        })
+    }
+
+    const fetchSummonerSpells = () => {
+        axios.get(Globals.PROXY_PREFIX + "/lol-game-data/assets/v1/summoner-spells.json").then((response) => {
+            let intermediate = {};
+            if (response.data.errorCode) {
+                console.error("Failed to load summoner spells");
+                return;
+            }
+            response.data.forEach((spell) => {
+                intermediate[spell.id] = spell;
+            });
+            setSummonerSpells(intermediate)
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
+
+    const fetchChromaSkins = () => {
+        console.log("[Fetch] Skins");
+        axios.get(Globals.PROXY_PREFIX + "/lol-game-data/assets/v1/skins.json").then((response) => {
+            let intermediate = {};
+            let intermediateByChampion = {};
+            let currentChampionID = -1;
+            if (response.data.errorCode) {
+                console.error("Failed to load skins");
+                return;
+            }
+            Object.values(response.data).forEach((skin) => {
+                if (skin.chromas) {
+                    skin.chromas.forEach((chroma) => {
+                        intermediate[chroma.id] = skin.id;
+                    });
+                }
+                if (skin.isBase) {
+                    currentChampionID = skin.id.toString().substring(0, skin.id.toString().length - 3);
+                    intermediateByChampion[currentChampionID] = {};
+                }
+                if (currentChampionID !== -1) {
+                    intermediateByChampion[currentChampionID][skin.id] = skin;
+                }
+                intermediate[skin.id] = skin.id;
+            });
+
+            setSkins(intermediate);
+            setSkinsByChampion(intermediateByChampion);
+            console.log("[Fetch] Skins - Done");
+        }).catch(() => {
+        });
+    }
+
+    const fetchMapAssets = () => {
+        console.log("[Fetch] Map Assets");
+        axios.get(Globals.PROXY_PREFIX + "/lol-game-data/assets/v1/map-assets/map-assets.json").then((response) => {
+            let intermediate = {};
+            if (response.data.errorCode) {
+                console.error("Failed to load map assets");
+                return;
+            }
+            Object.keys(response.data).forEach((key) => {
+                if (intermediate[key] === undefined) {
+                    const asset = response.data[key];
+                    if (asset.length > 0) {
+                        intermediate[key] = asset[0].assets;
+                    }
+                }
+            });
+            setMapAssets(intermediate)
+            console.log("[Fetch] Map Assets - Done");
+        }).catch(() => {
+        });
+    }
+
+    function connect(host) {
+        socket = new WebSocket(host);
+        socket.onopen = function (msg) {
+            setIsConnected(true);
+            console.log("Connected to " + host);
+            createKeepAlive();
+            getInitialData();
+        }
+        socket.onmessage = function (msg) {
+            handleMessage(msg.data)
+        }
+        socket.onclose = function (msg) {
+            setIsConnected(false);
+            resetAll();
+            setTimeout(() => {
+                connect(host)
+            }, 5000);
+            console.log("Disconnected from Host!");
+        }
+        socket.onerror = function (msg) {
+
+        }
     }
 
     function getInitialData() {
@@ -170,7 +297,7 @@ export default function Home() {
 
     function createKeepAlive() {
         setTimeout(createKeepAlive, 250000)
-        socket.send("[]");
+        socket.send(JSON.stringify([]));
     }
 
     function resetAll() {
@@ -200,16 +327,39 @@ export default function Home() {
                     console.log(message.event)
                     switch (message.event) {
                         case 'FriendListUpdate':
-                            const { puuid, availability, statusMessage, summonerId, iconId, name, lol, id} = message.data;
+                            const {
+                                puuid,
+                                availability,
+                                statusMessage,
+                                summonerId,
+                                iconId,
+                                name,
+                                lol,
+                                id
+                            } = message.data;
                             setFriends(prevFriends => {
-                                console.log("Updating "+name+": " + availability +" - " + lol);
-                                prevFriends[puuid] = { iconId, name, puuid, summonerId,  availability, statusMessage, lol, id};
+                                console.log("Updating " + name + ": " + availability + " - " + lol);
+                                prevFriends[puuid] = {
+                                    iconId,
+                                    name,
+                                    puuid,
+                                    summonerId,
+                                    availability,
+                                    statusMessage,
+                                    lol,
+                                    id
+                                };
                                 return prevFriends;
                             });
                             break;
                         case 'InitialFriendListUpdate':
                             const initialFriends = message.data;
                             setFriends(initialFriends);
+                            break;
+                        case 'InitialSelfPresenceUpdate':
+                        case 'SelfPresenceUpdate':
+                            const currentPresence = message.data;
+                            setPresence(currentPresence);
                             break;
                         case 'InitialLobbyUpdate':
                         case 'LobbyUpdate':
@@ -219,21 +369,23 @@ export default function Home() {
                         case 'InitialGameflowUpdate':
                         case 'GameflowPhaseUpdate':
                             const currentGameflowState = message.data;
-                            setGameflowState(currentGameflowState.phase );
-                        break;
+                            console.log(currentGameflowState.phase)
+                            setGameflowState(currentGameflowState.phase);
+                            break;
+                        case 'InitialChampSelectUpdate':
                         case 'ChampSelectUpdate':
                             const currentChampSelectState = message.data;
                             setChampionSelectState(currentChampSelectState);
-                        break;
+                            break;
                         case 'TaskUpdate':
                         case 'InitialTaskUpdate':
                             const currentTasks = message.data;
                             setTaskList(currentTasks);
-                        break;
+                            break;
                         case 'InitialQueues':
                             const currentQueues = message.data;
                             setQueues(currentQueues);
-                        break;
+                            break;
                         case 'MessageUpdate':
                             const messagePayload = message.data;
                             if (messagePayload === undefined) return;
@@ -241,7 +393,7 @@ export default function Home() {
                             const conversationId = messagePayload.conversationId;
                             const messageData = messagePayload.message;
                             triggerUpdateMessage(conversationId, messageData);
-                        break;
+                            break;
                         case 'ConversationUpdate':
                             const conversationPayload = message.data;
                             if (conversationPayload === undefined) return;
@@ -253,41 +405,15 @@ export default function Home() {
                         case 'InitialLoot':
                         case 'LootUpdate':
                             const currentLoot = message.data;
-                            console.log("Loot Update")
                             setLoot(currentLoot);
-                        break;
-                        case 'DataTransfer':
-                            const currentData = message.data;
-                            const dataTransferType = currentData.dataType;
-                            const dataTransferData = currentData.data;
-                            if (dataTransferType === undefined) return;
-                            console.log(message.data);
-                            switch (dataTransferType) {
-                                case 'Champions':
-                                    globalChampions = dataTransferData;
-                                break;
-                                case 'SummonerSpells':
-                                    globalSpells = dataTransferData;
-                                break;
-                                case 'ChromaSkins':
-                                    globalChromaSkins = dataTransferData;
-                                break;
-                                default:
-                                break;
-                            }
-                        break;
-                        case 'PlaySound':
-                            setTimeout(() => {
-                                const soundData = message.data;
-                                if (soundData === undefined) return;
-                                let audioSrc = Globals.PROXY_PREFIX+soundData.source;
-                                const audio = new Audio(audioSrc);
-                                audio.volume = 0.3;
-                                audio.play();
-                            }, 0);
-                        break;
+                            break;
+                        case 'InitialPatcher':
+                        case 'PatcherUpdate':
+                            const currentPatcherStatus = message.data;
+                            setPatcherStatus(currentPatcherStatus);
+                            break;
                         default:
-                        break;
+                            break;
                     }
                 }
             } catch (e) {
@@ -295,8 +421,6 @@ export default function Home() {
             }
         }
     }
-
-
 
     useEffect(() => {
         if (typeof document !== 'undefined') {
@@ -307,258 +431,199 @@ export default function Home() {
             document.body.style.height = "100.00vh";
 
             audio = new Audio();
-            audio.src = Globals.PROXY_STATIC_PREFIX+ "/lol-game-data/assets/assets/events/ps2021/audio/sfx-ps-ui-champ-button-click.ogg";
+            audio.src = Globals.PROXY_STATIC_PREFIX + "/lol-game-data/assets/assets/events/ps2021/audio/sfx-ps-ui-champ-button-click.ogg";
             audio.load();
 
-            window.onbeforeunload = function(){
+            window.onbeforeunload = function () {
                 // return 'Are you sure you want to leave?';
             };
 
-
-            if (typeof mainDiv !== 'undefined') {
-                mainDiv.current.style.backgroundImage = `url(${Globals.STATIC_PREFIX}/assets/png/background.png)`
-            }
         }
     }, []);
-
     useEffect(() => {
         connect("ws://127.0.0.1:8887");
     }, []);
 
-    const fetchChampions = () => {
-        axios.get(Globals.PROXY_PREFIX + "/lol-game-data/assets/v1/champion-summary.json").then((response) => {
-            let intermediate = {}
-            if (response.data.errorCode) {
-                console.error("Failed to load champions");
-                return;
-            }
-            response.data.forEach((champion) => {
-                intermediate[champion.id] = champion;
-            });
-            globalChampions = intermediate;
-        })
-    }
-
-    const fetchSummonerSpells = () => {
-        axios.get(Globals.PROXY_PREFIX + "/lol-game-data/assets/v1/summoner-spells.json").then((response) => {
-            let intermediate = {};
-            if (response.data.errorCode) {
-                console.error("Failed to load summoner spells");
-                return;
-            }
-            response.data.forEach((spell) => {
-                intermediate[spell.id] = spell;
-            });
-            globalSpells = intermediate;
-        }).catch((error) => {
-            console.log(error);
-        });
-    }
-
-    const fetchChromaSkins = () => {
-        axios.get(Globals.PROXY_PREFIX + "/lol-game-data/assets/v1/skins.json").then((response) => {
-            let intermediate = {};
-            if (response.data.errorCode) {
-                console.error("Failed to load skins");
-                return;
-            }
-            Object.values(response.data).forEach((skin) => {
-                if (skin.chromas) {
-                    skin.chromas.forEach((chroma) => {
-                        intermediate[chroma.id] = skin.id;
-                    });
-                }
-                intermediate[skin.id] = skin.id;
-            });
-            globalChromaSkins = intermediate;
-            setTimeout(() => {
-                console.log(globalChampions);
-                console.log(getChampions())
-            },1000);
-        }).catch(() => {});
-    }
-
-    const fetchMapAssets = () => {
-        axios.get(Globals.PROXY_PREFIX + "/lol-game-data/assets/v1/map-assets/map-assets.json").then((response) => {
-            let intermediate = {};
-            if (response.data.errorCode) {
-                console.error("Failed to load map assets");
-                return;
-            }
-            Object.keys(response.data).forEach((key) => {
-                if (intermediate[key] === undefined) {
-                    const asset = response.data[key];
-                    if (asset.length > 0) {
-                        intermediate[key] = asset[0].assets;
-                    }
-                }
-            });
-            globalMapAssets = intermediate;
-            console.log(globalMapAssets);
-        }).catch(() => {});
-    }
-
     useEffect(() => {
-        if (!isConnected) return;
-        fetchMapAssets();
-        fetchChampions();
-        fetchSummonerSpells();
-        fetchChromaSkins();
+        if (isConnected) {
+            axios.get(Globals.PROXY_PREFIX + "/lol-chat/v1/me").then((response) => {
+                globalChatIdentity = response.data;
+                console.log("Chat Identity");
+                console.log(response.data);
+            }).catch((error) => {
+                console.log(error);
+            });
+        }
+
     }, [isConnected])
 
 
 
-    const renderContent = (activeTab) => {
-        switch (activeTab) {
-            case 'lobby':
-                return renderLobby(gameflowState);
-            case 'tasks':
-                return <TaskContainer taskList={taskList} />;
-            case 'loot':
-                return <LootContainer loot={loot}/>;
-            case 'profile':
-                return <ProfileContainer />;
-            case 'config':
-                return <ConfigContainer />
-            default:
-                return (<>{activeTab}</>);
-        }
-    };
-
-
-    const renderFullScreenGameInfo = (state) => {
-
-    }
-
     const renderLobby = (state) => {
         switch (state) {
-            case 'Lobby':
-                return <LobbyContainer lobbyConfig={lobby} availableQueues={queues} />;
-            break;
-            case 'Matchmaking':
+            case Globals.GAMEFLOW_READY_CHECK:
+            case Globals.GAMEFLOW_LOBBY:
+                return <LobbyContainer lobbyConfig={lobby} availableQueues={queues} assetMap={mapAssets}/>
+                break;
+            case Globals.GAMEFLOW_MATCHMAKING:
                 return <MatchmakingContainer lobbyConfig={lobby}/>
-            break;
-            case 'ReadyCheck':
-                // return <ReadyCheckContainer />
-            break;
-            case 'ChampSelect':
-                return <ReworkedChampionSelectContainer session={championSelectState}/>;
-            break;
-            case 'GameStart':
+                break;
+            case Globals.GAMEFLOW_CHAMP_SELECT:
+                return <ReworkedChampionSelectContainer session={championSelectState} champions={champions} summonerSpells={summonerSpells} chromaSkins={skins}/>;
+                break;
+            case Globals.GAMEFLOW_GAME_START:
                 return <div>GAME - START</div>;
-            break;
-            case 'InProgress':
+                break;
+            case Globals.GAMEFLOW_IN_PROGRESS:
                 return <div>GAME - INPROGRESS</div>;
-            break;
-            case 'Reconnect':
-                return <div>RECONNECT - COMPONENT</div>;
-            break;
-            case 'WaitingForStats':
+                break;
+            case Globals.GAMEFLOW_RECONNECT:
+                return <ReconnectContainer/>
+                break;
+            case Globals.GAMEFLOW_WAITING_FOR_STATS:
                 return <div>WAITING FOR STATS</div>
-            break;
-            case 'PreEndOfGame':
+                break;
+            case Globals.GAMEFLOW_PRE_END_OF_GAME:
                 return <div>PRE END OF GAME</div>
-            break;
-            case 'EndOfGame':
+                break;
+            case Globals.GAMEFLOW_END_OF_GAME:
                 return <div>END OF GAME</div>
-            break;
-            case 'None':
-            case 'TerminatedInError': //Really Rare Edge Case
-                return <LobbyGamemodeSelector availableQueues={queues}/>
-            break;
-            case 'CheckedIntoTournament':
+                break;
+            case Globals.GAMEFLOW_NONE:
+            case Globals.GAMEFLOW_TERMINATED_IN_ERROR: //Really Rare Edge Case
+                return <LobbyGamemodeSelector availableQueues={queues} assetMap={mapAssets}/>
+                break;
+            case Globals.GAMEFLOW_CHECKED_INTO_TOURNAMENT:
                 return <div>This client doesnt support clash tournaments, please use the League Client</div>
                 break;
             default:
                 return <div>Unknown State : {state}</div>
-            break;
+                break;
         }
     }
 
-  const renderFullScreen = (gameflowState) => {
-    switch (gameflowState) {
-        // case 'ChampSelect':
-        //     return (<ChampionSelectContainer session={championSelectState}/>)
-        default:
-            return renderNormalLobby()
-        break;
+
+    const renderReadyCheck = (state) => {
+        let result = (<div></div>)
+        switch (state) {
+            case 'ReadyCheck':
+                result = (<ReadyCheckContainer/>);
+                break;
+            default:
+                break;
+        }
+        return result;
     }
-  }
 
+    const changeContainer = (newContainer) => {
+        if (newContainer === container) return;
+        setContainer(newContainer);
+    }
 
-  const renderNormalLobby = () => {
+    const renderCurrentStateReminder = () => {
+        return <></>
+    }
+
+    const renderActualContent = () => {
         return (
             <>
-                <div className={styles.mainContent}>
-                    <div className={styles.containerSelector}>
-                        <button className={styles.containerButton} onClick={() => setContainer("lobby")}>Lobby</button>
-                        <button className={styles.containerButton} onClick={() => setContainer("profile")}>Profile</button>
-                        <button className={styles.containerButton} onClick={() => setContainer("loot")}>Loot</button>
-                        <button className={styles.containerButton} onClick={() => setContainer("tasks")}>Tasks</button>
-                        <button className={styles.containerButton} onClick={() => setContainer("config")}>Config</button>
+                <div className={styles.content}>
+                    <CustomBackground clientProperties={config.clientProperties} currentContainer={container} currentGameflow={gameflowState}/>
+                    {renderBackButton()}
+                    <div className={styles.currentContainer}>
+                        {renderContainer()}
                     </div>
-                    <div className={styles.contentContainer}>
-                        {(renderContent(container))}
-                    </div>
+                    <FriendList friends={friends} collapsed={friendListCollapsed} self={presence}/>
                 </div>
-                <div className={styles.friendsTab}>
-                    <div className={styles.friendsGrid}>
-                        {/* Render the FriendComponents */}
-                        {
-                            Object.values(friends)
-                                .sort((a, b) => {
-                                    if (!a.availability) a.availability = "offline";
-                                    if (!b.availability) b.availability = "offline";
-
-                                    const availabilityIndexA = availabilityOrder.indexOf(a.availability);
-                                    const availabilityIndexB = availabilityOrder.indexOf(b.availability);
-
-                                    if (availabilityIndexA !== availabilityIndexB) {
-                                        return availabilityIndexA - availabilityIndexB;
-                                    } else {
-                                        const displayNameA = a.name.toLowerCase();
-                                        const displayNameB = b.name.toLowerCase();
-
-                                        if (displayNameA < displayNameB) {
-                                            return -1;
-                                        } else if (displayNameA > displayNameB) {
-                                            return 1;
-                                        } else {
-                                            return 0;
-                                        }
-                                    }
-                                })
-                                .map((friend) => (
-                                    <FriendComponent key={friend.puuid} friend={friend} setCurrentConversationFriend={setCurrentChatFriend} />
-                                ))
-                        }
-                    </div>
-                </div>
-                {
-                    Globals.isJsonObjectEmpty(currentChatFriend) ?
-                        (<></>) :
-                        (<div className={styles.friendsChatWindow}>
-                            <FriendMessageWindow friend={currentChatFriend} onClose={closeCurrentChat}/>
-                        </div>)
-                }
+                {renderReadyCheck(gameflowState)}
+                {renderCurrentStateReminder()}
             </>
         )
-  }
+    }
 
-  return (
-    <div className={styles.container}>
-      <Head>
-        <title>{Globals.BROWSER_TITLE}</title>
-        <link rel="icon" href={`${Globals.STATIC_PREFIX}/assets/svg/icon.svg`} />
-      </Head>
-      <main>
-          <div className={styles.mainContainer} ref={mainDiv}>
-              {
-                  renderFullScreen(gameflowState)
-              }
-          </div>
-      </main>
-        {isConnected ? (null): (<LoadingComponent reason={`Waiting for the League Client to start`}/>)}
-    </div>
-  )
+    const renderContainer = () => {
+        switch (container) {
+            case Globals.CONTAINER_NONE:
+                return (
+                    <>
+                        <div>
+                            <div className={styles.selectContainer}>
+                                <div className={styles.selectElement + " " +styles.selectElementPlay} onClick={() => {changeContainer(Globals.CONTAINER_PLAY)}}>
+                                    PLAY
+                                </div>
+                                <div className={styles.selectElement} onClick={() => {setContainer(Globals.CONTAINER_COLLECTION)}}>
+                                    Collection
+                                </div>
+                                <div className={styles.selectElement} onClick={() => {setContainer(Globals.CONTAINER_LOOT)}}>
+                                    Loot
+                                </div>
+                                <div className={styles.selectElement} onClick={() => {setContainer(Globals.CONTAINER_PROFILE)}}>
+                                    Profile
+                                </div>
+                                <div className={styles.selectElement} onClick={() => {setContainer(Globals.CONTAINER_TASKS)}}>
+                                    Tasks
+                                </div>
+                                <div className={styles.selectElement} onClick={() => {setContainer(Globals.CONTAINER_CONFIG)}}>
+                                    Configuration
+                                </div>
+                            </div>
+                        </div>
+                    </>
+                )
+            case Globals.CONTAINER_PLAY:
+                return (
+                    renderLobby(gameflowState)
+                )
+            case Globals.CONTAINER_COLLECTION:
+                return (
+                    <Collection skinsByChampion={skinsByChampion}/>
+                )
+            case Globals.CONTAINER_LOOT:
+                return (
+                    <LootContainer loot={loot}/>
+                )
+            case Globals.CONTAINER_PROFILE:
+                return (
+                    <>TODO: PROFILE</>
+                )
+            case Globals.CONTAINER_TASKS:
+                return (
+                    <TaskContainer champions={champions}/>
+                )
+            case Globals.CONTAINER_CONFIG:
+                return (
+                    <ReworkedConfigContainer config={config} patcherStatus={patcherStatus}/>
+                )
+            default:
+                return (
+                    <div></div>
+                )
+        }
+    }
+
+    const renderBackButton = () => {
+        if (container === Globals.CONTAINER_NONE) return <></>;
+        return (
+            <div className={styles.backButtonContainer} >
+                <div className={styles.backButton} onClick={() => {changeContainer(Globals.CONTAINER_NONE)}}>
+                    Back
+                </div>
+                <div className={styles.backButtonCurrentContainer} >
+                    &#47;&#47; {container}
+                </div>
+            </div>
+        )
+    }
+
+
+    return (
+        <div className={styles.appContainer}>
+            <Head>
+                <title>{Globals.BROWSER_TITLE}</title>
+                <link rel="icon" href={`${Globals.STATIC_PREFIX}/assets/svg/icon.svg`}/>
+            </Head>
+
+            {isConnected ? renderActualContent() : (<LoadingComponent reason={`Waiting for the League Client to start`}/>)}
+        </div>
+    )
 }

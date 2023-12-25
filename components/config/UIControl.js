@@ -1,4 +1,4 @@
-import {axiosSend} from "../../pages/indexRework";
+import {axiosSend} from "../../pages";
 import styles from "../../styles/config/UIControl.module.css"
 
 export default  function UIControl() {

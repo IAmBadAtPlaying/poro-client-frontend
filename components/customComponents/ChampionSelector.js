@@ -11,7 +11,7 @@ export default function ChampionSelector({champions, currentValue, onChange}) {
         let options = [];
 
         options.push(
-            <option value={""} key={"unselected"} disabled={true}>Select an option</option>
+            <option value={""} selected={true} disabled={true}>Select an option</option>
         )
         Object.values(champions).sort(function (a,b) {
             return a.name.localeCompare(b.name);

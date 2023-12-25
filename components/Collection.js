@@ -106,6 +106,7 @@ export default function Collection({skinsByChampion}) {
                     Object.entries(playerSkins).sort(([championIdA, skinsA], [championIdB, skinsB]) => {
                         return skinsA[championIdA + "000"].name.localeCompare(skinsB[championIdB + "000"].name);
                     }).map(([championId, skins], index) => {
+                        console.log(skins[championId + "000"]);
                         return (
                             <div key={"Champion-" + index} className={styles.singleChampionSection}>
                                 <div className={styles.singleChampionHeader}>
@@ -128,18 +129,29 @@ export default function Collection({skinsByChampion}) {
                                             //     return <slot key={"Skin-" + skinIndex}></slot>;
 
                                             return (
-                                                <div key={"Skin-" + skinIndex} className={styles.singleEntry}>
+                                                <div key={"Skin-" + skinIndex} className={styles.singleEntry} onClick={() => {
+                                                    window.open(Globals.PROXY_PREFIX + skin.uncenteredSplashPath, "_blank")
+                                                }}>
                                                     <div className={getSkinInfoClass(skin, skinId)}>
                                                         <div className={styles.skinInfoName}>
                                                             {skin.name}
                                                         </div>
                                                     </div>
-                                                    <div className={styles.entryImageContainer}>
-                                                        <Image loading={"lazy"}
-                                                               src={Globals.PROXY_STATIC_PREFIX + skin.loadScreenPath}
-                                                               fill
-                                                        />
-                                                    </div>
+                                                    {
+                                                        skin.splashVideoPath == null ? (
+                                                                <div className={styles.entryImageContainer}>
+                                                                    <Image loading={"lazy"}
+                                                                           src={Globals.PROXY_STATIC_PREFIX + skin.loadScreenPath}
+                                                                           fill
+                                                                    />
+                                                                </div>
+                                                            ) :
+                                                            <div className={styles.entryImageContainer}>
+                                                                <video autoPlay={true} loop={true} muted={true} playsInline={true} preload={"auto"} className={styles.entryVideo}>
+                                                                    <source src={Globals.PROXY_STATIC_PREFIX + skin.splashVideoPath} type="video/webm"/>
+                                                                </video>
+                                                            </div>
+                                                    }
                                                 </div>
                                             )
                                         })
@@ -174,11 +186,16 @@ export default function Collection({skinsByChampion}) {
                 }}>Emotes
                 </button>
             </div>
-            <div className={styles.collectionContainer}>
-                {
-                    renderCollectionTab()
-                }
+            <div className={styles.collectionWrapper}>
+                <div className={styles.collectionTransitionTop}/>
+                <div className={styles.collectionContainer}>
+                    {
+                        renderCollectionTab()
+                    }
+                </div>
+                <div className={styles.collectionTransitionBottom}/>
             </div>
+
         </div>
     )
 

@@ -3,7 +3,7 @@ import styles from "../../styles/config/PatcherStatus.module.css"
 export default function PatcherStatus({patcherStatus}) {
 
     const renderSingleComponent = (component, index) => {
-        if (!component) return <div key={"Key-" + index}></div>;
+        if (component === undefined) return <div key={"Key-" + index}></div>;
 
         const action = component.action;
         const id = component.id;
@@ -73,7 +73,8 @@ export default function PatcherStatus({patcherStatus}) {
                 </div>
                 <div className={styles.statusDetailed}>
                     {
-                        patcherStatus.components.map((component, index) => {
+                        patcherStatus.components === undefined ? <></> :
+                            patcherStatus.components.map((component, index) => {
                             return renderSingleComponent(component, index)
                         })
                     }

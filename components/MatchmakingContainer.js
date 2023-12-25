@@ -1,7 +1,7 @@
 import LobbyMemberCard from "./LobbyMemberCard";
 import styles from "../styles/LobbyContainer.module.css"
 import * as Globals from '../globals'
-import {axiosSend} from "../pages/indexRework";
+import {axiosSend} from "../pages";
 
 function stopMatchmaking () {
     axiosSend("DELETE", "/lol-lobby/v2/lobby/matchmaking/search", "");

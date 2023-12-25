@@ -12,10 +12,36 @@
 
 }
 
-.collectionContainer {
-    position: relative;
-
+.collectionWrapper {
     height: 90%;
+    width: 100%;
+
+    overflow: hidden;
+}
+
+.collectionTransitionTop {
+    position: absolute;
+    height: 5%;
+    width: 100%;
+
+    background: linear-gradient( rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+    z-index: 2;
+}
+
+.collectionTransitionBottom {
+    position: absolute;
+    bottom: 0;
+    height: 5%;
+    width: 100%;
+
+    background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+    z-index: 2;
+}
+
+.collectionContainer {
+    position: absolute;
+
+    height: 100%;
     width: 100%;
 
     overflow-y: scroll;
@@ -40,13 +66,22 @@
     position: relative;
     height: 100%;
     width: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.entryVideo {
+    position: relative;
+    height: 100%;
 }
 
 .singleChampionSelection {
 }
 
 .singleChampionHeader {
-    width: available;
+    width: auto;
     height: 10%;
 
     font-family: "Beaufort for LOL";
@@ -85,7 +120,7 @@
 
     display: flex;
     justify-content: center;
-    align-items: end;
+    align-items: flex-end;
 
     user-select: none;
 }

@@ -1,12 +1,12 @@
 import LobbyMemberCard from "./LobbyMemberCard";
 import styles from "../styles/LobbyContainer.module.css"
 import * as Globals from '../globals'
-import * as Index from '../pages/index'
 import {useEffect, useState} from "react";
 import LobbyContainerRoleSelection from "./LobbyContainerRoleSelection";
 import LobbyGamemodeSelector from "./LobbyGamemodeSelector";
 import {PROXY_STATIC_PREFIX} from "../globals";
-import {axiosSend} from "../pages/indexRework";
+import {axiosSend} from "../pages";
+import axios from "axios";
 
 function startMatchmaking () {
     console.log("Starting Matchmaking")
@@ -71,6 +71,29 @@ export default function LobbyContainer({lobbyConfig, availableQueues, assetMap})
         )
     }
 
+    const handleDrop = (event) => {
+        console.log("Dropped")
+        event.preventDefault();
+
+        const itemData = event.dataTransfer.getData("text/plain");
+        const item = JSON.parse(itemData);
+
+        console.log(item);
+
+        if (item.summonerId) {
+            const inviteElement = {}
+            inviteElement["toSummonerId"] = item.summonerId
+
+            const inviteBody = []
+            inviteBody.push(inviteElement)
+            axios.post(Globals.PROXY_PREFIX+"/lol-lobby/v2/lobby/invitations", JSON.stringify(inviteBody))
+                .then(r => {})
+                .catch(e => {
+                    console.log(e);
+                })
+        }
+    }
+
     const renderFunction = () => {
       return (
           Globals.isJsonObjectEmpty(lobbyConfig) || (lobbyConfig === undefined)? (
@@ -81,7 +104,7 @@ export default function LobbyContainer({lobbyConfig, availableQueues, assetMap})
                       <div className={styles.lobby_type_display} onClick={() => setShowSelector(true)}>
                           {"Current Gamemode: " + lobbyConfig.gameConfig.gameMode}
                       </div>
-                      <div className={styles.member_container}>
+                      <div className={styles.member_container} onDragOver={event => {event.preventDefault()}} onDrop={(e) => {handleDrop(e)}}>
                           {lobbyConfig.members.map((member, index) => {
                               if (!member.puuid) {
                               }

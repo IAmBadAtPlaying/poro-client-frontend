@@ -2,7 +2,7 @@ import * as Globals from "../../globals";
 import styles from '../../styles/gameflow/ReadyCheck.module.css';
 import {useEffect, useState} from "react";
 import ChampSelectCountdown from "./ChampSelectCountdown";
-import {axiosSend} from "../../pages/indexRework";
+import {axiosSend} from "../../pages";
 
 export default function ReadyCheckContainer() {
     useEffect(() => {

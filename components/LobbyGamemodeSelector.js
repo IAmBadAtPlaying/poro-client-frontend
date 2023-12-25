@@ -2,7 +2,7 @@ import * as Globals from '../globals';
 import styles from '../styles/LobbyGamemodeSelector.module.css'
 import GamemodeElement from "./GamemodeElement";
 import {useEffect, useState} from "react";
-import {AUDIO_PLAY_BIG_BUTTON, axiosSend, send} from "../pages/indexRework";
+import {AUDIO_PLAY_BIG_BUTTON, axiosSend, send} from "../pages";
 import {isJsonObjectEmpty} from "../globals";
 
 

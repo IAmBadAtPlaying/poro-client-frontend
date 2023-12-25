@@ -1,5 +1,5 @@
 import styles from "../../styles/gameflow/ReconnectContainer.module.css";
-import {axiosSend} from "../../pages/indexRework";
+import {axiosSend} from "../../pages";
 
 export default function ReconnectContainer() {
 

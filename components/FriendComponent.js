@@ -2,7 +2,7 @@ import styles from '../styles/FriendComponent.module.css';
 import {useEffect, useRef, useState} from "react";
 import * as Globals from "../globals"
 import Image from "next/image";
-import {axiosSend} from "../pages/indexRework";
+import {axiosSend} from "../pages";
 import FriendComponentContextMenu from "./FriendComponentContextMenu";
 
 export default function FriendComponent({friend, setCurrentConversationFriend}) {

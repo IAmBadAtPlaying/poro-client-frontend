@@ -1,8 +1,10 @@
 import {isJsonObjectEmpty, PROXY_STATIC_PREFIX} from "../globals";
 import {useEffect, useState} from "react";
 import styles from "../styles/LootContainer.module.css";
-import {send} from "../pages/indexRework";
+import {axiosSend, send} from "../pages";
+import * as Globals from "../globals";
 import Image from "next/image";
+import axios from "axios";
 
 
 export default function LootContainer({loot}) {
@@ -84,7 +86,14 @@ export default function LootContainer({loot}) {
         });
         setDisenchantLoot({});
         setAwaitingDisenchant(true);
-        send([6, lootToDisenchant]);
+        axios.post(Globals.REST_PREFIX + "/loot/disenchant", lootToDisenchant)
+            .then((response) => {
+                setAwaitingDisenchant(false);
+            })
+            .catch((error) => {
+                setAwaitingDisenchant(false);
+            })
+        setAwaitingDisenchant(true)
     };
 
     const sendRerollLoot = () => {
@@ -95,7 +104,7 @@ export default function LootContainer({loot}) {
         });
         setDisenchantLoot({});
         setAwaitingDisenchant(true);
-        send([7, lootToDisenchant]);
+        // send([7, lootToDisenchant]);
     }
 
     const handleDropToDisplay = (event) => {

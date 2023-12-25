@@ -1,4 +1,4 @@
-import {axiosSend} from "../pages/indexRework";
+import {axiosSend} from "../pages";
 
 export default function FriendComponentContextMenu({x,y, onClose,friend}) {
     const style = {

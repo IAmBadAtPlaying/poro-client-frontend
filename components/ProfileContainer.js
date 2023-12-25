@@ -1,5 +1,5 @@
 import {useRef, useState} from "react";
-import {axiosSend, send} from "../pages/indexRework";
+import {axiosSend, send} from "../pages";
 import * as Globals from "../globals";
 import styles from "../styles/ProfileContainer.module.css";
 import FriendMessageWindow from "./messaging/FriendMessageWindow";
