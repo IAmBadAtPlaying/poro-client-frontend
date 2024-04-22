@@ -1,0 +1,33 @@
+.container {
+    z-index: 9999;
+
+    position: absolute;
+    height: 2dvw;
+    aspect-ratio: 1;
+
+    bottom: 0;
+    right: 0;
+
+    margin: 10px;
+
+    cursor: pointer;
+}
+
+
+.svg {
+    fill: #FAFAFA;
+    animation: animateSVGFill 20s ease-in-out infinite;
+}
+
+.svg:hover {
+    animation-play-state: paused;
+}
+
+@keyframes animateSVGFill {
+    0% {
+        fill: #F2F2F2;
+    }
+    50% {
+        fill: #2F2F2F;
+    }
+}

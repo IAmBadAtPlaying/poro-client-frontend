@@ -1,0 +1,43 @@
+.container {
+    position: absolute;
+    top: 0;
+
+    left: 50%;
+    transform: translate(-50%, 0%);
+
+    height: 10%;
+    width: 25%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    clip-path: polygon(0% 0%, 100% 00%, 85% 100%, 15% 100%);
+
+    animation: slideIn 0.15s linear forwards;
+
+    background-color: #2f2f2f;
+}
+
+.containerHide {
+    animation: slideOut 0.15s linear forwards;
+}
+
+
+@keyframes slideIn {
+    0% {
+        transform: translate(-50%, -100%);
+    }
+    100% {
+        transform: translate(-50%, 0%);
+    }
+}
+
+@keyframes slideOut {
+    0% {
+        transform: translate(-50%, 0%);
+    }
+    100% {
+        transform: translate(-50%, -100%);
+    }
+}

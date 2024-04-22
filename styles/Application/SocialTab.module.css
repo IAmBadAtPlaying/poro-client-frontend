@@ -1,0 +1,21 @@
+.container {
+    --FRIENDLIST_ANIMATION_DURATION: 0.5s;
+    --FRIENDLIST_SLIDE_IN_DELAY: 0.5s;
+
+    position: absolute;
+    right: 0;
+    height: 100%;
+    width: 20%;
+
+    transform: translateX(75%);
+    transition: transform var(--FRIENDLIST_ANIMATION_DURATION);
+    transition-delay: var(--FRIENDLIST_SLIDE_IN_DELAY);
+
+    backdrop-filter: blur(5px);
+}
+
+.container:hover {
+    transform: translateX(0);
+    transition: transform var(--FRIENDLIST_ANIMATION_DURATION);
+}
+
