@@ -1,6 +1,8 @@
-const isDev = true;
+require('dotenv').config();
 
-/** @type {import('next').NextConfig} */
+const isDev = process.env.IS_DEV === 'true';
+const doExport = process.env.DO_EXPORT === 'true';
+
 module.exports = {
     images: {
         unoptimized: true,
@@ -12,7 +14,8 @@ module.exports = {
     ...(!isDev && {
         basePath: '/static',
         assetPrefix: '/static'
+    }),
+    ...(doExport && {
+        output: 'export'
     })
 };
-
-// module.exports = nextConfig;

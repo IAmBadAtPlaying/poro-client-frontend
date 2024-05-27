@@ -3,10 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "export": "next export",
-    "start": "next start",
+    "dev": "cross-env IS_DEV=true DO_EXPORT=false next dev",
+    "build": "cross-env IS_DEV=false DO_EXPORT=true next build",
+    "start": "cross-env IS_DEV=false DO_EXPORT=false next start",
     "lint": "next lint"
   },
   "dependencies": {
@@ -15,6 +14,7 @@
     "@types/react-redux": "^7.1.33",
     "axios": "^1.6.5",
     "bootstrap": "^5.3.3",
+    "dotenv": "^16.4.5",
     "eslint-plugin-html": "^7.1.0",
     "howler": "^2.2.4",
     "next": "^14.2.3",
@@ -31,6 +31,7 @@
     "@types/react-dom": "^18",
     "@typescript-eslint/eslint-plugin": "^6.17.0",
     "@typescript-eslint/parser": "^6.17.0",
+    "cross-env": "^7.0.3",
     "eslint": "^8.56.0",
     "eslint-config-next": "14.0.4",
     "typescript": "^5"
