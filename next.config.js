@@ -1,8 +1,9 @@
-const isDev = true;
+require('dotenv').config();
 
-/** @type {import('next').NextConfig} */
+const isDev = process.env.IS_DEV === 'true';
+const doExport = process.env.DO_EXPORT === 'true';
+
 module.exports = {
-    output: 'export',
     images: {
         unoptimized: true,
         domains: ['127.0.0.1'] // Add the hostname(s) here
@@ -13,7 +14,8 @@ module.exports = {
     ...(!isDev && {
         basePath: '/static',
         assetPrefix: '/static'
+    }),
+    ...(doExport && {
+        output: 'export'
     })
 };
-
-// module.exports = nextConfig;
