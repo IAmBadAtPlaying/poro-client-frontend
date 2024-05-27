@@ -8,7 +8,7 @@ export default function LoadingComponent() {
     const internalState = useSelector((state: AppState) => state.internalState);
 
     const requestSearchForLeagueProcess = () => {
-        axios.post(Globals.REST_V2_PREFIX + '/status/findProcess')
+        axios.post(Globals.REST_PREFIX + '/status/findProcess')
             .catch((error) => {
                 console.error(error);
             });
@@ -63,7 +63,7 @@ export default function LoadingComponent() {
         <div className={styles.container}>
             <div className={styles.mainInformation}>
                 <div className={styles.loadingGif}>
-                    <img src={Globals.STATIC_PREFIX + '/assets/gifs/Poro.gif'} alt={'Please restart the application'}/>
+                    <img src={Globals.STATIC_PREFIX + '/assets/gifs/Poro.gif'} alt={'Please restart the application'} className={styles.loadingGif}/>
                 </div>
                 <div className={styles.loadingText} draggable={false}>
                     {

@@ -3,9 +3,9 @@ import * as Globals from '../../../Globals';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import {useSelector} from 'react-redux';
 import {AppState} from '../../../store';
-import {JSX, RefAttributes} from 'react';
-import Tooltip, {TooltipProps} from 'react-bootstrap/Tooltip';
+import Tooltip from 'react-bootstrap/Tooltip';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import PrettyImage from '../../General/PrettyImage';
 
 export default function ProfileDisplay() {
 
@@ -22,9 +22,9 @@ export default function ProfileDisplay() {
     const xpSinceLastLevel = currentSummoner?.xpSinceLastLevel;
     const xpPercentage = currentSummoner?.percentCompleteForNextLevel;
 
-    const renderLevelProgressBarTooltip = (currentXp: number, xpTowardsNextLevel: number) => (
-        <Tooltip id="button-tooltip">
-            {currentXp} / {xpTowardsNextLevel} XP
+    const renderLevelProgressBarTooltip = (percentage: number, currentXp: number, xpTowardsNextLevel: number) => (
+        <Tooltip>
+            {currentXp} / {xpTowardsNextLevel} XP ({percentage}%)
         </Tooltip>
     );
 
@@ -36,10 +36,11 @@ export default function ProfileDisplay() {
         return (
             <>
                 <OverlayTrigger overlay={renderLevelProgressBarTooltip(
+                    xpPercentage,
                     xpSinceLastLevel,
                     xpTowardsNextLevel
                 )} placement={'bottom'} delay={{show: 250, hide: 400}}>
-                    <ProgressBar now={xpPercentage} label={xpPercentage + '%'} style={{transform: 'translateY(25%)'}}/>
+                    <ProgressBar now={xpPercentage} style={{height: '0.7dvw', transform: 'translateY(-10%)'}}/>
                 </OverlayTrigger>
             </>
         );
@@ -66,16 +67,18 @@ export default function ProfileDisplay() {
             <div className={styles.shortFlex}>
                 <div className={styles.profileIconContainer}>
                     {profileIcon ?
-                        <img className={styles.profileIcon}
-                             src={'http://localhost:35199/proxy/lol-game-data/assets/v1/profile-icons/' + profileIcon + '.jpg'}
-                             alt="Profile Icon"/>
+                        <PrettyImage imgProps={{
+                            src: Globals.PROXY_STATIC_PREFIX + '/lol-game-data/assets/v1/profile-icons/' + profileIcon + '.jpg',
+                            alt: 'Profile Icon',
+                            className: styles.profileIcon
+                        }}
+                        />
                         :
                         <></>}
                     <div className={Globals.applyMultipleStyles(
                         styles.activityDiv,
                         getActivityClassName(activity)
                     )}>
-
                     </div>
                 </div>
             </div>
@@ -84,13 +87,20 @@ export default function ProfileDisplay() {
                     {gameName}
                 </div>
                 <div className={styles.levelContainer}>
-                    {
-                        renderLevel()
-                    }
+                    <div className={styles.levelText}>
+                        {
+                            level ? 'Level ' + level : ''
+                        }
+                    </div>
+                    <div className={styles.renderLevelContainer}>
+                        {
+                            renderLevel()
+                        }
+                    </div>
                 </div>
                 <div className={styles.activityDescription}>
                     {
-                        Globals.remoteActivityToActivity(detailedActivity)
+                        Globals.getActivityFromRemoteActivity(detailedActivity, '')
                     }
                 </div>
             </div>

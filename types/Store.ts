@@ -58,6 +58,16 @@ export interface InternalState {
 
 //======================== FRIENDS ========================
 
+export interface FriendGroup {
+    collapsed: boolean,
+    id: number,
+    isLocalized: boolean,
+    isMetaGroup: boolean,
+    name: string,
+    priority: number
+}
+
+
 export interface LolPresence {
     bannerIdSelected: number,
     challengeCrystalLevel: number,
@@ -102,7 +112,7 @@ export interface Friend {
     gameTag: string,
     groupId: number,
     groupName: string,
-    icon: number,
+    iconId: number,
     id: string,
     isP2PConversationMuted: boolean,
     lastSeenOnlineTimestamp: any,
@@ -157,7 +167,6 @@ export interface QueueRewards {
 export enum QueueAvailability {
     AVAILABLE = 'Available',
     PLATFORM_DISABLED = 'PlatformDisabled'
-
 }
 
 export interface Queue {
@@ -231,27 +240,25 @@ export interface ChampionState {
     [key: string]: MinimalChampion;
 }
 
+export interface OwnedChampion {
+    expirationDate: string,
+    f2p: boolean,
+    inventoryType: 'CHAMPION',
+    itemId: number,
+    loyalty: boolean,
+    loyaltySources: string[],
+    owned: boolean,
+    ownershipType: string,
+    payload: object;
+    purchaseDate: string,
+    quantity: number,
+    rental: boolean,
+    uuid: string,
+    wins: number,
+}
 
-export interface Skin {
-    id: number,
-    isBase: boolean,
-    name: string,
-    splashPath: string,
-    uncenteredSplashPath: string,
-    tilePath: string,
-    loadScreenPath: string,
-    skinType: string,
-    isLegacy: boolean,
-    splashVideoPath: string | null,
-    collectionSplashVideoPath: string | null,
-    featuresText: string | null,
-    chromaPath: string | null,
-    emblems: string | null,
-    regionRarityId: number,
-    rarityGemPath: string | null,
-    skinLines: object[] | null,
-    skinAugments: object[] | null,
-    description: string | null,
+export interface OwnedChampionState {
+    [key: number]: OwnedChampion;
 }
 
 //======================== HONOR EOG ========================
@@ -264,7 +271,7 @@ export interface EOGHonorPlayer {
     gameName: string,
 }
 
-export interface EOGHonor {
+export interface EOGHonorState {
     gameId: number,
     eligiblePlayers: EOGHonorPlayer[],
 }
@@ -392,7 +399,12 @@ export interface LobbyConfig {
 export interface LobbyRegalia {
     bannerType: string,
     crestType: string,
-    highestRankedEntry: object,
+    highestRankedEntry: {
+        division: string,
+        queueType: string,
+        splitRewardLevel: string,
+        tier: string
+    },
     lastSeasonHighestRank: object,
     profileIconId: number,
     selectedPrestigeCrest: number,
@@ -511,40 +523,40 @@ export interface RemoteMapAssetProperties {
     suppressRunesMasteriesPerks: boolean;
 }
 
-export interface MapAssetAssets {
+export interface MapAssetAssets extends Partial<Record<string, string>> {
     'champ-select-flyout-background'?: string;
     'champ-select-planning-intro'?: string;
-    'game-select-icon-default': string;
-    'game-select-icon-disabled': string;
-    'game-select-icon-hover': string;
-    'icon-defeat': string;
-    'icon-empty': string;
-    'icon-hover': string;
-    'icon-leaver': string;
-    'icon-victory': string;
-    'parties-background': string;
-    'social-icon-leaver': string;
-    'social-icon-victory': string;
-    'game-select-icon-active': string;
-    'ready-check-background': string;
-    'map-north': string;
-    'map-south': string;
-    'gameflow-background': string;
-    'icon-v2': string;
-    'icon-defeat-v2': string;
-    'icon-loss-forgiven-v2': string;
-    'icon-leaver-v2': string;
-    'gameflow-background-dark': string;
-    'champ-select-background-sound': string;
-    'gameselect-button-hover-sound': string;
-    'music-inqueue-loop-sound': string;
-    'postgame-ambience-loop-sound': string;
-    'sfx-ambience-pregame-loop-sound': string;
-    'ready-check-background-sound': string;
-    'game-select-icon-active-video': string;
-    'game-select-icon-intro-video': string;
-    'icon-defeat-video': string;
-    'icon-victory-video': string;
+    'game-select-icon-default'?: string;
+    'game-select-icon-disabled'?: string;
+    'game-select-icon-hover'?: string;
+    'icon-defeat'?: string;
+    'icon-empty'?: string;
+    'icon-hover'?: string;
+    'icon-leaver'?: string;
+    'icon-victory'?: string;
+    'parties-background'?: string;
+    'social-icon-leaver'?: string;
+    'social-icon-victory'?: string;
+    'game-select-icon-active'?: string;
+    'ready-check-background'?: string;
+    'map-north'?: string;
+    'map-south'?: string;
+    'gameflow-background'?: string;
+    'icon-v2'?: string;
+    'icon-defeat-v2'?: string;
+    'icon-loss-forgiven-v2'?: string;
+    'icon-leaver-v2'?: string;
+    'gameflow-background-dark'?: string;
+    'champ-select-background-sound'?: string;
+    'gameselect-button-hover-sound'?: string;
+    'music-inqueue-loop-sound'?: string;
+    'postgame-ambience-loop-sound'?: string;
+    'sfx-ambience-pregame-loop-sound'?: string;
+    'ready-check-background-sound'?: string;
+    'game-select-icon-active-video'?: string;
+    'game-select-icon-intro-video'?: string;
+    'icon-defeat-video'?: string;
+    'icon-victory-video'?: string;
 }
 
 export interface RemoteTutorialCard {
@@ -607,6 +619,207 @@ export interface CurrentSummonerState {
     unnamed: boolean,
     xpSinceLastLevel: number,
     xpUntilNextLevel: number
+}
+
+//======================= SUMMONER SPELLS =======================
+
+export interface SummonerSpell {
+    id: number,
+    name: string,
+    description: string,
+    summonerLevel: number,
+    cooldown: number,
+    gameModes: string[],
+    iconPath: string,
+}
+
+export interface SummonerSpellState extends Record<number, SummonerSpell> {}
+
+//======================= SKINS =======================
+
+export interface Skin {
+    id: number,
+    isBase: boolean,
+    name: string,
+    splashPath: string,
+    uncenteredSplashPath: string,
+    tilePath: string,
+    loadScreenPath: string,
+    loadScreenVintagePath: string,
+    skinType: string,
+    rarity: string,
+    isLegacy: boolean,
+    splashVideoPath: string | null,
+    collectionSplashVideoPath: string | null,
+    featuresText: string | null,
+    chromaPath: string | null,
+    emblems: unknown,
+    regionRarityId: number,
+    rarityGemPath: null,
+    skinLines: {
+        id: number,
+    }[],
+    skinAugments: null,
+    description: string,
+    chromas?: {
+        id: number,
+        name: string,
+        chromaPath: string,
+        colors: string[],
+        description: {
+            region: string,
+            description: string
+        }[],
+        rarities: {
+            region: string,
+            description: number
+        }[]
+    }[]
+}
+
+export interface OwnedSkin {
+    expirationDate: string,
+    f2p: boolean,
+    inventoryType: 'CHAMPION_SKIN',
+    itemId: number,
+    loyalty: boolean,
+    loyaltySources: string[],
+    owned: boolean,
+    ownershipType: string,
+    payload: object;
+    purchaseDate: string,
+    quantity: number,
+    rental: boolean,
+    uuid: string,
+    wins: number,
+}
+
+export interface OwnedSkinState extends Record<number, OwnedSkin> {}
+
+export interface SkinState extends Record<number, Skin> {}
+
+//This maps the chroma ID to the parent skin ID
+export interface ChromaMap extends Record<number, number> {}
+
+//This maps the champion ID to the skin IDs
+export interface ChampionSkinMap extends Record<number, number[]> {}
+
+//======================= MATCHMAKING =======================
+
+export interface MatchmakingSearchState extends Record<string, any> {
+    dodgeData: {
+        dodgerId: number,
+        state: string
+    },
+    estimatedQueueTime: number,
+    isCurrentlyInQueue: boolean,
+    readyCheck: {
+        dodgeWarning: string,
+        playerResponse: string,
+        state: string,
+        suppressUx: boolean,
+        timer: number
+    }
+    searchState: string,
+    timeInQueue: number
+}
+
+
+//======================= CHAMP SELECT =======================
+
+export interface ChampSelectState {
+    bans: {
+        myTeamBans: number[],
+        theirTeamBans: number[]
+    }
+    benchChampions: {
+        championId: number,
+        isPriority: boolean
+    }[],
+    benchEnabled: boolean,
+    gameId: number,
+    hasSimultaneousBans: boolean,
+    isCustomGame: boolean,
+    localPlayerCellId: number,
+    myTeam: {
+        assignedPosition: string,
+        banAction: {
+            actorCellId: number,
+            championId: number,
+            completed: boolean,
+            id: number,
+            isAllyAction: boolean,
+            isInProgress: boolean,
+            pickTurn: number,
+            type: string
+        } | Record<string, never>,
+        cellId: number,
+        championId: number,
+        championPickIntent: number,
+        nameVisibilityType: string,
+        obfuscatedPuuid: string,
+        obfuscatedSummonerId: number,
+        pickAction: {
+            actorCellId: number,
+            championId: number,
+            completed: boolean,
+            id: number,
+            isAllyAction: boolean,
+            isInProgress: boolean,
+            pickTurn: number,
+            type: string
+        } | Record<string, never>
+        puuId: string,
+        selectedSkinId: number
+        spell1Id: number,
+        spell2Id: number,
+        state: 'PREPARATION' | 'BANNING' | 'AWAITING_PICK' | 'AWAITING_BAN_RESULT' | 'PICKING_WITH_BAN' | 'PICKING_WITHOUT_BAN' | 'AWAITING_FINALIZATION' | 'FINALIZATION',
+        summonerId: number,
+        team: number,
+        wardSkinId: number
+    }[],
+    rerollsRemaining: number,
+    theirTeam: {
+        assignedPosition: string,
+        banAction: {
+            actorCellId: number,
+            championId: number,
+            completed: boolean,
+            id: number,
+            isAllyAction: boolean,
+            isInProgress: boolean,
+            pickTurn: number,
+            type: string
+        } | Record<string, never>,
+        cellId: number,
+        championId: number,
+        championPickIntent: number,
+        nameVisibilityType: string,
+        obfuscatedPuuid: string,
+        obfuscatedSummonerId: number,
+        pickAction: {
+            actorCellId: number,
+            championId: number,
+            completed: boolean,
+            id: number,
+            isAllyAction: boolean,
+            isInProgress: boolean,
+            pickTurn: number,
+            type: string
+        } | Record<string, never>
+        puuId: string,
+        selectedSkinId: number
+        spell1Id: number,
+        spell2Id: number,
+        state: string
+        summonerId: number,
+        team: number,
+        wardSkinId: number
+    }[],
+    timer: {
+        phase: 'PLANNING' | 'BAN_PICK' | 'FINALIZATION' | 'GAME_STARTING',
+        isInfinite: boolean,
+    }
 }
 
 //=========================================================

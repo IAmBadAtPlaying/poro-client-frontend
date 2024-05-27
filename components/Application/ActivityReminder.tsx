@@ -10,12 +10,13 @@ export default function ActivityReminder() {
     const activeContainers = useSelector((state: AppState) => state.activeContainer);
     const lobbyState = useSelector((state: AppState) => state.lobbyState);
 
+    const mapAssets = useSelector((state: AppState) => state.mapAssets);
 
     const dispatch = useDispatch();
 
     const renderCustomLobbyInfo = () => {
-        const team1Members = lobbyState?.gameConfig?.customTeam100
-        const team2Members = lobbyState?.gameConfig?.customTeam200
+        const team1Members = lobbyState?.gameConfig?.customTeam100;
+        const team2Members = lobbyState?.gameConfig?.customTeam200;
 
         return (<p>
             Custom Game: {team1Members?.length} vs {team2Members?.length}
@@ -27,8 +28,17 @@ export default function ActivityReminder() {
         const maximumSize = members?.length;
         const presentMembers = members?.filter((member) => member?.puuid).length;
 
+        const mapId = lobbyState?.gameConfig?.mapId;
+        const gameModeName = lobbyState?.gameConfig?.gameMode;
+
         return (
-            <p>{presentMembers} / {maximumSize} Member</p>
+            <>
+                {/*<video src={Globals.PROXY_PREFIX + '/'+Globals.getSpecificMapAsset(mapAssets, mapId, gameModeName, '')}*/}
+                {/*    autoPlay={true} loop={true} muted={true} style={{height: '100%', width: ''}}>*/}
+
+                {/*</video>*/}
+                <p>{presentMembers} / {maximumSize} Member</p>
+            </>
         );
 
     };
@@ -44,10 +54,9 @@ export default function ActivityReminder() {
 
     const hideContainer = () => {
         return (
-            <div className={Globals.applyMultipleStyles(
-                styles.container,
-                styles.containerHide
-            )}>
+            <div className={
+                styles.container
+            }>
             </div>
         );
     };
@@ -87,16 +96,20 @@ export default function ActivityReminder() {
             case Globals.CONTAINER_TASKS:
             case Globals.CONTAINER_PROFILE:
             case Globals.CONTAINER_CONFIG:
-            case Globals.CONTAINER_NONE:
             default:
         }
         return (
-            <div className={styles.container} onClick={() => {
+            <div className={Globals.applyMultipleStyles(
+                styles.container,
+                styles.containerShow
+            )} onClick={() => {
                 dispatch(ACTION_SET_ACTIVE_CONTAINER(ContainerState.PLAY));
             }}>
-                {
-                    renderReminderContent(phase)
-                }
+                <div className={styles.innerContainer}>
+                    {
+                        renderReminderContent(phase)
+                    }
+                </div>
             </div>
         );
     };

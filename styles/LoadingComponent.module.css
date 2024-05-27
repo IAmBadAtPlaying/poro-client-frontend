@@ -58,9 +58,9 @@
 
 .mainInformation {
     left: 30%;
-    top: 20%;
+    top: 25%;
     position: absolute;
-    height: 60%;
+    height: 40%;
     width: 40%;
 
     display: flex;
@@ -71,9 +71,10 @@
 .loadingGif {
     position: relative;
     object-fit: contain;
-    max-height: 100%;
-    max-width: 100%;
-    flex: 2;
+    height: 100%;
+    width: 100%;
+
+    flex: 3;
 
     display: flex;
     align-items: center;
@@ -88,7 +89,8 @@
     left: 10%;
     width: 80%;
 
-    font-size: 1.5em;
+    font-size: 1.5dvw;
+    font-weight: 600;
 
     display: flex;
     align-items: center;

@@ -6,7 +6,7 @@
     aspect-ratio: 1;
 
     bottom: 0;
-    right: 0;
+    left: 0;
 
     margin: 10px;
 
@@ -27,7 +27,7 @@
     0% {
         fill: #F2F2F2;
     }
-    50% {
+    66% {
         fill: #2F2F2F;
     }
 }

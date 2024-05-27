@@ -1,6 +1,6 @@
 import React from 'react';
 import * as Globals from '../Globals';
-import App from './App';
+import App from '../components/App';
 import {Provider} from 'react-redux';
 import {store} from '../store';
 import Head from 'next/head'

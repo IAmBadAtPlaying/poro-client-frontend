@@ -12,9 +12,9 @@ enum ClientBackgroundType {
 }
 
 interface BackgroundInfo {
-    clientBackgroundType: ClientBackgroundType,
-    clientBackground: string,
-    clientBackgroundContentType: string,
+    backgroundType: ClientBackgroundType,
+    background: string,
+    backgroundContentType: string,
 }
 
 export default function DynamicBackground() {
@@ -23,8 +23,9 @@ export default function DynamicBackground() {
 
     useEffect(
         () => {
-            axios.get(Globals.REST_PREFIX + '/userconfig/clientProperties')
+            axios.get(Globals.REST_PREFIX + '/config/background/info')
                 .then((response) => {
+                    console.log(response.data);
                     const backgroundInfo: BackgroundInfo = response.data as BackgroundInfo;
                     setBackgroundInfo(backgroundInfo);
                 })
@@ -50,7 +51,7 @@ export default function DynamicBackground() {
     const renderLocalVideo = () => {
         return (
             <video className={styles.content} autoPlay={true} muted={true} loop={true} disablePictureInPicture={true}>
-                <source src={Globals.REST_PREFIX + '/dynamic/userdata/background'} type={backgroundInfo?.clientBackgroundContentType}/>
+                <source src={Globals.REST_PREFIX + '/config/background'} type={backgroundInfo?.backgroundContentType}/>
             </video>
         );
     };
@@ -62,7 +63,7 @@ export default function DynamicBackground() {
     };
 
     const renderContent = () => {
-        switch (backgroundInfo?.clientBackgroundType) {
+        switch (backgroundInfo?.backgroundType) {
             case ClientBackgroundType.LOCAL_IMAGE:
                 return renderLocalImage();
             case ClientBackgroundType.LOCAL_VIDEO:
@@ -72,6 +73,7 @@ export default function DynamicBackground() {
             case ClientBackgroundType.LCU_VIDEO:
                 return renderLCUVideo();
             default:
+                console.log('Unknown background type: ', backgroundInfo?.backgroundType);
                 return (<></>);
         }
     };
