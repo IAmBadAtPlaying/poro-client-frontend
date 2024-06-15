@@ -28,7 +28,7 @@ import {
     ACTION_SET_SUMMONER_SPELLS,
     ACTION_SET_QUEUES,
     ACTION_SET_OWNED_CHAMPIONS,
-    ACTION_SET_OWNED_SKINS
+    ACTION_SET_OWNED_SKINS, ACTION_SET_WINDOW_FOCUSED
 } from '../store';
 import {
     ChampionState, ChampSelectState, CurrentSummonerState, EOGHonorState, Friend, FriendGroup,
@@ -57,8 +57,21 @@ export default function App() {
         data: object | object[];
     }
 
+    const handleVisibilityChange = () => {
+        if (document.hidden) {
+            console.log('The tab is now inactive.');
+        } else {
+            console.log('The tab is now active.');
+        }
+    };
+
     useEffect(
         () => {
+            document.addEventListener(
+                'visibilitychange',
+                handleVisibilityChange
+            );
+
             document.body.style.overflow = 'hidden';
             setTimeout(
                 () => {
@@ -69,6 +82,14 @@ export default function App() {
             );
 
             return () => {
+                document.removeEventListener(
+                    'visibilitychange',
+                    handleVisibilityChange
+                );
+
+                if (socket === undefined) {
+                    return;
+                }
                 socket.onclose = function () {
                 };
                 socket.close();
@@ -304,7 +325,7 @@ export default function App() {
                     // eslint-disable-next-line no-case-declarations
                     const ownedChampions = message.data as OwnedChampion[];
                     // eslint-disable-next-line no-case-declarations
-                    const championState = {} as OwnedChampionState
+                    const championState = {} as OwnedChampionState;
                     ownedChampions.forEach((ownedChampion) => {
                         championState[ownedChampion.itemId] = ownedChampion;
                     });

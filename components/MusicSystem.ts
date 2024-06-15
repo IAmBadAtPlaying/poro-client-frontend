@@ -174,7 +174,5 @@ export default function MusicSystem() {
         [gameflow]
     );
 
-    return (
-        <></>
-    );
+    return;
 }
