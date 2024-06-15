@@ -34,7 +34,7 @@ export default function SkinSelector({championId} : SkinSelectorProps) {
             for (const skinId of skinIds) {
                 intermediateArray.push(skins[skinId]);
             }
-
+            setIndex(0);
             setSkinsAsArray(intermediateArray);
         },
         [championId]
@@ -129,7 +129,7 @@ export default function SkinSelector({championId} : SkinSelectorProps) {
         <div className={styles.containerWrapper}>
             <div className={styles.container}>
 
-                <Carousel activeIndex={index} onSelect={handleSelect} onSlid={handleSlideEnd} interval={null}>
+                <Carousel activeIndex={index} slide={false} onSelect={handleSelect} onSlid={handleSlideEnd} interval={null}>
                     {skinsAsArray.map((element) => renderCarouselItem(element))}
                 </Carousel>
             </div>

@@ -91,6 +91,10 @@
     flex: 8;
     height: 80%;
     border: green solid 2px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
 }
 
 .middleBotSection {
@@ -308,11 +312,14 @@
 .champSelectFINALIZATION {
     position: relative;
     flex-basis: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
     height: 100%;
     margin: 10px 20px 10px 25px;
-    border-radius: 20px;
     max-height: calc(70% * 0.22);
-    border: white solid 2px;
+    box-sizing: border-box;
     overflow: hidden;
 }
 
@@ -476,7 +483,7 @@
 }
 
 .aramSkinSelector {
-    height: 90%;
+    height: 25%;
     width: 100%;
 }
 
@@ -485,4 +492,9 @@
     width: 100%;
 }
 
+
+.skinSelector {
+    height: 25%;
+    width: 100%;
+}
 

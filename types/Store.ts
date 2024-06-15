@@ -70,7 +70,7 @@ export interface FriendGroup {
 
 export interface LolPresence {
     bannerIdSelected: number,
-    challengeCrystalLevel: number,
+    challengeCrystalLevel: string,
     challengePoints: number,
     challengeTokensSelected: string, //In this wonderful form "[ID_1],[ID_2],[ID_3]", I surely love league of legends
     championId: number,
@@ -361,6 +361,7 @@ export interface Invitation {
     gameConfig: GameConfig,
     invitationId: string,
     invitationType: string,
+    state: string
 }
 
 //======================== TICKER MESSAGES ========================
@@ -825,6 +826,10 @@ export interface ChampSelectState {
 //=========================================================
 //======================= UI STATES =======================
 //=========================================================
+
+export interface WindowFocusState {
+    focused: boolean
+}
 
 //======================= CONTAINER =======================
 export enum ContainerState {

@@ -160,7 +160,7 @@ export default function ChampionSelector(
         const championBaseSkinId = championId * 1000;
 
         if (skins[championBaseSkinId]) {
-            return Globals.PROXY_STATIC_PREFIX + skins[championBaseSkinId].splashPath;
+            return Globals.PROXY_STATIC_PREFIX + skins[championBaseSkinId].tilePath;
         } else {
             return '';
         }

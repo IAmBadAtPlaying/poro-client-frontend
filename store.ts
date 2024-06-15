@@ -7,7 +7,7 @@ import {
     InternalState,
     Invitation, LobbyState, LootState, MapAssets, MatchmakingSearchState, OwnedChampionState, OwnedSkinState,
     PatcherState,
-    PresenceState, Queue, Skin, SummonerSpell, TickerMessage
+    PresenceState, Queue, Skin, SummonerSpell, TickerMessage, WindowFocusState
 } from './types/Store';
 import * as Globals from './Globals';
 
@@ -51,6 +51,8 @@ export interface AppState {
     ownedChampions: OwnedChampionState | Record<number, never>,
 
     //--- UI STATES ---
+    windowFocused: WindowFocusState,
+
     activeContainer: ActiveContainerState
 }
 
@@ -88,6 +90,8 @@ const INITIAL_TICKER_MESSAGES = [] as TickerMessage[];
 
 const INITIAL_HONOR_EOG_STATE = {} as EOGHonorState | Record<string, never>;
 
+const INITIAL_WINDOW_FOCUSED = {focused: true} as WindowFocusState;
+
 const INITIAL_ACTIVE_CONTAINER = {container: ContainerState.NONE} as ActiveContainerState;
 
 const INITIAL_CURRENT_SUMMONER = {} as CurrentSummonerState | Record<string, never>;
@@ -121,6 +125,7 @@ export const ACTION_SET_LOOT_STATE = createAction<LootState | Record<string, nev
 export const ACTION_SET_INVITATIONS = createAction<Invitation[]>('invitations/set');
 export const ACTION_SET_TICKER_MESSAGES = createAction<TickerMessage[]>('tickerMessages/set');
 export const ACTION_SET_HONOR_EOG_STATE = createAction<EOGHonorState | Record<string, never>>('honorEOG/set');
+export const ACTION_SET_WINDOW_FOCUSED = createAction<WindowFocusState>('windowFocused/set');
 export const ACTION_SET_ACTIVE_CONTAINER = createAction<ContainerState>('activeContainer/set');
 export const ACTION_SET_CURRENT_SUMMONER = createAction<CurrentSummonerState | Record<string, never>>('currentSummoner/set');
 export const ACTION_SET_MATCHMAKING_SEARCH_STATE = createAction<MatchmakingSearchState | Record<string, never>>('matchmakingSearchState/set');
@@ -413,6 +418,22 @@ const internalStateReducer = createReducer(
     }
 );
 
+const windowFocusedReducer = createReducer(
+    INITIAL_WINDOW_FOCUSED,
+    builder => {
+        builder
+            .addCase(
+                ACTION_SET_WINDOW_FOCUSED,
+                (state, action) => {
+                    return action.payload;
+                }
+            )
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            .addDefaultCase((state, action) => {
+            });
+    }
+);
+
 const activeContainerReducer = createReducer(
     INITIAL_ACTIVE_CONTAINER,
     builder => {
@@ -522,10 +543,10 @@ const chromaToParentSkinReducer = createReducer(
             )
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             .addDefaultCase((state, action) => {
+                return undefined;
             });
     }
 );
-
 
 
 export const store = configureStore({
@@ -552,10 +573,12 @@ export const store = configureStore({
         tickerMessages: tickerMessagesReducer,
         internalState: internalStateReducer,
         gameflowState: gameflowStateReducer,
-        activeContainer: activeContainerReducer,
         currentSummoner: currentSummonerReducer,
         champSelectState: champSelectStateReducer,
         matchmakingSearchState: matchmakingSearchStateReducer,
-        honorEOGState: honorEOGReducer
+        honorEOGState: honorEOGReducer,
+
+        windowFocused: windowFocusedReducer,
+        activeContainer: activeContainerReducer
     }
 });

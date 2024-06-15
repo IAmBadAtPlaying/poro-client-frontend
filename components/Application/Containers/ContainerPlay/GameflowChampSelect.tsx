@@ -6,8 +6,8 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import ChampionSelector, {SelectorOptions} from './GameflowChampSelect/ChampionSelector';
 import PrettyImage from '../../../General/PrettyImage';
-import SkinSelector from './GameflowChampSelect/SkinSelector';
 import axios from 'axios';
+import ReworkedSkinSelector from './GameflowChampSelect/ReworkedSkinSelector';
 
 
 enum PHASES {
@@ -402,7 +402,7 @@ export default function GameflowChampSelect() {
             );
         }
 
-        return <SkinSelector championId={localPlayer.championId}/>;
+        return <ReworkedSkinSelector championId={localPlayer.championId} initialSkinId={localPlayer.selectedSkinId}/>;
     };
 
 
@@ -484,7 +484,9 @@ export default function GameflowChampSelect() {
             case PHASES.AWAITING_FINALIZATION:
             case PHASES.FINALIZATION:
                 return (
-                    <SkinSelector championId={localPlayer.pickAction.championId}/>
+                    <div className={styles.skinSelector}>
+                        <ReworkedSkinSelector championId={localPlayer.pickAction.championId} initialSkinId={localPlayer.selectedSkinId}/>
+                    </div>
                 );
             default:
                 return (
@@ -501,30 +503,29 @@ export default function GameflowChampSelect() {
             <div className={styles.defaultChampSelectContainer}>
                 <div className={styles.myTeamContainer}>
                     <div className={styles.myTeamBansSection}>
-                        {/*{*/}
-                        {/*    champSelect.bans?.myTeamBans.filter(*/}
-                        {/*        (bannedChampionId) => {*/}
-                        {/*            return validChampionId(bannedChampionId);*/}
-                        {/*        }*/}
-                        {/*    ).map(*/}
-                        {/*        (bannedChampionId) => {*/}
-                        {/*            return (*/}
-                        {/*                <div key={bannedChampionId} className={styles.singleBanContainer}>*/}
-                        {/*                    <OverlayTrigger overlay={renderChampionNameTooltip(bannedChampionId)}*/}
-                        {/*                                    placement={'bottom'} delay={{show: 250, hide: 250}}>*/}
-                        {/*                        <div className={styles.banIconContainer}>*/}
-                        {/*                            <PrettyImage imgProps={{*/}
-                        {/*                                className: styles.icon,*/}
-                        {/*                                src: getChampionBanImage(bannedChampionId),*/}
-                        {/*                                alt: ''*/}
-                        {/*                            }}/>*/}
-                        {/*                        </div>*/}
-                        {/*                    </OverlayTrigger>*/}
-                        {/*                </div>*/}
-                        {/*            );*/}
-                        {/*        }*/}
-                        {/*    )*/}
-                        {/*}*/}
+                        {
+                            champSelect.bans?.myTeamBans.filter(
+                                (bannedChampionId) => {
+                                    return validChampionId(bannedChampionId);
+                                }
+                            ).map(
+                                (bannedChampionId) => {
+                                    return (
+                                        <div key={bannedChampionId} className={styles.singleBanContainer}>
+                                            <OverlayTrigger overlay={renderChampionNameTooltip(bannedChampionId)} placement={'bottom'} delay={{show: 250, hide: 250}}>
+                                                <div className={styles.banIconContainer}>
+                                                    <PrettyImage imgProps={{
+                                                        className: styles.icon,
+                                                        src: getChampionBanImage(bannedChampionId),
+                                                        alt: ''
+                                                    }}/>
+                                                </div>
+                                            </OverlayTrigger>
+                                        </div>
+                                    );
+                                }
+                            )
+                        }
                     </div>
                     <div className={styles.myTeamPickSection}>
                         {

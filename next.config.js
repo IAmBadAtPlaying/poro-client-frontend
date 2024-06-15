@@ -1,3 +1,4 @@
+/** @type {import('next').NextConfig} */
 require('dotenv').config();
 
 const isDev = process.env.IS_DEV === 'true';

@@ -8,6 +8,7 @@ import BackButton from './Application/BackButton';
 import {ContainerState} from '../types/Store';
 import ContainerNone from './Application/Containers/ContainerNone';
 import ContainerPlay from './Application/Containers/ContainerPlay';
+import ContainerProfile from './Application/Containers/ContainerProfile';
 import ContainerLoot from './Application/Containers/ContainerLoot';
 import ContainerTasks from './Application/Containers/ContainerTasks';
 import ContainerCollection from './Application/Containers/ContainerCollection';
@@ -38,6 +39,8 @@ export default function Application() {
                 return <ContainerPlay/>;
             case ContainerState.LOOT:
                 return <ContainerLoot/>;
+            case ContainerState.PROFILE:
+                return <ContainerProfile/>;
             case ContainerState.NONE:
             default:
                 return <ContainerNone/>;
@@ -54,6 +57,8 @@ export default function Application() {
         return <></>;
     };
 
+    MusicSystem();
+
     return (
         <div className={styles.container}>
             <BackButton/>
@@ -65,7 +70,6 @@ export default function Application() {
             {
                 renderReadyCheck()
             }
-            <MusicSystem/>
         </div>
     );
 }
