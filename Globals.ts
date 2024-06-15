@@ -3,7 +3,7 @@ import {Friend, MapAssetAssets, MapAssets, RemoteMapAssets} from './types/Store'
 
 const VERSION_MAJOR: number = 0;
 const VERSION_MINOR: number = 1;
-const VERSION_PATCH: number = 4;
+const VERSION_PATCH: number = 6;
 
 export const VERSION: string = `${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}`;
 
