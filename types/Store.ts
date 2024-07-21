@@ -841,13 +841,13 @@ export interface WindowFocusState {
 
 //======================= CONTAINER =======================
 export enum ContainerState {
-    NONE = Globals.CONTAINER_NONE,
-    PLAY = Globals.CONTAINER_PLAY,
-    COLLECTION = Globals.CONTAINER_COLLECTION,
-    LOOT = Globals.CONTAINER_LOOT,
-    TASKS = Globals.CONTAINER_TASKS,
-    CONFIG = Globals.CONTAINER_CONFIG,
-    PROFILE = Globals.CONTAINER_PROFILE
+    NONE = ''+Globals.CONTAINER_NONE,
+    PLAY = ''+Globals.CONTAINER_PLAY,
+    COLLECTION = ''+Globals.CONTAINER_COLLECTION,
+    LOOT = ''+Globals.CONTAINER_LOOT,
+    TASKS = ''+Globals.CONTAINER_TASKS,
+    CONFIG = ''+Globals.CONTAINER_CONFIG,
+    PROFILE = ''+Globals.CONTAINER_PROFILE
 }
 
 export interface ActiveContainerState {
