@@ -5,11 +5,11 @@ import axios from 'axios';
 
 
 export enum ClientBackgroundType {
-    LOCAL_IMAGE = Globals.BACKGROUND_TYPE_IMAGE,
-    LOCAL_VIDEO = Globals.BACKGROUND_TYPE_VIDEO,
-    LCU_IMAGE = Globals.BACKGROUND_TYPE_LCU_IMAGE,
-    LCU_VIDEO = Globals.BACKGROUND_TYPE_LCU_VIDEO,
-    NONE = Globals.BACKGROUND_TYPE_NONE
+    LOCAL_IMAGE = ''+Globals.BACKGROUND_TYPE_IMAGE,
+    LOCAL_VIDEO = ''+Globals.BACKGROUND_TYPE_VIDEO,
+    LCU_IMAGE = ''+Globals.BACKGROUND_TYPE_LCU_IMAGE,
+    LCU_VIDEO = ''+Globals.BACKGROUND_TYPE_LCU_VIDEO,
+    NONE = ''+Globals.BACKGROUND_TYPE_NONE
 }
 
 export interface BackgroundInfo {

@@ -41,10 +41,10 @@ export default function ContainerLoot() {
 
     const [selection, setSelection] = useState('none');
 
-    const [disenchantLoot, setDisenchantLoot] = useState({});
-    const [displayLoot, setDisplayLoot] = useState({});
+    const [disenchantLoot, setDisenchantLoot] = useState<Record<string, LootItem>>({});
+    const [displayLoot, setDisplayLoot] = useState<Record<string, LootItem>>({});
 
-    const filterLoot = (passedLoot: LootState | undefined) => {
+    const filterLoot = (passedLoot: LootState | undefined): Record<string, LootItem> => {
         if (passedLoot === undefined) {
             return {};
         }
@@ -356,7 +356,7 @@ export default function ContainerLoot() {
                 {
                     Object.values(displayLoot).sort((a, b) => {
                         return a.itemDesc.localeCompare(b.itemDesc);
-                    }).map((item: LootItem, index) => {
+                    }).map((item: LootItem) => {
                         return (<div key={'Loot-' + item.lootId} className={styles.lootElement} draggable={true}
                             onDragStart={(e) => {
                                 handleDragStart(
@@ -394,7 +394,7 @@ export default function ContainerLoot() {
                 {
                     Object.values(disenchantLoot).sort((a, b) => {
                         return a.itemDesc.localeCompare(b.itemDesc);
-                    }).map((item, index) => {
+                    }).map((item) => {
                         return (<div key={'Loot-' + item.lootId} className={styles.lootElement} draggable={true}
                             onDragStart={(e) => handleDragStart(
                                 e,

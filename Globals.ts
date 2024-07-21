@@ -251,7 +251,7 @@ export const getReadableLootName = (lootItem: LootItem): string => {
     }
 };
 
-export const getReadableLootCategoryName = (lootType) => {
+export const getReadableLootCategoryName = (lootType: string | undefined): string => {
     if (lootType === undefined) {
         return 'Unknown';
     }

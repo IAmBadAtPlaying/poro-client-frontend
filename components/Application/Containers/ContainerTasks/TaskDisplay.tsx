@@ -6,7 +6,7 @@ import axios from 'axios';
 
 
 export interface TaskDisplayArgs {
-    taskName: string[];
+    taskName: string;
 }
 
 interface TaskArgumentMap {
