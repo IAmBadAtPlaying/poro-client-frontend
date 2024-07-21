@@ -4,14 +4,15 @@ import styles from '../styles/DynamicBackground.module.css';
 import axios from 'axios';
 
 
-enum ClientBackgroundType {
+export enum ClientBackgroundType {
     LOCAL_IMAGE = Globals.BACKGROUND_TYPE_IMAGE,
     LOCAL_VIDEO = Globals.BACKGROUND_TYPE_VIDEO,
     LCU_IMAGE = Globals.BACKGROUND_TYPE_LCU_IMAGE,
-    LCU_VIDEO = Globals.BACKGROUND_TYPE_LCU_VIDEO
+    LCU_VIDEO = Globals.BACKGROUND_TYPE_LCU_VIDEO,
+    NONE = Globals.BACKGROUND_TYPE_NONE
 }
 
-interface BackgroundInfo {
+export interface BackgroundInfo {
     backgroundType: ClientBackgroundType,
     background: string,
     backgroundContentType: string,
@@ -36,42 +37,28 @@ export default function DynamicBackground() {
         []
     );
 
-    const renderLCUVideo = () => {
-        return (
-            <></>
-        );
-    };
-
-    const renderLCUImage = () => {
-        return (
-            <></>
-        );
-    };
-
-    const renderLocalVideo = () => {
+    const renderVideo = () => {
         return (
             <video className={styles.content} autoPlay={true} muted={true} loop={true} disablePictureInPicture={true}>
-                <source src={Globals.REST_PREFIX + '/config/background'} type={backgroundInfo?.backgroundContentType}/>
+                <source src={Globals.REST_PREFIX + '/config/background'}/>
             </video>
         );
     };
 
-    const renderLocalImage = () => {
+    const renderImage = () => {
         return (
-            <></>
+            <img className={styles.content} src={Globals.REST_PREFIX + '/config/background'}></img>
         );
     };
 
     const renderContent = () => {
         switch (backgroundInfo?.backgroundType) {
             case ClientBackgroundType.LOCAL_IMAGE:
-                return renderLocalImage();
-            case ClientBackgroundType.LOCAL_VIDEO:
-                return renderLocalVideo();
             case ClientBackgroundType.LCU_IMAGE:
-                return renderLCUImage();
+                return renderImage();
+            case ClientBackgroundType.LOCAL_VIDEO:
             case ClientBackgroundType.LCU_VIDEO:
-                return renderLCUVideo();
+                return renderVideo();
             default:
                 console.log('Unknown background type: ', backgroundInfo?.backgroundType);
                 return (<></>);

@@ -111,3 +111,23 @@
     text-underline: white;
     font-weight: bold;
 }
+
+.disclaimer {
+    position: absolute;
+    bottom: 0%;
+    left: 50%;
+    width: 100%;
+
+    text-align: center;
+
+    height: 5%;
+
+    font-family: Spiegel;
+
+    transform: translateX(-50%);
+
+    font-size: 0.75dvw;
+    font-weight: 600;
+
+    color: white;
+}

@@ -6,6 +6,7 @@ import axios from 'axios';
 
 export default function LoadingComponent() {
     const internalState = useSelector((state: AppState) => state.internalState);
+    const allDataLoaded = useSelector((state: AppState) => state.allDataLoaded);
 
     const requestSearchForLeagueProcess = () => {
         axios.post(Globals.REST_PREFIX + '/status/findProcess')
@@ -42,8 +43,18 @@ export default function LoadingComponent() {
     const renderAwaitingBackendConnection = () => {
         return (<>Waiting for the Poro-Client Backend...</>);
     };
+
+    const renderAwaitingAllDataLoaded = () => {
+        return (<>Waiting for all data to be loaded...</>);
+    }
+
     const renderLoadingText = () => {
         switch (internalState?.state) {
+            case Globals.BACKEND_STATE_CONNECTED:
+                if (!allDataLoaded) {
+                    return renderAwaitingAllDataLoaded();
+                }
+                return (<p>Connected!</p>);
             case Globals.BACKEND_STATE_AWAITING_LEAGUE_PROCESS:
                 return renderAwaitLeagueProcess();
             case Globals.BACKEND_STATE_NO_PROCESS_IDLE:
@@ -70,6 +81,10 @@ export default function LoadingComponent() {
                         renderLoadingText()
                     }
                 </div>
+            </div>
+            <div className={styles.disclaimer}>
+                <p>
+                    <b>{Globals.APPLICATION_NAME}</b> isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties.<br/> Riot Games, and all associated properties are trademarks or registered trademarks of Riot Games, Inc.</p>
             </div>
         </div>
     );

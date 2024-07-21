@@ -25,6 +25,9 @@ export interface ChampionSelectorProps {
     selectorMode: SelectorOptions,
 }
 
+const PICK_SFX_DELAY_MS = 500;
+const BAN_SFX_DELAY_MS = 500;
+
 export default function ChampionSelector(
     {
         bannedChampionIds,
@@ -37,36 +40,40 @@ export default function ChampionSelector(
     const [selectedBan, setSelectedBan] = useState<number>(-1);
 
     const selectPickChampion = (championId: number, lockIn: boolean) => {
-        // if (allowLockIn && lockIn) {
-        //     const stringerHowl = new Howl(
-        //         {
-        //             src: [Globals.PROXY_PREFIX + '/lol-game-data/assets/v1/champion-sfx-audios/' + championId + '.ogg'],
-        //             volume: 0.5
-        //         }
-        //     );
-        //
-        //     const sfxHowl = new Howl(
-        //         {
-        //             src: [Globals.PROXY_PREFIX + '/lol-game-data/assets/v1/champion-choose-vo/' + championId + '.ogg'],
-        //             volume: 0.5
-        //         }
-        //     );
-        //
-        //     stringerHowl.load();
-        //     sfxHowl.load();
-        //
-        //     stringerHowl.play();
-        //     sfxHowl.play();
-        // }
+        const stringerHowl = new Howl(
+            {
+                src: [Globals.PROXY_PREFIX + '/lol-game-data/assets/v1/champion-sfx-audios/' + championId + '.ogg'],
+                volume: 0.5
+            }
+        );
 
+        const sfxHowl = new Howl(
+            {
+                src: [Globals.PROXY_PREFIX + '/lol-game-data/assets/v1/champion-choose-vo/' + championId + '.ogg'],
+                volume: 0.5
+            }
+        );
+
+        stringerHowl.load();
+        sfxHowl.load();
         axios.post(
-            Globals.REST_PREFIX + '/champSelect/pick',
+            Globals.REST_V1_PREFIX + '/champ-select/pick',
             {
                 championId: championId,
                 lockIn: allowLockIn ? lockIn : false
             }
         ).then(
             () => {
+                if (allowLockIn && lockIn) {
+                    stringerHowl.play();
+                    setTimeout(
+                        () => {
+                            sfxHowl.play();
+                        },
+                        PICK_SFX_DELAY_MS
+                    );
+
+                }
             }
         ).catch(
             () => {
@@ -75,25 +82,25 @@ export default function ChampionSelector(
     };
 
     const selectBanChampion = (championId: number, lockIn: boolean) => {
-        // if (allowLockIn && lockIn) {
-        //     const sfHowl = new Howl(
-        //         {
-        //             src: [Globals.PROXY_PREFIX + '/lol-game-data/assets/v1/champion-ban-vo/' + championId + '.ogg'],
-        //             volume: 0.5
-        //         }
-        //     );
-        //
-        //     sfHowl.load();
-        //     sfHowl.play();
-        // }
+        const sfHowl = new Howl(
+            {
+                src: [Globals.PROXY_PREFIX + '/lol-game-data/assets/v1/champion-ban-vo/' + championId + '.ogg'],
+                volume: 0.5
+            }
+        );
+
+        sfHowl.load();
         axios.post(
-            Globals.REST_PREFIX + '/champSelect/ban',
+            Globals.REST_V1_PREFIX + '/champ-select/ban',
             {
                 championId: championId,
                 lockIn: allowLockIn ? lockIn : false
             }
         ).then(
             () => {
+                if (allowLockIn && lockIn) {
+                    sfHowl.play();
+                }
             }
         ).catch(
             () => {
@@ -145,12 +152,20 @@ export default function ChampionSelector(
         case SelectorOptions.PICK:
             Object.values(ownedChampions).forEach((champion: OwnedChampion) => {
                 const selectable = !selectedChampionIds.includes(champion.itemId) && !bannedChampionIds.includes(champion.itemId);
+                const itemId = champion.itemId;
 
                 const csChampion = {
                     championId: champion.itemId,
                     selectable: selectable,
-                    name: champions[champion.itemId].name
+                    name: 'Unknown'
                 };
+
+                if (itemId !== undefined) {
+                    if ( champions[champion.itemId]) {
+                        csChampion.name = champions[champion.itemId].name;
+                    }
+
+                }
 
                 selectableChampions.push(csChampion);
             });

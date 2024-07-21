@@ -14,6 +14,7 @@ import ContainerTasks from './Application/Containers/ContainerTasks';
 import ContainerCollection from './Application/Containers/ContainerCollection';
 import ReadyCheckContainer from './Application/ReadyCheckContainer';
 import MusicSystem from './MusicSystem';
+import ContainerConfiguration from './Application/Containers/ContainerConfiguration';
 
 export default function Application() {
 
@@ -28,6 +29,7 @@ export default function Application() {
     const tickerMessages = useSelector((state: AppState) => state.tickerMessages);
     const friends = useSelector((state: AppState) => state.friends);
     const activeContainer = useSelector((state: AppState) => state.activeContainer);
+    const allDataLoaded = useSelector((state: AppState) => state.allDataLoaded);
 
     const renderContainer = () => {
         switch (activeContainer.container) {
@@ -41,6 +43,8 @@ export default function Application() {
                 return <ContainerLoot/>;
             case ContainerState.PROFILE:
                 return <ContainerProfile/>;
+            case ContainerState.CONFIG:
+                return <ContainerConfiguration/>;
             case ContainerState.NONE:
             default:
                 return <ContainerNone/>;

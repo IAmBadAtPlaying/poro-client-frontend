@@ -4,6 +4,7 @@ import * as Globals from '../../../Globals';
 import GameflowLobby from './ContainerPlay/GameflowLobby';
 import GameflowPreEndOfGame from './ContainerPlay/GameflowPreEndOfGame';
 import GameflowChampSelect from './ContainerPlay/GameflowChampSelect';
+import GameflowNone from './ContainerPlay/GameflowNone';
 
 export default function ContainerPlay() {
 
@@ -27,6 +28,10 @@ export default function ContainerPlay() {
             case Globals.GAMEFLOW_CHAMP_SELECT:
                 return (
                     <GameflowChampSelect/>
+                );
+            case Globals.GAMEFLOW_NONE:
+                return (
+                    <GameflowNone/>
                 );
             default:
                 return (

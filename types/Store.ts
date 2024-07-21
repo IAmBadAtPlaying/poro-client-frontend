@@ -178,7 +178,7 @@ export interface Queue {
     description: string,
     detailedDescription: string,
     gameMode: string,
-    gameTypeConfig: GameTypeConfig,
+    gameTypeConfig: GameTypeConfig
     id: number,
     isRanked: boolean,
     isTeamBuilderManaged: boolean,
@@ -233,7 +233,8 @@ export interface SummonerSpell {
 export interface MinimalChampion {
     id: number,
     alias: string,
-    name: string
+    name: string,
+    roles: string[],
 }
 
 export interface ChampionState {
@@ -592,7 +593,7 @@ export interface RemoteMapAssets {
 }
 
 export interface MapAssets {
-    [key: string]: Record<string, MapAssetAssets | never>;
+    [key: string]: Record<string, RemoteMapAsset | never>;
 }
 
 //======================= CURRENT SUMMONER =======================
@@ -711,6 +712,13 @@ export interface MatchmakingSearchState extends Record<string, any> {
     dodgeData: {
         dodgerId: number,
         state: string
+    },
+    lowPriorityData?: {
+        bustedLeaverAccessToken: string,
+        penalizedSummonerIds: number[],
+        penaltyTime: number,
+        penaltyTimeRemaining: number,
+        reason: string
     },
     estimatedQueueTime: number,
     isCurrentlyInQueue: boolean,

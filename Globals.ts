@@ -1,9 +1,11 @@
 import {Color} from './types/Color';
-import {Friend, MapAssetAssets, MapAssets, RemoteMapAssets} from './types/Store';
+import {Friend, LootItem, MapAssetAssets, MapAssets, RemoteMapAsset, RemoteMapAssets} from './types/Store';
 
 const VERSION_MAJOR: number = 0;
 const VERSION_MINOR: number = 1;
 const VERSION_PATCH: number = 6;
+
+export const APPLICATION_NAME: string = 'Poro-Client';
 
 export const VERSION: string = `${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}`;
 
@@ -12,8 +14,7 @@ export const SOCKET_PORT: number = 8887;
 
 export const VERSION_SHORT: string = `v${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}`;
 export const VERSION_LONG: string = `Version ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}`;
-
-export const BROWSER_TITLE: string = `Poro-Client ${VERSION_SHORT}`;
+export const BROWSER_TITLE: string = `${APPLICATION_NAME} ${VERSION_SHORT}`;
 
 //================================ URL PATHS ================================
 const BASE_URL: string = `http://127.0.0.1:${APPLICATION_PORT}`;
@@ -22,15 +23,15 @@ export const PROXY_PREFIX: string = BASE_URL + '/proxy';
 export const PROXY_STATIC_PREFIX: string = PROXY_PREFIX + '/static';
 export const STATIC_PREFIX: string = BASE_URL + '/static';
 export const REST_PREFIX: string = BASE_URL + '/rest';
-export const REST_V2_PREFIX: string = BASE_URL + '/rest/v2';
+export const REST_V1_PREFIX: string = BASE_URL + '/rest/v1';
 
 export const WEBSOCKET_URL: string = `ws://127.0.0.1:${SOCKET_PORT}`;
 
 export const GITHUB_ISSUES_URL: string = 'https://github.com/IAmBadAtPlaying/poro-client/issues';
 
 //=================================== REST URL ===================================
-export const FETCH_BACKEND_STATUS_URL: string = REST_V2_PREFIX + '/status';
-export const POST_SEARCH_LEAGUE_PROCESS_URL: string = REST_V2_PREFIX + '/status/findProcess';
+export const FETCH_BACKEND_STATUS_URL: string = REST_V1_PREFIX + '/status';
+export const POST_SEARCH_LEAGUE_PROCESS_URL: string = REST_V1_PREFIX + '/status/findProcess';
 
 //=================================== FETCH STATIC SHARED URL ===================================
 export const FETCH_SKINS_URL: string = PROXY_STATIC_PREFIX + '/lol-game-data/assets/v1/skins.json';
@@ -54,26 +55,6 @@ export function getChampionIconURL(championId: number): string {
         championId = -1;
     }
     return PROXY_PREFIX + `/lol-game-data/assets/v1/champion-icons/${championId}.png`;
-}
-
-export function getCenteredChampionSplashURL(skinId: number, championId: number | null): string {
-    if (championId == null) {
-        championId = Number.parseInt(skinId.toString().slice(
-            0,
-            -3
-        ));
-    }
-    return PROXY_PREFIX + `/lol-game-data/assets/v1/champion-splashes/${championId}/${skinId}.jpg`;
-}
-
-export function getUncenteredChampionSplashURL(skinId: number, championId: number | null): string {
-    if (championId == null) {
-        championId = Number.parseInt(skinId.toString().slice(
-            0,
-            -3
-        ));
-    }
-    return PROXY_PREFIX + `/lol-game-data/assets/v1/champion-splashes/uncentered/${championId}/${skinId}.jpg`;
 }
 
 //================================= HARDCODED VALUES ===================================
@@ -167,6 +148,19 @@ const GAMEMODE_TO_STRING: Record<string, string> = {
     CHERRY: 'Arena'
 };
 
+const LOOT_TYPE_TO_STRING: Record<string, string> = {
+    CHAMPION_RENTAL: 'Champion Shard',
+    SKIN_RENTAL: 'Skin Shard',
+    CHAMPION: 'Champion Permanent',
+    SKIN: 'Skin Permanent',
+    WARDSKIN_RENTAL: 'Ward Skin Shard',
+    WARDSKIN: 'Ward Skin Permanent',
+    EMOTE: 'Emote',
+    SUMMONER_ICON: 'Summoner Icon',
+    CURRENCY: 'Currency',
+    MATERIAL: 'Material'
+};
+
 const HOSTING_PREFIX = 'hosting_';
 
 const GAME_STATUS_TO_STRING = (remoteActivity: string): string => {
@@ -195,7 +189,7 @@ export const getMapAsset = (mapAssets: MapAssets | Record<string, never>, mapId:
     if (mapAssets[mapId] === undefined) {
         return undefined;
     }
-    return mapAssets[mapId][gameMode];
+    return mapAssets[mapId][gameMode].assets;
 };
 
 export const getSpecificMapAsset = (mapAssets: MapAssets | Record<string, never>, mapId: number | undefined, gameMode: string | undefined, asset: string): string | undefined => {
@@ -215,6 +209,55 @@ export const isEmptyObject = (obj: Record<never, unknown>): boolean => {
 };
 
 //================================= TRANSFORM FUNCTIONS ===================================
+
+export const getPrettyCount = (count: number): string => {
+    if (count < 1000) {
+        return count.toString();
+    }
+    if (count < 1000000) {
+        return (count / 1000).toFixed(1) + 'k';
+    }
+    return (count / 1000000).toFixed(1) + 'm';
+};
+
+export const getTilePathUrl = (item: LootItem) => {
+    const tilePath = item.tilePath;
+    const itemId = item.lootId;
+    switch (itemId) {
+        case 'CURRENCY_champion':
+            return STATIC_PREFIX + '/assets/png/currencies/big/blue_essence.png';
+        case 'CURRENCY_cosmetic':
+            return STATIC_PREFIX + '/assets/png/currencies/big/orange_essence.png';
+        case 'MATERIAL_key':
+            return STATIC_PREFIX + '/assets/png/currencies/big/key.png';
+        default:
+            return PROXY_STATIC_PREFIX + tilePath;
+    }
+};
+
+export const getReadableLootName = (lootItem: LootItem): string => {
+    const lootId = lootItem.lootId;
+    switch (lootId) {
+        case 'CURRENCY_champion':
+            return 'Blue Essence';
+        case 'CURRENCY_cosmetic':
+            return 'Orange Essence';
+        case 'chest_generic':
+            return 'Hextech Chest';
+        case 'MATERIAL_key':
+            return 'Hextech Key';
+        default:
+            return lootItem.itemDesc ?? lootId;
+    }
+};
+
+export const getReadableLootCategoryName = (lootType) => {
+    if (lootType === undefined) {
+        return 'Unknown';
+    }
+
+    return LOOT_TYPE_TO_STRING[lootType] ?? lootType;
+};
 
 export const getActivityFromRemoteActivity = (remoteActivity: string | undefined, alternative: string): string => {
     if (remoteActivity === undefined) {
@@ -250,15 +293,12 @@ export const getMapAssetsFromRemoteMapAssets = (remoteMapAssets: RemoteMapAssets
             return;
         }
         const asset = remoteMapAssets[key];
-        const assetsByGameMode: Record<string, MapAssetAssets> = {};
+        const assetsByGameMode: Record<string, RemoteMapAsset> = {};
         if (asset.length === 0) {
             return;
         }
         for (const element of asset) {
-            if (element.gameMode === undefined || assetsByGameMode[element.gameMode] !== undefined) {
-                continue;
-            }
-            assetsByGameMode[element.gameMode] = element.assets;
+            assetsByGameMode[element.gameMode] = element;
         }
         intermediateObject[key] = assetsByGameMode;
     });
@@ -322,7 +362,9 @@ export const UPDATES = {
     INITIAL_OWNED_SKINS_UPDATE: getInitialUpdateString('OwnedSkinsUpdate'),
 
     OWNED_CHAMPIONS_UPDATE: 'OwnedChampionsUpdate',
-    INITIAL_OWNED_CHAMPIONS_UPDATE: getInitialUpdateString('OwnedChampionsUpdate')
+    INITIAL_OWNED_CHAMPIONS_UPDATE: getInitialUpdateString('OwnedChampionsUpdate'),
+
+    INITIAL_UPDATES_DONE_UPDATE: 'DataLoaded'
 };
 
 //================================= COLORS ===================================

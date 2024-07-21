@@ -7,7 +7,7 @@ import {
     InternalState,
     Invitation, LobbyState, LootState, MapAssets, MatchmakingSearchState, OwnedChampionState, OwnedSkinState,
     PatcherState,
-    PresenceState, Queue, Skin, SummonerSpell, TickerMessage, WindowFocusState
+    PresenceState, Queue, RemoteMapAssets, Skin, SummonerSpell, TickerMessage, WindowFocusState
 } from './types/Store';
 import * as Globals from './Globals';
 
@@ -19,7 +19,6 @@ export interface AppState {
     skins: Record<number, Skin>
     queues: Record<number, Queue>
     champions: ChampionState
-    regaliaInfo: object
 
     //========= STATIC MAPS =========
     skinsByChampion: Record<number, number[]>
@@ -33,31 +32,29 @@ export interface AppState {
     gameflowState: GameflowState | Record<string, never>,
     patcherState: PatcherState | Record<string, never>,
     lobbyState: LobbyState | Record<string, never>,
-    lootState: LootState | Record<string, never>,
+    lootState: LootState | undefined,
     matchmakingSearchState: MatchmakingSearchState | Record<string, never>,
     invitations: Invitation[],
     tickerMessages: TickerMessage[],
-    taskList: object[],
-    currentChatFriend: object,
     currentSummoner: CurrentSummonerState | Record<string, never>
     honorEOGState: EOGHonorState | Record<string, never>
     champSelectState: ChampSelectState | Record<string, never>
 
     //--- INVENTORY ---
-    ownedIcons: object[],
-    ownedWards: object[],
-    ownedEmotes: object[],
+    // ownedIcons: object[],
+    // ownedWards: object[],
+    // ownedEmotes: object[],
     ownedSkins: OwnedSkinState | Record<number, never>,
     ownedChampions: OwnedChampionState | Record<number, never>,
 
     //--- UI STATES ---
     windowFocused: WindowFocusState,
-
+    allDataLoaded: boolean,
     activeContainer: ActiveContainerState
 }
 
 
-const INITIAL_MAP_ASSETS_STATE = {};
+const INITIAL_MAP_ASSETS_STATE = {} as MapAssets | Record<string, never>;
 const INITIAL_SUMMONER_SPELLS = {};
 const INITIAL_SKIN_STATE = {};
 const INITIAL_QUEUES = {};
@@ -82,7 +79,7 @@ const INITIAL_INTERNAL_STATE = {} as InternalState | Record<string, never>;
 
 const INITIAL_LOBBY_STATE = {} as LobbyState | Record<string, never>;
 
-const INITIAL_LOOT_STATE = {} as LootState | Record<string, never>;
+const INITIAL_LOOT_STATE = null as LootState | null;
 
 const INITIAL_INVITATIONS = [] as Invitation[];
 
@@ -99,6 +96,8 @@ const INITIAL_CURRENT_SUMMONER = {} as CurrentSummonerState | Record<string, nev
 const INITIAL_MATCHMAKING_SEARCH_STATE = {} as MatchmakingSearchState | Record<string, never>;
 
 const INITIAL_CHAMP_SELECT_STATE = {} as ChampSelectState | Record<string, never>;
+
+const INITIAL_ALL_DATA_LOADED = false;
 
 export const ACTION_SET_MAP_ASSETS = createAction<MapAssets>('mapAssets/set');
 export const ACTION_SET_SUMMONER_SPELLS = createAction<Record<number, SummonerSpell>>('summonerSpells/set');
@@ -121,7 +120,7 @@ export const ACTION_SET_PATCHER_STATE = createAction<PatcherState | Record<strin
 export const ACTION_SET_GAMEFLOW_STATE = createAction<GameflowState | Record<string, never>>('gameflowState/set');
 export const ACTION_SET_INTERNAL_STATE = createAction<InternalState | Record<string, never>>('internalState/set');
 export const ACTION_SET_LOBBY_STATE = createAction<LobbyState | Record<string, never>>('lobbyState/set');
-export const ACTION_SET_LOOT_STATE = createAction<LootState | Record<string, never>>('lootState/set');
+export const ACTION_SET_LOOT_STATE = createAction<LootState | null>('lootState/set');
 export const ACTION_SET_INVITATIONS = createAction<Invitation[]>('invitations/set');
 export const ACTION_SET_TICKER_MESSAGES = createAction<TickerMessage[]>('tickerMessages/set');
 export const ACTION_SET_HONOR_EOG_STATE = createAction<EOGHonorState | Record<string, never>>('honorEOG/set');
@@ -131,6 +130,7 @@ export const ACTION_SET_CURRENT_SUMMONER = createAction<CurrentSummonerState | R
 export const ACTION_SET_MATCHMAKING_SEARCH_STATE = createAction<MatchmakingSearchState | Record<string, never>>('matchmakingSearchState/set');
 export const ACTION_SET_CHAMP_SELECT_STATE = createAction<ChampSelectState | Record<string, never>>('champSelectState/set');
 
+export const ACTION_SET_ALL_DATA_LOADED = createAction<boolean>('allDataLoaded/set');
 
 const mapAssetsReducer = createReducer(
     INITIAL_MAP_ASSETS_STATE,
@@ -548,6 +548,22 @@ const chromaToParentSkinReducer = createReducer(
     }
 );
 
+const allDataLoadedReducer = createReducer(
+    INITIAL_ALL_DATA_LOADED,
+    builder => {
+        builder
+            .addCase(
+                ACTION_SET_ALL_DATA_LOADED,
+                (state, action) => {
+                    return action.payload;
+                }
+            )
+            .addDefaultCase((state, action) => {
+                return state;
+            });
+    }
+);
+
 
 export const store = configureStore({
     reducer: {
@@ -579,6 +595,7 @@ export const store = configureStore({
         honorEOGState: honorEOGReducer,
 
         windowFocused: windowFocusedReducer,
+        allDataLoaded: allDataLoadedReducer,
         activeContainer: activeContainerReducer
     }
 });

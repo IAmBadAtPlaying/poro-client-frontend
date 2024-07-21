@@ -28,7 +28,7 @@ import {
     ACTION_SET_SUMMONER_SPELLS,
     ACTION_SET_QUEUES,
     ACTION_SET_OWNED_CHAMPIONS,
-    ACTION_SET_OWNED_SKINS, ACTION_SET_WINDOW_FOCUSED
+    ACTION_SET_OWNED_SKINS, ACTION_SET_WINDOW_FOCUSED, ACTION_SET_ALL_DATA_LOADED
 } from '../store';
 import {
     ChampionState, ChampSelectState, CurrentSummonerState, EOGHonorState, Friend, FriendGroup,
@@ -48,7 +48,9 @@ export default function App() {
     const dispatch = useDispatch();
 
     const internalState = useSelector((state: AppState) => state.internalState);
+    const allDataLoaded = useSelector((state: AppState) => state.allDataLoaded);
     const [connected, setConnected] = useState(false);
+
 
     let socket: WebSocket;
 
@@ -176,6 +178,11 @@ export default function App() {
         dispatch(
             ACTION_SET_TICKER_MESSAGES(
                 []
+            )
+        );
+        dispatch(
+            ACTION_SET_ALL_DATA_LOADED(
+                false
             )
         );
     }
@@ -355,6 +362,13 @@ export default function App() {
                         )
                     );
                     break;
+                case Globals.UPDATES.INITIAL_UPDATES_DONE_UPDATE:
+                    dispatch(
+                        ACTION_SET_ALL_DATA_LOADED(
+                            true
+                        )
+                    );
+                    break;
                 default:
                     console.log('Unknown Event: ' + message.event);
                     console.log(message.data);
@@ -529,25 +543,6 @@ export default function App() {
             });
     };
 
-    const fetchQueues = () => {
-        console.log('[Fetch] Queues');
-        axios.get(
-            Globals.PROXY_STATIC_PREFIX + '/lol-game-data/assets/v1/queues.json'
-        )
-            .then((response) => {
-                if (response.data.errorCode) {
-                    console.error('Failed to load Queues');
-                    return;
-                }
-
-                console.log(response.data);
-                console.log('[Fetch] Queues - Done');
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    };
-
     function fetchStaticData() {
         fetchChampions();
         fetchSkins();
@@ -566,12 +561,14 @@ export default function App() {
     const renderContent = () => {
         switch (internalState?.state) {
             case Globals.BACKEND_STATE_CONNECTED:
-                return (
-                    <>
-                        <Application/>
-                        <DynamicBackground/>
-                    </>
-                );
+                if (!allDataLoaded) {
+                    return <LoadingComponent/>;
+                }
+
+                return <>
+                    <Application/>
+                    <DynamicBackground/>
+                </>;
             default:
                 return <LoadingComponent/>;
         }

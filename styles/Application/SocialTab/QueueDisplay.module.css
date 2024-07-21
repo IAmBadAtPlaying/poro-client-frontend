@@ -13,6 +13,11 @@
     transition: background-color 0.5s;
 }
 
+.delayedQueue {
+    background-color: #ffbb235f;
+    transition: background-color 0.5s;
+}
+
 .containerLobby {
     position: relative;
     aspect-ratio: 4;
@@ -79,7 +84,7 @@
     font-weight: 600;
 
     height: 30%;
-    width: 50%;
+    width: 70%;
 
     display: flex;
     align-items: center;
