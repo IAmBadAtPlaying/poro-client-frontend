@@ -149,6 +149,58 @@ export default function QueueDisplay() {
         return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
     };
     const renderQueueInfo = () => {
+        if (!matchmakingState.isCurrentlyInQueue) {
+            return (
+                <div className={Globals.applyMultipleStyles(styles.container, styles.delayedQueue)}>
+                    <div className={styles.flexShort}>
+                        <div className={styles.iconContainer}>
+                            <PrettyVideo videoProps={
+                                {
+                                    className: styles.iconVideo,
+                                    autoPlay: true,
+                                    muted: true,
+                                    loop: true,
+                                    src: Globals.PROXY_STATIC_PREFIX + '/' + Globals.getSpecificMapAsset(
+                                        mapAssets,
+                                        lobbyState?.gameConfig?.mapId,
+                                        lobbyState?.gameConfig?.gameMode,
+                                        'game-select-icon-active-video'
+                                    ),
+                                    poster: Globals.PROXY_STATIC_PREFIX + '/' + Globals.getSpecificMapAsset(
+                                        mapAssets,
+                                        lobbyState?.gameConfig?.mapId,
+                                        lobbyState?.gameConfig?.gameMode,
+                                        'game-select-icon-active'
+                                    )
+                                }
+                            }/>
+                        </div>
+                    </div>
+                    <div className={styles.flexLong}>
+                        <div className={styles.absoluteWrapper}>
+                            <div className={styles.inQueueText}>
+                                Low Priority Queue
+                            </div>
+                            <div className={styles.timeInQueueText}>
+                                {renderQueueSecondsPretty(matchmakingState?.lowPriorityData?.penaltyTime - matchmakingState?.lowPriorityData?.penaltyTimeRemaining ?? 0)}
+                            </div>
+                            <div className={styles.expectedTimeText}>
+                                Penalty Time&nbsp;
+                                {
+                                    renderQueueSecondsPretty(matchmakingState?.lowPriorityData?.penaltyTime ?? 0)
+                                }
+                            </div>
+                            <div className={styles.cancelQueueContainer}>
+                                <button type={'button'} className={styles.closeButton} onClick={requestCancelQueue}
+                                        aria-label="Close"></button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            )
+        }
+
         return (
             <div className={styles.container}>
                 <div className={styles.flexShort}>

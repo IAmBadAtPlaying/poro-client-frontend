@@ -93,9 +93,10 @@
     display: flex;
     left: 0%;
     top: 0;
+    align-items: center;
+    justify-content: center;
     height: 100%;
     width: 100%;
-
 }
 
 .button_container {

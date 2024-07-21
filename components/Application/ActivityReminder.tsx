@@ -90,13 +90,13 @@ export default function ActivityReminder() {
         }
         switch (container) {
             case Globals.CONTAINER_PLAY:
-                return hideContainer();
             case Globals.CONTAINER_LOOT:
             case Globals.CONTAINER_COLLECTION:
             case Globals.CONTAINER_TASKS:
             case Globals.CONTAINER_PROFILE:
             case Globals.CONTAINER_CONFIG:
             default:
+                return hideContainer();
         }
         return (
             <div className={Globals.applyMultipleStyles(

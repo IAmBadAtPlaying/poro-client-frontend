@@ -175,7 +175,7 @@ export default function RuneSelector({setVisible}: RuneSelectorProps) {
             current: true
         };
         axios.post(
-            Globals.REST_V2_PREFIX + '/runes/save',
+            Globals.REST_V1_PREFIX + '/runes/save',
             sendObject
         ).then((response) => {
             console.log(response);

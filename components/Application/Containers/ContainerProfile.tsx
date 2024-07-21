@@ -2,6 +2,8 @@ import styles from '../../../styles/Application/Containers/ContainerProfile.modu
 import {useSelector} from 'react-redux';
 import {AppState} from '../../../store';
 import {useEffect} from 'react';
+import * as Globals from '../../../Globals';
+import axios from 'axios';
 
 export default function ContainerProfile() {
 
@@ -9,6 +11,23 @@ export default function ContainerProfile() {
     //TODO: Fetch background image
     //TODO: Fetch banner image
     //TODO; Get Challenge Level
+
+    //On-mount
+    useEffect(
+        () => {
+            if (presence.puuid) {
+                axios.get(Globals.PROXY_PREFIX + '/lol-hovercard/v1/friend-info/' + presence.puuid)
+                    .then((response) => {
+                        console.log('Refreshed presence data.');
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            }
+
+        },
+        []
+    );
 
     useEffect(
         () => {
@@ -27,15 +46,15 @@ export default function ContainerProfile() {
         <div className={styles.previewSpace}>
             <div className={styles.backgroundImageContainer}>
                 <img className={styles.coverImage}
-                     src="http://127.0.0.1:35199/proxy/lol-game-data/assets/ASSETS/Characters/Ahri/Skins/Skin76/Images/ahri_splash_centered_76.jpg"
-                     alt="background image"/>
+                    src="http://127.0.0.1:35199/proxy/lol-game-data/assets/ASSETS/Characters/Ahri/Skins/Skin76/Images/ahri_splash_centered_76.jpg"
+                    alt="background image"/>
                 <div className={styles.backgroundImageFilter}>
                 </div>
             </div>
             <div className={styles.bannerArea}>
                 <div className={styles.bannerImageContainer}>
                     <img className={styles.bannerImage}
-                         src="http://127.0.0.1:35199/proxy/lol-game-data/assets/ASSETS/Regalia/BannerSkins/sf2023.png"/>
+                        src="http://127.0.0.1:35199/proxy/lol-game-data/assets/ASSETS/Regalia/BannerSkins/UnkillableDemonKingBanner.ACCESSORIES_14_12.png"/>
                 </div>
                 <div className={styles.banner}>
                     <div className={styles.spacer}></div>
@@ -47,7 +66,7 @@ export default function ContainerProfile() {
                     <div className={styles.profileSection}>
                         <div className={styles.profileContainer}>
                             <div className={styles.profileIcon}>
-                                {/*<div class="prestigeRegalia"></div>*/}
+                                {/*<div className={styles.prestigeRegalia}></div>*/}
                                 <div className={styles.rankedRegalia}>
                                     <video className={styles.rankedRegaliaVideo} autoPlay loop muted>
                                         <source
@@ -71,15 +90,15 @@ export default function ContainerProfile() {
                             <div className={styles.tokens}>
                                 <div className={styles.singleToken}>
                                     <img draggable="false" className={styles.tokenImage}
-                                         src="http://localhost:35199/proxy/lol-game-data/assets/ASSETS/Challenges/Config/504004/Tokens/iron.png"></img>
+                                        src="http://localhost:35199/proxy/lol-game-data/assets/ASSETS/Challenges/Config/504004/Tokens/iron.png"></img>
                                 </div>
                                 <div className={styles.singleToken}>
                                     <img draggable="false" className={styles.tokenImage}
-                                         src="http://localhost:35199/static/assets/png/challenges/background.png"></img>
+                                        src="http://localhost:35199/static/assets/png/challenges/background.png"></img>
                                 </div>
                                 <div className={styles.singleToken}>
                                     <img draggable="false" className={styles.tokenImage}
-                                         src="http://localhost:35199/proxy/lol-game-data/assets/ASSETS/Challenges/Config/504004/Tokens/iron.png"></img>
+                                        src="http://localhost:35199/proxy/lol-game-data/assets/ASSETS/Challenges/Config/504004/Tokens/iron.png"></img>
                                 </div>
                             </div>
                         </div>

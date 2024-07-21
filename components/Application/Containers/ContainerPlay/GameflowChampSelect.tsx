@@ -363,13 +363,17 @@ export default function GameflowChampSelect() {
 
             const currentMember = champSelect.theirTeam[index];
 
+            if (currentMember == null) {
+                continue;
+            }
+
             switch (currentMember?.state) {
                 case PHASES.PREPARATION:
                     theirTeamArray.push(
                         <div className={styles.champSelectFINALIZATION} key={'TheirTeamPick-' + index}>
                             <div className={styles.borderBox}>
                                 {
-                                    renderBGImageFromPickIntent(currentMember?.championPickIntent)
+                                    renderBGImageFromPickIntent(currentMember?.championPickIntent ? currentMember.championPickIntent : 0)
                                 }
                                 <div className={styles.teammateContent}>
                                     <div className={styles.statusContainer}>
@@ -380,6 +384,55 @@ export default function GameflowChampSelect() {
                                             renderPositionIcon(currentMember?.assignedPosition)
                                         }
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    );
+                    break;
+                case PHASES.BANNING:
+                    theirTeamArray.push(
+                        <div>
+
+                        </div>
+                    );
+                    break;
+                default:
+                    theirTeamArray.push(
+                        <div className={styles.champSelectFINALIZATION} key={'MyTeamPick-' + index}>
+                            <div className={styles.finalizationBGContainer}
+                                key={currentMember.pickAction.championId}>
+                                <img
+                                    src={getCenteredSplashartUrlFromSkinId(currentMember.selectedSkinId)}
+                                    className={styles.finalizationBGImage}
+                                />
+                                <div className={styles.finalizationBGFilter}/>
+                            </div>
+                            <div className={styles.teammateContent}>
+                                <div className={styles.finalizationContentSummonerSpells}>
+                                    <div className={styles.finalizationContentSummonerSpellContainer}>
+                                        <img className={styles.champSelectComponentSummonerSpellImage}
+                                            draggable={false}
+                                            alt={' '}
+                                            src={getSpellPathFromSpellId(currentMember.spell1Id)}
+                                        />
+                                    </div>
+                                    <div className={styles.finalizationContentSummonerSpellContainer}>
+                                        <img className={styles.champSelectComponentSummonerSpellImage}
+                                            draggable={false}
+                                            alt={' '}
+                                            src={getSpellPathFromSpellId(currentMember.spell2Id)}
+                                        />
+                                    </div>
+                                </div>
+                                <div className={styles.championNameContainer}>
+                                    {
+                                        getChampionName(currentMember.championId)
+                                    }
+                                </div>
+                                <div className={styles.positionContainer}>
+                                    {
+                                        renderPositionIcon(currentMember.assignedPosition)
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -633,24 +686,9 @@ export default function GameflowChampSelect() {
     };
 
     const donateReroll = () => {
-        const localPlayer = champSelect.myTeam?.find((member) => {
-            return member.cellId === champSelect.localPlayerCellId;
-        });
-
-        if (localPlayer === undefined) {
-            console.error('Local player not found');
-            return;
-        }
-
-        const currentChampionId = localPlayer.championId;
-
-        axios.post(Globals.PROXY_PREFIX + '/lol-champ-select/v1/session/my-selection/reroll')
-            .then(() => {
-                axios.post(Globals.PROXY_PREFIX + '/lol-champ-select/v1/session/bench/swap/' + currentChampionId)
-                    .then(() => {
-                    })
-                    .catch(() => {
-                    });
+        axios.post(Globals.REST_V1_PREFIX + '/champ-select/donate-reroll', {})
+            .then((resp) => {
+                console.log(resp);
             })
             .catch((error) => {
                 console.error(error);
