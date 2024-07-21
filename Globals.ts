@@ -3,7 +3,7 @@ import {Friend, LootItem, MapAssetAssets, MapAssets, RemoteMapAsset, RemoteMapAs
 
 const VERSION_MAJOR: number = 0;
 const VERSION_MINOR: number = 1;
-const VERSION_PATCH: number = 6;
+const VERSION_PATCH: number = 7;
 
 export const APPLICATION_NAME: string = 'Poro-Client';
 
