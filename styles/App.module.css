@@ -198,4 +198,31 @@
 
     color: white;
     font-family: "Beaufort for LOL";
+
+    /* Brand Colors */
+    --pc-blue1: #CDFAFA;
+    --pc-blue2: #0AC889;
+    --pc-blue3: #0397AB;
+    --pc-blue4: #005A82;
+    --pc-blue5: #0A323C;
+    --pc-blue6: #091428;
+    --pc-blue7: #0A1428;
+
+    --pc-gold1: #F0E6D2;
+    --pc-gold2: #C8AA6E;
+    --pc-gold3: #C8AA6E;
+    --pc-gold4: #C89B3C;
+    --pc-gold5: #785A28;
+    --pc-gold6: #463714;
+    --pc-gold7: #32281E;
+
+    --pc-grey1: #A09B8C;
+    --pc-grey1dot5: #5B5A56;
+    --pc-grey2: #3C3C41;
+    --pc-grey3: #1E2328;
+    --pc-grey-cool: #1E282D;
+
+    --pc-hextech-black: #010A13;
+
+    --pc-red1 : #F44336;
 }
