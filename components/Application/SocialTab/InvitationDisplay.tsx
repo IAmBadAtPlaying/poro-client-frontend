@@ -5,6 +5,7 @@ import * as Globals from '../../../Globals';
 import PrettyImage from '../../General/PrettyImage';
 import {Color} from '../../../types/Color';
 import axios from 'axios';
+import {Invitation} from '../../../types/Store';
 
 export default function InvitationDisplay() {
 
@@ -18,8 +19,9 @@ export default function InvitationDisplay() {
         return <></>;
     }
 
-    const acceptInvitation = (invitationId: string) => {
-        axios.post(Globals.PROXY_PREFIX + '/lol-lobby/v2/received-invitations/' + invitationId + '/accept')
+    const acceptInvitation = (invitation: Invitation) => {
+        if (!invitation.canAcceptInvitation) return;
+        axios.post(Globals.PROXY_PREFIX + '/lol-lobby/v2/received-invitations/' + invitation.invitationId + '/accept')
             .then(() => {
             })
             .catch((error) => {
@@ -65,7 +67,7 @@ export default function InvitationDisplay() {
                                 mapAssets,
                                 invitation.gameConfig?.mapId,
                                 invitation.gameConfig?.gameMode
-                            )?.gameModeName}
+                            )?.name}
                         </div>
                         <div className={styles.singleTextLine}>
                             {queues[invitation.gameConfig?.queueId]?.description}
@@ -73,8 +75,8 @@ export default function InvitationDisplay() {
                     </div>
                     <div className={styles.actionButtons}>
                         <div className={styles.acceptButtonContainer}>
-                            <button className={styles.acceptButton} onClick={() => {
-                                acceptInvitation(invitation.invitationId);
+                            <button className={Globals.applyMultipleStyles(styles.acceptButton, invitation.canAcceptInvitation ? '': styles.acceptButtonUnavailable)} onClick={() => {
+                                acceptInvitation(invitation);
                             }}>
                                 <svg viewBox="0 0 1024 1024" version="1.1" className={styles.acceptIconClass}
                                     xmlns="http://www.w3.org/2000/svg">
