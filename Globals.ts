@@ -182,6 +182,16 @@ export const applyMultipleStyles = (baseStyle: string, ...styles: string[]): str
     );
 };
 
+export const getMapInfo = (mapAssets: MapAssets | Record<string, never>, mapId: number | undefined, gameMode: string | undefined): RemoteMapAsset | undefined => {
+    if (mapId === undefined || gameMode === undefined) {
+        return undefined;
+    }
+    if (mapAssets[mapId] === undefined) {
+        return undefined;
+    }
+    return mapAssets[mapId][gameMode];
+}
+
 export const getMapAsset = (mapAssets: MapAssets | Record<string, never>, mapId: number | undefined, gameMode: string | undefined): MapAssetAssets | undefined => {
     if (mapId === undefined || gameMode === undefined) {
         return undefined;
@@ -369,25 +379,29 @@ export const UPDATES = {
 
 //================================= COLORS ===================================
 // Taken from https://brand.riotgames.com/de-de/league-of-legends/color
-export const BLUE1: Color = Color.fromHex('#CDFAFA');
-export const BLUE2: Color = Color.fromHex('#0AC889');
-export const BLUE3: Color = Color.fromHex('#0397AB');
-export const BLUE4: Color = Color.fromHex('#005A82');
-export const BLUE5: Color = Color.fromHex('#0A323C');
-export const BLUE6: Color = Color.fromHex('#091428');
-export const BLUE7: Color = Color.fromHex('#0A1428');
 
-export const GOLD1: Color = Color.fromHex('#F0E6D2');
-export const GOLD2: Color = Color.fromHex('#C8AA6E');
-export const GOLD3: Color = Color.fromHex('#C8AA6E');
-export const GOLD4: Color = Color.fromHex('#C89B3C');
-export const GOLD5: Color = Color.fromHex('#785A28');
-export const GOLD6: Color = Color.fromHex('#463714');
-export const GOLD7: Color = Color.fromHex('#32281E');
+export const BrandColor = {
+    BLUE1: Color.fromHex('#CDFAFA'),
+    BLUE2: Color.fromHex('#0AC889'),
+    BLUE3: Color.fromHex('#0397AB'),
+    BLUE4: Color.fromHex('#005A82'),
+    BLUE5: Color.fromHex('#0A323C'),
+    BLUE6: Color.fromHex('#091428'),
+    BLUE7: Color.fromHex('#0A1428'),
 
-export const GREY1: Color = Color.fromHex('#A09B8C');
-export const GREY1DOT5: Color = Color.fromHex('#5B5A56');
-export const GREY2: Color = Color.fromHex('#3C3C41');
-export const GREY3: Color = Color.fromHex('#1E2328');
-export const GREY_COOL: Color = Color.fromHex('#1E282D');
-export const HEXTECH_BLACK: Color = Color.fromHex('#010A13');
+    GOLD1: Color.fromHex('#F0E6D2'),
+    GOLD2: Color.fromHex('#C8AA6E'),
+    GOLD3: Color.fromHex('#C8AA6E'),
+    GOLD4: Color.fromHex('#C89B3C'),
+    GOLD5: Color.fromHex('#785A28'),
+    GOLD6: Color.fromHex('#463714'),
+    GOLD7: Color.fromHex('#32281E'),
+
+    GREY1: Color.fromHex('#A09B8C'),
+    GREY1DOT5: Color.fromHex('#5B5A56'),
+    GREY2: Color.fromHex('#3C3C41'),
+    GREY3: Color.fromHex('#1E2328'),
+    GREY_COOL: Color.fromHex('#1E282D'),
+
+    HEXTECH_BLACK : Color.fromHex('#010A13')
+}

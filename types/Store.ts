@@ -359,6 +359,8 @@ export interface GameConfig {
 export interface Invitation {
     canAcceptInvitation: boolean,
     fromSummonerName: string,
+    fromGameName?: string,
+    fromTagLine?: string,
     gameConfig: GameConfig,
     invitationId: string,
     invitationType: string,
