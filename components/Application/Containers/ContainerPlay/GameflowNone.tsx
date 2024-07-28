@@ -4,7 +4,7 @@ import styles from '../../../../styles/Application/Containers/ContainerPlay/Game
 export default function GameflowNone() {
     return (
         <div className={styles.container}>
-            <GamemodeSelector/>
+            <GamemodeSelector onClosed={() => {}}/>
         </div>
     );
 }

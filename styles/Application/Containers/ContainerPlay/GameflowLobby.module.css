@@ -53,6 +53,7 @@
 
 
 .lobby_type_display {
+    cursor: pointer;
     position: absolute;
     text-align: right;
     font-weight: 500;

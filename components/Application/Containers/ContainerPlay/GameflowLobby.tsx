@@ -4,6 +4,8 @@ import * as Globals from '../../../../Globals';
 import styles from '../../../../styles/Application/Containers/ContainerPlay/GameflowLobby.module.css';
 import axios from 'axios';
 import LobbyMemberCard from './GameflowLobby/LobbyMemberCard';
+import {useState} from 'react';
+import GamemodeSelector from './GameflowNone/GamemodeSelector';
 
 export interface GameflowLobbyProps {
     inQueue: boolean;
@@ -12,6 +14,9 @@ export interface GameflowLobbyProps {
 export default function GameflowLobby({inQueue}: GameflowLobbyProps) {
 
     const lobby = useSelector((state: AppState) => state.lobbyState);
+    const queues = useSelector((state: AppState) => state.queues);
+
+    const [showGamemodeSelector, setShowGamemodeSelector] = useState<boolean>(false);
 
     const requestStartMatchmaking = () => {
         axios.post(Globals.PROXY_PREFIX + '/lol-lobby/v2/lobby/matchmaking/search')
@@ -129,12 +134,21 @@ export default function GameflowLobby({inQueue}: GameflowLobbyProps) {
         }
     };
 
+    if (showGamemodeSelector) {
+        return (
+            <GamemodeSelector onClosed={() => {
+                setShowGamemodeSelector(false);
+            }}/>);
+    }
+
     return (
         <div className={styles.container}>
             <div className={styles.divTop}></div>
             {
-                <div className={styles.lobby_type_display}>
-                    Current Gamemode: {lobby.gameConfig?.gameMode}
+                <div className={styles.lobby_type_display} onClick={() => {
+                    setShowGamemodeSelector(true);
+                }}>
+                    Current Gamemode: {queues[lobby.gameConfig?.queueId]?.description}
                 </div>
             }
             <div className={styles.divMiddle}>
