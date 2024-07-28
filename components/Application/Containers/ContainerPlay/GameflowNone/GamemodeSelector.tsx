@@ -35,7 +35,11 @@ const GamemodeOrdering: Record<string, number | undefined> = {
     'TFT': 99999999
 };
 
-export default function GamemodeSelector() {
+interface GamemodeSelectorProps {
+    onClosed: () => void;
+}
+
+export default function GamemodeSelector(props: GamemodeSelectorProps) {
 
     const defaultQueueCategory = QueueCategory.PvP;
 
@@ -124,6 +128,7 @@ export default function GamemodeSelector() {
             }
         )
             .then((response) => {
+                props.onClosed();
             })
             .catch((error) => {
                 console.error(error);
@@ -153,8 +158,8 @@ export default function GamemodeSelector() {
             }).map(([gameMode, queues]) => {
                 return (
                     <GamemodeElement setActive={setActiveGameMode} key={gameMode} gamemode={gameMode} queues={queues}
-                        active={gameMode === activeGameMode} activeQueueId={activeQueueId}
-                        setActiveQueueId={setActiveQueueId}/>);
+                                     active={gameMode === activeGameMode} activeQueueId={activeQueueId}
+                                     setActiveQueueId={setActiveQueueId}/>);
             });
     };
 
@@ -165,7 +170,7 @@ export default function GamemodeSelector() {
                     Object.keys(QueueCategory).map((key) => {
                         return (
                             <button key={key}
-                                onClick={() => setActiveCategory(QueueCategory[key as keyof typeof QueueCategory])}>
+                                    onClick={() => setActiveCategory(QueueCategory[key as keyof typeof QueueCategory])}>
                                 {QueueCategory[key as keyof typeof QueueCategory]}
                             </button>
                         );
@@ -180,6 +185,11 @@ export default function GamemodeSelector() {
                     )
                 }
             </div>
+            <button className={styles.cancelButton} onClick={() => {
+                props.onClosed();
+            }}>
+                Cancel
+            </button>
             <button className={styles.startButton} onClick={() => {
                 startLobby(activeQueueId);
             }}>
