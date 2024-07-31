@@ -19,6 +19,11 @@ const buildTaskArgumentMap = (task: Task | undefined): TaskArgumentMap | undefin
     }
     const argumentMap: TaskArgumentMap = {};
     task.arguments.forEach((argument) => {
+        if (argument.currentValue !== undefined) {
+            argumentMap[argument.backendKey] = argument.currentValue;
+            return;
+        }
+        
         switch (argument.type) {
             case TaskType.NUMBER:
                 argumentMap[argument.backendKey] = 0;

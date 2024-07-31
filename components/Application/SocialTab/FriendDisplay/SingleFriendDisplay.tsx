@@ -2,6 +2,8 @@ import {Friend} from '../../../../types/Store';
 import styles from '../../../../styles/Application/SocialTab/FriendDisplay/SingleFriend.module.css';
 import * as Globals from '../../../../Globals';
 import PrettyImage from '../../../General/PrettyImage';
+import {useState} from 'react';
+import DraggedFriend from './DraggedFriend';
 
 
 interface SingleFriendDisplayProps {
