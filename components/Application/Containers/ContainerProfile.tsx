@@ -4,6 +4,8 @@ import {AppState} from '../../../store';
 import {useEffect} from 'react';
 import * as Globals from '../../../Globals';
 import axios from 'axios';
+import PrettyImage from '../../General/PrettyImage';
+import PrettyVideo from '../../General/PrettyVideo';
 
 export default function ContainerProfile() {
 
@@ -47,7 +49,7 @@ export default function ContainerProfile() {
             <div className={styles.backgroundImageContainer}>
                 <img className={styles.coverImage}
                     src="http://127.0.0.1:35199/proxy/lol-game-data/assets/ASSETS/Characters/Ahri/Skins/Skin76/Images/ahri_splash_centered_76.jpg"
-                    alt="background image"/>
+                    alt=""/>
                 <div className={styles.backgroundImageFilter}>
                 </div>
             </div>
@@ -68,11 +70,15 @@ export default function ContainerProfile() {
                             <div className={styles.profileIcon}>
                                 {/*<div className={styles.prestigeRegalia}></div>*/}
                                 <div className={styles.rankedRegalia}>
-                                    <video className={styles.rankedRegaliaVideo} autoPlay loop muted>
-                                        <source
-                                            src="http://127.0.0.1:35199/static/assets/webm/regalia/emblem-wings-magic-gold.webm"
-                                            type="video/webm"/>
-                                    </video>
+                                    <PrettyVideo
+                                        className={styles.rankedRegaliaVideo}
+                                        videoProps={{
+                                            autoPlay: true,
+                                            loop: true,
+                                            muted: true,
+                                            src: Globals.STATIC_PREFIX + '/assets/webm/regalia/emblem-wings-magic-gold.webm'
+                                        }}
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -89,16 +95,28 @@ export default function ContainerProfile() {
                             </div>
                             <div className={styles.tokens}>
                                 <div className={styles.singleToken}>
-                                    <img draggable="false" className={styles.tokenImage}
-                                        src="http://localhost:35199/proxy/lol-game-data/assets/ASSETS/Challenges/Config/504004/Tokens/iron.png"></img>
+                                    <PrettyImage
+                                        className={styles.tokenImage}
+                                        imgProps={{
+                                            src: Globals.PROXY_PREFIX + '/lol-game-data/assets/ASSETS/Challenges/Config/504004/Tokens/iron.png'
+                                        }}
+                                    />
                                 </div>
                                 <div className={styles.singleToken}>
-                                    <img draggable="false" className={styles.tokenImage}
-                                        src="http://localhost:35199/static/assets/png/challenges/background.png"></img>
+                                    <PrettyImage
+                                        className={styles.tokenImage}
+                                        imgProps={{
+                                            src: Globals.STATIC_PREFIX + '/assets/png/challenges/background.png'
+                                        }}
+                                    />
                                 </div>
                                 <div className={styles.singleToken}>
-                                    <img draggable="false" className={styles.tokenImage}
-                                        src="http://localhost:35199/proxy/lol-game-data/assets/ASSETS/Challenges/Config/504004/Tokens/iron.png"></img>
+                                    <PrettyImage
+                                        className={styles.tokenImage}
+                                        imgProps={{
+                                            src: Globals.PROXY_PREFIX + '/lol-game-data/assets/ASSETS/Challenges/Config/504004/Tokens/iron.png'
+                                        }}
+                                    />
                                 </div>
                             </div>
                         </div>

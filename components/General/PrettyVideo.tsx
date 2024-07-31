@@ -4,6 +4,7 @@ interface VideoProps extends React.VideoHTMLAttributes<HTMLVideoElement> {}
 
 export interface PrettyVideoProps {
     onContextMenu?: (event: React.MouseEvent<HTMLVideoElement, MouseEvent>) => void;
+    className?: string;
     videoProps: VideoProps;
 }
 
@@ -12,6 +13,7 @@ const PrettyVideo: React.FC<PrettyVideoProps> = (props) => {
 
     useEffect(() => {
         const video = document.createElement('video');
+        video.load();
         video.onloadeddata = () => {
             setLoadedSrc(props.videoProps.src || '');
         };
@@ -27,7 +29,7 @@ const PrettyVideo: React.FC<PrettyVideoProps> = (props) => {
     };
 
     return (
-        <video draggable={false} style={{userSelect: 'none'}} {...props.videoProps} src={loadedSrc} onContextMenu={handleContextMenu}/>
+        <video draggable={false} className={props.className} style={{userSelect: 'none'}} {...props.videoProps} src={loadedSrc} onContextMenu={handleContextMenu}/>
     );
 };
 
